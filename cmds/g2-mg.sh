@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+
+[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: merging on a wip commit is forbiden, please <unwip> and commit <ci> first..." && exit 1
+
+[[ $("$GIT_EXE" g2isbehind) = "true" ]] && read -p "It appears the current branch is in the past, proceed with the merge (y/n)? " -n 1 -r && [[ $REPLY != [yY]* ]] && exit 0
+
+# merge returns 0 when it merges correctly
+"$GIT_EXE" merge "$@" || {
+
+    unmerged=$("$GIT_EXE" ls-files --unmerged)
+    if [[ -n $unmerged ]]; then
+        echo "info: some files need to be merged manually, please use <mt> to fix conflicts..."
+        echo " once all resolved, please <commit> the files and resume the operation.  Note that you may <abort> at any time."
+    fi
+    exit 1;
+}
