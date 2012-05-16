@@ -62,7 +62,7 @@ Add the following script to **/etc/bashrc** or **~/.bashrc** (or any other file 
 
 Git is not a prerequisit on windows as the installer comes bundled with it.
 
-Please download the Windows native installer from [https://github.com/downloads/orefalo/g2/G2-1.7.10.1.exe](https://github.com/downloads/orefalo/g2/G2-1.7.10.1.exe).
+Please download the Windows native installer from [https://github.com/downloads/orefalo/g2/Git-1.7.10.exe](https://github.com/downloads/orefalo/g2/Git-1.7.10.exe).
 
 
 ##How to use
@@ -246,6 +246,8 @@ Look at these graphs taken from various projects on github. Note how the branche
 ![image](http://orefalo.github.com/g2/images/h3.jpg)
 
 Looks familiar? This is unfortunately the consequence of multiple people working on the same branch. Wouldn't it be nicer to have straight lines, with segments showing only when feature branch is merged?  In fact, git provides all the tooling to get around these ugly loops, but as you can see... few people know about it ;-/
+
+So what's a clean history, would you ask?
 
 With **g2** however, the graphs above are not likely to happen. **g2** enforces two different scenarios, each backed by a different command.
 
@@ -550,7 +552,7 @@ No, not for now. With commands `wip` and `unwip`, the stash brings little benefi
 
 ###Is it a new git-flow ?
 
-No, **g2** doesn't enforce any branching policy.
+No, **g2** doesn't enforce any branching policy.  
 
 ###What if my favorite command is missing?
 
