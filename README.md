@@ -15,7 +15,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 * **g2** provides a reduced set of commands which give guidance on what to do next.
 * **g2** enhances command line experience with TAB completion & a smart prompt.
 * **g2** warns when a branch history was changed on the server (forced pushed).
-* **g2** checks the fresheshness of the branch prior to merging.
+* **g2** checks the fresheshness of the branch prior to merging and warns accordingly.
 * **g2** enforces new commands to force developers into a clean linear history.
 * **g2** requires a clean state before rebasing, checking out, branching or merging.
 * **g2** provides guidance when it cannot perform an operation.
@@ -239,28 +239,27 @@ You can only switch branch from a stable state. A _stable state_ means: **no mod
 
 ###Working with remotes
 
-Before introducing one of the main **g2** features, let me talk about what you should **not** do.    
-Look at these graphs taken from various projects on github. Note how the branches overlap...
+Before introducing one of the main **g2** features, let me talk about what **NOT** to do when merging.    
+Look at these graphs taken from various projects on github. Note how the branches overlap and how these loops make the graphic extremely difficult to read as the number of commiters increases.
 
 ![image](http://orefalo.github.com/g2/images/h2.jpg)
 ![image](http://orefalo.github.com/g2/images/h3.jpg)
 
-Looks familiar? This is unfortunately the consequence of multiple people working on the same branch. Wouldn't it be nicer to have straight lines, with segments showing only when feature branch is merged?  In fact, git provides all the tooling to get around these ugly loops, but as you can see... few people know about it ;-/
+Looks familiar? Wouldn't it be nicer to have straight lines, with segments showing only when feature branches are merged in? Like this…
 
-So what's a clean history, would you ask?
+![image](http://orefalo.github.com/g2/images/good_branching.png)
 
-With **g2** however, the graphs above are not likely to happen. **g2** enforces two different scenarios, each backed by a different command.
+The above is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to ready.
+To get to the above result, **g2** enforces two different merging scenarios, each backed by a different command.
 
-First the scenarios:
-
-1. Saving your code into its working branch
-2. Merging features from other branches: As the project evolves other features may need to be merged in.
+1. Saving the code into its working branch, that's what we do most of the time
+2. Merging features from other branches, like merging the changes that your collegues deployed to production.
 
 The matching commands are `g sync` and `g pull`, here is how to use them:
 
 * Use `g sync` to synchronize the current branch. The command doesn't take any parameters because it uses the tracking table to figure the remote/branch. To enforce a clean linear history, the changes are always appended to the end of the branch. Once completed, the changes are sent back to the server.
 
-For the git expert, the command issues a _fetch, a rebase and a push_ with a multitude of validation in between. For instance, it will stop if the remote history was changed; also it won't push a wip commit (see below).
+For the git expert, the command issues a _fetch, a rebase and a push_ with a multitude of validation in between. For instance, it will block if the remote history was force updated; also it won't push a wip commit (see below).
 
 * Use `g pull` when merging contents from a feature branches.
 
