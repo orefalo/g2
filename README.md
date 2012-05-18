@@ -576,7 +576,7 @@ Distributed under the GNU General Public License, version 2.0.
 * g mode
 * g as - aliasing
 * introduce g2 options - panic exlcudes, count files in prompt
-
+* renaming branch fails: g branch -M mv tt
 
 
 
