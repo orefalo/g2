@@ -9,9 +9,9 @@ remote=$("$GIT_EXE" g2getremote)
 [[ -z $remote ]] && echo "fatal: please use <track> to setup the remote/branch to track with" && exit 2
 [[ $# -ne 0 ]] && echo "fatal: sorry, you may only <sync> against the tracking remote/branch, use <pull> or <push> to deal with other branches." && exit 3
 "$GIT_EXE" fetch || exit $?;
-[[ $("$GIT_EXE" g2isforced $remote) = "true" ]] && \
-	  echo "abort: it appears the history of the branch was changed on the server." \
-	  echo " please issue a <rs upstream> or a <rb $remote> to resume" \
+[[ $("$GIT_EXE" g2isforced $remote) = "true" ]] && 
+	  echo "abort: it appears the history of the branch was changed on the server." &&
+	  echo " please issue a <rs upstream> or a <rb $remote> to resume" &&
 	  exit 1;
 branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
 "$GIT_EXE" rev-list --left-right $branch...$remote -- 2> /dev/null > /tmp/git_upstream_status_delta || exit $?
