@@ -1,12 +1,12 @@
 #!/bin/bash
 #
 
-hasDFlag() {
+hasDMFlag() {
     local opt
-    while getopts ":dD:" opt; do
+    while getopts ":dDmM:" opt; do
         case $opt in
-            d|D)  echo "true"; return ;;
-            *) echo "Usage: g br <?-D> <?branch>"; exit 1;;
+            d|D|m|M)  echo "true"; return ;;
+            *) echo "Usage: g br <?-D> <?-M> <?branch>"; exit 1;;
         esac
     done
     echo "false"
@@ -30,14 +30,13 @@ br_status() {
     done
 }
 
-
 if [[ $# -eq 0 ]]; then
     "$GIT_EXE" branch -a
     echo "-------"
     br_status
 else
 
-    [[ $(hasDFlag "$@") = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
+    [[ $(hasDMFlag "$@") = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
     hasChanges
 
     shift $(( OPTIND - 1 ))

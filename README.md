@@ -570,13 +570,15 @@ Author: [Olivier Refalo](https://github.com/orefalo)
 Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
+* FIXED: renaming branch fails: g branch -M mv tt
+
 * shunit2 the project
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts
 * g mode
 * g as - aliasing
 * introduce g2 options - panic exlcudes, count files in prompt
-* renaming branch fails: g branch -M mv tt
+
 
 
 
