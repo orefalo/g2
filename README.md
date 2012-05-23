@@ -249,8 +249,8 @@ Looks familiar? Wouldn't it be nicer to have straight lines, with segments showi
 
 ![image](http://orefalo.github.com/g2/images/good_branching.png)
 
-The above is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to ready.
-To get to the above result, **g2** enforces two different merging scenarios, each backed by a different command.
+The above is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to read.
+In order to achive this result, **g2** enforces two different merging scenarios, each backed by a different command.
 
 1. Saving the code into its working branch, that's what we do most of the time
 2. Merging features from other branches, like merging the changes that your collegues deployed to production.
@@ -319,10 +319,13 @@ Aborts either a rebase or a merge.
 Amends last commit with contents from the staging area.  
 Won't amend if top commit was pushed unless the `-f` flag is given.
  
-### br <?branch>
+### br -D -M <?branch>
 
 Displays the list of branches, local and remote.  
 Can create new branches if given a branch name.
+ 
+ * -D deleted the given branch
+ * -M renames the given branch
  
 ### bs / bisect
 
@@ -571,8 +574,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 * FIXED: renaming branch fails: g branch -M mv tt
-
-* git branch -a should be ignored, in fact most other - flags should be ignored
+* FIXED: git branch -a should be ignored, in fact most other - flags should be ignored
 * shunit2 the project
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts

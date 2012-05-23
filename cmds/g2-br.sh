@@ -5,8 +5,11 @@ hasDMFlag() {
     local opt
     while getopts ":dDmM:" opt; do
         case $opt in
-            d|D|m|M)  echo "true"; return ;;
-            *) echo "Usage: g br <?-D> <?-M> <?branch>"; exit 1;;
+            d|D|m|M)
+					echo "true"; return ;;
+			\?)
+					echo "Usage: g br <?-D> <?-M> <?branch>" >&2
+					echo "exit"; return ;;
         esac
     done
     echo "false"
@@ -35,8 +38,9 @@ if [[ $# -eq 0 ]]; then
     echo "-------"
     br_status
 else
-
-    [[ $(hasDMFlag "$@") = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
+	flag=$(hasDMFlag "$@")
+	[[ $flag = "exit" ]] && exit 1;
+    [[ $flag = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
     hasChanges
 
     shift $(( OPTIND - 1 ))

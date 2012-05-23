@@ -31,7 +31,7 @@ function __g2_usage() {
 Usage:
 	abort - aborts any rebase/merge
 	am <?-f> - amends last commit with staging area
-	br <?branch> - list or create branches
+	br <?-D> <?-M> <?branch> - list or create branches
 	bs - bisect
 	co <branch> - switches branch (either local/remote)
 	cp <commit> - cherry-pick
