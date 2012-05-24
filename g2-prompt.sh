@@ -301,19 +301,22 @@ parse_g2_status() {
         #### PARSE STATUS
         local untracked_files=0 added_files=0 modified_files=0
 
-        IFS=$'\n'
-        local git_status line x y
-        git_status="$("$GIT_EXE" status --porcelain 2> /dev/null)"
+        if [[ $("$GIT_EXE" config --global --bool --get g2.prompt.countfiles 2>/dev/null) != false ]]; then
+            IFS=$'\n'
+            local git_status line x y
+            git_status="$("$GIT_EXE" status --porcelain 2> /dev/null)"
 
-         for line in $git_status; do
-          x=${line:0:1}; y=${line:1:1};
-          if [[ $x = '?' ]]; then
-             let untracked_files++
-          else
-             [[ $x != ' ' ]] && let added_files++
-             [[ $y != ' ' ]] && let modified_files++
-          fi
-         done
+             for line in $git_status; do
+              x=${line:0:1}; y=${line:1:1};
+              if [[ $x = '?' ]]; then
+                 let untracked_files++
+              else
+                 [[ $x != ' ' ]] && let added_files++
+                 [[ $y != ' ' ]] && let modified_files++
+              fi
+             done
+        fi
+
 
         ####  GET GIT OP
         local   modified untracked added init detached

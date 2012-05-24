@@ -31,6 +31,9 @@ save_config() {
     if [[ -n $dt_alias ]]; then
         cmdLine_dt=$("$GIT_EXE" config difftool.${dt_alias}.cmd)
     fi
+
+    g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
+
 }
 
 apply_config() {
@@ -42,6 +45,7 @@ apply_config() {
     [[ -n $mt_alias && -n $cmdLine ]] && "$GIT_EXE" config --global mergetool.${mt_alias}.cmd "$cmdLine";
     [[ -n $dt_alias ]] && "$GIT_EXE" config --global diff.tool "$dt_alias";
     [[ -n $dt_alias && -n $cmdLine_dt ]] && "$GIT_EXE" config --global difftool.${dt_alias}.cmd "$cmdLine_dt";
+    [[ -n $g2count ]] && "$GIT_EXE" config --global g2.prompt.countfiles $g2count
 }
 
 # Avoid errors with multiple concurrent sessions

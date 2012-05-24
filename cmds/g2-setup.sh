@@ -30,6 +30,16 @@ fi
 [[ -n "$editor" ]] && "$GIT_EXE" config --global core.editor "$editor"
 
 
+g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
+if [[ -z $g2count ]]; then
+    read -p "Count files in the bash prompt? (true)" -e g2count
+else
+    read -p "Count files in the bash prompt? ($g2count): " -e g2count
+fi
+[[ -z $g2count ]] && g2count=true
+"$GIT_EXE" config --global g2.prompt.countfiles $g2count
+
+
 ## MERGETOOL
 mt_alias=$("$GIT_EXE" config merge.tool)
 mergetools="araxis bc3 diffuse ecmerge emerge gvimdiff kdiff3 meld opendiff p4merge kdiff tortoisemerge vimdiff xxdiff CUSTOM"
