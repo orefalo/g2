@@ -572,10 +572,8 @@ Author: [Olivier Refalo](https://github.com/orefalo)
 Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
-* FIXED: renaming branch fails: g branch -M mv tt
-* FIXED: git branch -a should be ignored, in fact most other - flags should be ignored
-* FIXED: there is now a setting to dactivate file counts in the bash prompt
-* shunit2 the project
+
+* BUG: g rm/co/freeze/unfreeze <file> - path issues
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts
 * g mode

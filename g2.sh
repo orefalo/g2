@@ -75,6 +75,7 @@ function __g2_eval() {
 	[[ $# -eq 0 ]] && __g2_usage || (
 	local A=(
     "abort" ""
+    "add" "g2add"
     "am" "g2am"
     "br" ""
     "branch" "br"

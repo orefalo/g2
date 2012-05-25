@@ -14,7 +14,6 @@ GIT_EXE=$(which git)
 [[ -z "$GIT_EXE" ]] && echo "Sorry, git not found in the PATH";
 export GIT_EXE
 
-
 save_config() {
     # Read current settings
     nameinput=$("$GIT_EXE" config --global --get user.name);
@@ -33,7 +32,6 @@ save_config() {
     fi
 
     g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
-
 }
 
 apply_config() {

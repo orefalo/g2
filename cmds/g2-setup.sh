@@ -1,6 +1,8 @@
 #!/bin/bash
 #
 
+echo "Running G2 setup, press <ENTER> to select the default setting:"
+
 ## USER NAME
 
 nameinput=$("$GIT_EXE" config --global --get user.name)
