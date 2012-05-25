@@ -61,7 +61,7 @@ Add the following script to **/etc/bashrc** or **~/.bashrc** (or any other file 
 
 Git is not a prerequisit on windows as the installer comes bundled with it.
 
-Please download the Windows native installer from [https://github.com/downloads/orefalo/g2/G2-1.7.10.exe](https://github.com/downloads/orefalo/g2/Git-1.7.10.exe).
+Please download the Windows native installer from [https://github.com/downloads/orefalo/g2/G2-1.7.10.exe](https://github.com/downloads/orefalo/g2/G2-1.7.10.exe).
 
 
 ##How to use
