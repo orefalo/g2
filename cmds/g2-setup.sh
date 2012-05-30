@@ -36,7 +36,7 @@ fi
 
 g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
 if [[ -z $g2excludes ]]; then
-    read -p "Files to keep untouched (ie. \"-e .classpath -e .settings\"):" -e g2excludes
+    read -p "Files to keep untouched (ie. \"-e .classpath -e .settings -e *.iml\"):" -e g2excludes
 else
     read -p "Files to keep untouched ($g2excludes): " -e g2excludes
 fi

@@ -568,12 +568,15 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* TODO: g rb --something -> skip the warning
+* TODO: create g fr & g uf
+* TODO: get ri dof git rm -> should be git unfreeze or g uf
 * BUG: g rm/co/freeze/unfreeze <file> - path issues
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts
-* g mode
+* g mode - for advanced users
 * g as - aliasing
-* introduce g2 options - panic exlcudes, count files in prompt
+* introduce g2 options - panic excludes, count files in prompt
 
 
 
