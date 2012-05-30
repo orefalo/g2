@@ -32,6 +32,7 @@ save_config() {
     fi
 
     g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
+    g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
 }
 
 apply_config() {
@@ -44,6 +45,7 @@ apply_config() {
     [[ -n $dt_alias ]] && "$GIT_EXE" config --global diff.tool "$dt_alias";
     [[ -n $dt_alias && -n $cmdLine_dt ]] && "$GIT_EXE" config --global difftool.${dt_alias}.cmd "$cmdLine_dt";
     [[ -n $g2count ]] && "$GIT_EXE" config --global g2.prompt.countfiles $g2count
+    [[ -n $g2excludes ]] && "$GIT_EXE" config --global g2.panic.excludes "$g2excludes"
 }
 
 # Avoid errors with multiple concurrent sessions

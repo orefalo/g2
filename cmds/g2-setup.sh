@@ -4,14 +4,12 @@
 echo "Running G2 setup, press <ENTER> to select the default setting:"
 
 ## USER NAME
-
 nameinput=$("$GIT_EXE" config --global --get user.name)
 if [[ -z $nameinput ]]; then
     read -p "Please input your full name: " -e nameinput
 else
     read -p "Please input your full name ($nameinput): " -e nameinput
 fi
-[[ -n $nameinput ]] && "$GIT_EXE" config --global user.name "$nameinput"
 
 ## EMAIL
 emailinput=$("$GIT_EXE" config --global --get user.email);
@@ -20,7 +18,6 @@ if [[ -z $emailinput ]]; then
 else
     read -p "Please input your email ($emailinput): " -e emailinput
 fi
-[[ -n "$emailinput" ]] && "$GIT_EXE" config --global user.email "$emailinput"
 
 ## EDITOR
 editor=$("$GIT_EXE" config --global --get core.editor)
@@ -29,8 +26,6 @@ if [[ -z "$editor" ]]; then
 else
     read -p "Please input your editor ($editor): " -e editor
 fi
-[[ -n "$editor" ]] && "$GIT_EXE" config --global core.editor "$editor"
-
 
 g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
 if [[ -z $g2count ]]; then
@@ -38,9 +33,20 @@ if [[ -z $g2count ]]; then
 else
     read -p "Count files in the bash prompt? ($g2count): " -e g2count
 fi
+
+g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
+if [[ -z $g2excludes ]]; then
+    read -p "Files to keep untouched (ie. \"-e .classpath -e .settings\"):" -e g2excludes
+else
+    read -p "Files to keep untouched ($g2excludes): " -e g2excludes
+fi
+
+[[ -n $nameinput ]] && "$GIT_EXE" config --global user.name "$nameinput"
+[[ -n "$emailinput" ]] && "$GIT_EXE" config --global user.email "$emailinput"
+[[ -n "$editor" ]] && "$GIT_EXE" config --global core.editor "$editor"
 [[ -z $g2count ]] && g2count=true
 "$GIT_EXE" config --global g2.prompt.countfiles $g2count
-
+[[ -n $g2excludes ]] && "$GIT_EXE" config --global g2.panic.excludes "$g2excludes"
 
 ## MERGETOOL
 mt_alias=$("$GIT_EXE" config merge.tool)
