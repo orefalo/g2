@@ -8,8 +8,8 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 ###Benefits
 
+* **g2** is generaly safer than git as it prompts before destructive actions.
 * **g2** helps setup git settings : sshkeys, username, email & tools.
-* **g2** warns before any destructive operation.
 * **g2** provides two letter acronyms for most commands.
 * **g2** provides a reduced set of commands which give guidance on what to do next.
 * **g2** enhances command line experience with TAB completion & a smart prompt.
@@ -272,11 +272,9 @@ You can easily get to a clean state by using `g panic`
 
 ###Work in progress
 
-When developing, saving the _work in progress_ is common. How many times do you have to switch branch to troubleshoot another issue?
+Saving the _work in progress_ is common when developing with git. Typically, git _stash_ comes to the rescue. The issue with stashing is that you typically loose track of which branch you stashed from, making the stash a short term solution to save work in progress.
 
-git _stash_ typically comes to the rescue in that situation. But unless you provide a well detailed comment (which nobody does!), you loose track of which branches the stash applied to.
-
-That's why **g2** introduces `wip` and `unwip`. Two handy commands that you will learn to love. See below and note how a wip commit is created on your current branch.
+Instead, **g2** introduces `wip` and `unwip`. Two handy commands that you will learn to love. Unlike stashing, wip commits the work in progress as a regular commit.
 
 ```
 $ g st
@@ -302,10 +300,7 @@ M	g2-prompt.sh
 $
 ```
 
-But how good is a wip commit if it behaves just like any other commit? The point is, it's not a regular commit:
-
-* A wip commit **CANNOT** be **merged, pulled, pushed or synched**. You **cannot commit** on top of it either. It's a real "work in progress" that is meant to be `unwip` at some point.
-
+But unlike commits, wip commits **CANNOT** be **merged, pulled, pushed or synched**. You **cannot commit** on top of them either. In orther words, a wip commit in meant to stay at the tip of the branch until you are ready to `unwip` and resume your development.
 
 #List of Commands
 
