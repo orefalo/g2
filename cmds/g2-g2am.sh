@@ -2,11 +2,11 @@
 #
 
 error() {
-    echo "fatal: no files to amend, please <freeze> the changes to amend."
+    echo $1
     exit 1
 }
 
-[[ $("$GIT_EXE" diff --cached --numstat | wc -l) -eq 0 ]] && error
+[[ $("$GIT_EXE" diff --cached --numstat | wc -l) -eq 0 ]] && error "fatal: no files to amend, please <freeze> the changes to amend."
 
 remote=$("$GIT_EXE" g2getremote)
 if [[ -z $remote ]]; then
@@ -19,7 +19,7 @@ else
             read -p "warning: force amending will rewrite the branch history, please confirm (y/n)? " -n 1 -r
             echo
             [[ $REPLY != [yY]* ]] && exit 1
-        else error; fi
+        else error "fatal: no local commits to amend."; fi
     fi
 
     "$GIT_EXE" commit --amend -C HEAD
