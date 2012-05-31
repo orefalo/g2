@@ -569,9 +569,7 @@ Distributed under the GNU General Public License, version 2.0.
 ##TODO
 
 * TODO: g rb --something -> skip the warning
-* TODO: create g fr & g uf
-* TODO: get ri dof git rm -> should be git unfreeze or g uf
-* BUG: g rm/co/freeze/unfreeze <file> - path issues
+* BUG: g rm/co/freeze/unfreeze <file> - On MSYSGIT -> path issues
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts
 * g mode - for advanced users
