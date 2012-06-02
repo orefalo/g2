@@ -73,9 +73,10 @@ $ g
 Usage:
 	abort - aborts any rebase/merge
 	am <?-f> - amends last commit with staging area
-	br <?branch> - list or create branches
+	br <?-D> <?-M> <?branch> - list or create branches
 	bs - bisect
 	co <branch> - switches branch (either local/remote)
+	continue - resumes a conflict resolution
 	cp <commit> - cherry-pick
 	ci <?params...> - commit
 	clone <url> - clone a remote repository
@@ -333,7 +334,11 @@ Clones a remote repository, wires to `git clone`
 
 Switches branch (either local/remote)  
 extremely strict - won't let you checkout if you have changes or untracked files
- 
+
+### continue
+
+Resumes a conflict resolution
+
 ### cp/cherry-pick (commit)
 
 Cherry picks a commit from another branch, same as `git cherry-pick`
@@ -531,6 +536,10 @@ Unfreezes the files from the staging area back into the workspace.
 
 Unstacks a WIP from the history into the workspace.
 
+### upgrade
+
+Upgrades G2 by syncing with the github code repository
+
 ### wip
 
 Easy way to save your WIP (Work In Progress). Stacks all current changes as a commit on the history.
@@ -568,13 +577,10 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* TODO: g rb --something -> skip the warning
-* BUG: g rm/co/freeze/unfreeze <file> - On MSYSGIT -> path issues
 * some completions are not properly working - git push origin <TAB> not working ?
 * completion, rename __git to avoid conflicts
 * g mode - for advanced users
 * g as - aliasing
-* introduce g2 options - panic excludes, count files in prompt
 
 
 

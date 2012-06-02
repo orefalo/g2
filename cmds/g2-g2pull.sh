@@ -9,7 +9,7 @@ error() {
 
 n=$#;
 [[ $n -eq 0 || ${!n} = -* ]] && error
-#[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: pulling on a wip commit is forbidden, please <unwip> and commit <ci>" && exit 1
+[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: pulling on a wip commit is forbidden, please <unwip> and commit <ci>" && exit 1
 [[ ${!n} = */* ]] && echo "Usage: pull <?opts> <remote> <branch>" && exit 1
 branch=${!n}
 let n--

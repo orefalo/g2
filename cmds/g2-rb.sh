@@ -1,8 +1,10 @@
 #!/bin/bash
 #
 
-#TODO: make sure we are clear
+[[ $("$GIT_EXE" g2isrebasing) = "false" ]] && {
+    read -p "The history is about to be rewritten. This is a dangerous operation, please confirm (y/n)? " -n 1 -r
+    echo
+    [[ $REPLY = [nN]* ]] && exit 0
+}
 
-read -p "The history is about to be rewritten. This might be a dangerous operation, please confirm (y/n)? " -n 1 -r
-echo
-[[ $REPLY = [yY]* ]] && "$GIT_EXE" rebase "$@"
+"$GIT_EXE" rebase "$@"

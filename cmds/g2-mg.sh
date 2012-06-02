@@ -11,7 +11,8 @@
     unmerged=$("$GIT_EXE" ls-files --unmerged)
     if [[ -n $unmerged ]]; then
         echo "info: some files need to be merged manually, please use <mt> to fix conflicts..."
-        echo " once all resolved, please <commit> the files and resume the operation.  Note that you may <abort> at any time."
+        echo " once all resolved, <freeze> and <commit> the files."
+        echo " note that you may <abort> at any time."
     fi
     exit 1;
 }

@@ -34,6 +34,7 @@ Usage:
 	br <?-D> <?-M> <?branch> - list or create branches
 	bs - bisect
 	co <branch> - switches branch (either local/remote)
+	continue - resumes a conflict resolution
 	cp <commit> - cherry-pick
 	ci <?params...> - commit
 	clone <url> - clone a remote repository
@@ -85,6 +86,7 @@ function __g2_eval() {
     "ci" ""
     "commit" "ci"
     "co" ""
+    "continue" ""
     "checkout" "co"
     "cp" ""
     "cherry-pick" "cp"
@@ -98,6 +100,7 @@ function __g2_eval() {
     "gp" ""
     "grep" "gp"
     "gui" ""
+    "help" "g2help"
     "ig" ""
     "init" ""
     "key" ""
@@ -134,6 +137,7 @@ function __g2_eval() {
     "tg" ""
     "tag" "tg"
     "track" ""
+    "upgrade" "g2upgrade"
     "unfreeze" ""
     "unwip" ""
     "wip" ""
