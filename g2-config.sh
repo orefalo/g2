@@ -101,8 +101,7 @@ while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 cd $DIR
 
-# Process all aliases
-
+# Process all aliases dynamically
 for cmd in $cmds
 do
     al=$( basename $cmd )

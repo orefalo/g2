@@ -20,6 +20,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 * **g2** provides guidance when it cannot perform an operation.
 * **g2** brings a number of friendly commands such as : panic, sync, freeze, wip.
 * **g2** eases branch creation.
+* **g2** smartly resumes a rebase by smartly using skip or continue.
 
 ###What G2 is not
 
@@ -337,7 +338,7 @@ extremely strict - won't let you checkout if you have changes or untracked files
 
 ### continue
 
-Resumes a conflict resolution
+Resumes a conflict resolution.
 
 ### cp/cherry-pick (commit)
 
