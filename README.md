@@ -8,13 +8,14 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 ###Benefits
 
-* **g2** is generaly safer than git as it prompts before destructive actions.
+* **g2** is generally safer than git as it prompts before destructive actions.
 * **g2** helps setup git settings : sshkeys, username, email & tools.
 * **g2** provides two letter acronyms for most commands.
+* **g2** eases the merge process.
 * **g2** provides a reduced set of commands which give guidance on what to do next.
 * **g2** enhances command line experience with TAB completion & a smart prompt.
 * **g2** warns when a branch history was changed on the server (forced pushed).
-* **g2** checks the fresheshness of the branch prior to merging and warns accordingly.
+* **g2** checks the freshness of the branch prior to merging and warns accordingly.
 * **g2** enforces new commands to force developers into a clean linear history.
 * **g2** requires a clean state before rebasing, checking out, branching or merging.
 * **g2** provides guidance when it cannot perform an operation.
@@ -349,7 +350,11 @@ Distributed under the GNU General Public License, version 2.0.
 * completion, rename __git to avoid conflicts
 * g mode - for advanced users
 * g as - aliasing
-
+* g undo file
+* g undo commit
+* g undo commit -f
+* g ss/stash
+* g undo merge = reset --hard ORIG_HEAD
 
 
 
