@@ -57,17 +57,18 @@ Usage:
 	rb <?params...> <branch> - rebase
 	rm <params...> - remove
 	rs <params...> - reset
-	rs upstream - resets branch to upstream state
+	rs 'upstream' - resets branch to upstream state
 	rt <?params...> - remote
 	rv <commit> - revert
 	setup - configures user, key, editor, tools
 	sh <?-deep> - show commit contents
 	sm <?params...> - submodule
-    ss <?params> - stash
+	ss <?params> - stash
 	st <?params...> - status
 	sync - syncs working branch: fetch, rebase & push
 	tg - tag
 	track <?upstream_branch> - shows/set tracking
+	undo file|'commit'|'merge'
 	wip/unwip - save/restore work in progress to branch
 EOF
 	return 0;
