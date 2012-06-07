@@ -897,19 +897,15 @@ _git_freeze ()
 		__gitcomp "-m"
 		return
 		;;
+    *)
+        COMPREPLY=()
+        ;;
 	esac
-	__git_complete_file
 }
 
 
 _git_gc ()
 {
-#	case "$cur" in
-#	--*)
-#		__gitcomp "--prune --aggressive"
-#		return
-#		;;
-#	esac
 	COMPREPLY=()
 }
 
