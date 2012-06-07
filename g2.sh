@@ -63,6 +63,7 @@ Usage:
 	setup - configures user, key, editor, tools
 	sh <?-deep> - show commit contents
 	sm <?params...> - submodule
+    ss <?params> - stash
 	st <?params...> - status
 	sync - syncs working branch: fetch, rebase & push
 	tg - tag
@@ -131,12 +132,15 @@ function __g2_eval() {
     "show" "sh"
     "sm" ""
     "submodule" "sm"
+    "ss" ""
+    "stash" "ss"
     "st" ""
     "status" "st"
     "sync" ""
     "tg" ""
     "tag" "tg"
     "track" ""
+    "undo" ""
     "unfreeze" ""
     "unwip" ""
     "wip" ""

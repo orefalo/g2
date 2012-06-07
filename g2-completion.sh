@@ -567,7 +567,7 @@ __git_complete_strategy ()
 
 __git_list_all_commands ()
 {
-    echo "abort am br branch bs bisect clone co continue checkout cp cherry-pick ci commit df diff dt difftool fetch freeze key gc gp grep gui ig init mg merge mt mergetool mv lg log ls panic pull push rb rebase rm rs reset rt remote rv revert setup sh show sm submodule st status sync tg tag track unfreeze unwip wip"
+    echo "abort am br branch bs bisect clone co continue checkout cp cherry-pick ci commit df diff dt difftool fetch freeze key gc gp grep gui ig init mg merge mt mergetool mv lg log ls panic pull push rb rebase rm rs reset rt remote rv revert setup sh show sm submodule ss stash st status sync tg tag track undo unfreeze unwip wip"
 }
 
 __git_all_commands=
