@@ -137,7 +137,6 @@ function __g2_eval() {
     "tg" ""
     "tag" "tg"
     "track" ""
-    "upgrade" "g2upgrade"
     "unfreeze" ""
     "unwip" ""
     "wip" ""
