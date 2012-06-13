@@ -67,6 +67,7 @@ apply_config
 "$GIT_EXE" config --global alias.rt remote
 "$GIT_EXE" config --global alias.st status
 "$GIT_EXE" config --global alias.ss stash
+"$GIT_EXE" config --global alias.sm submodule
 
 #"$GIT_EXE" config --global alias.alias "!"$GIT_EXE" config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\: \\2/' | sort"
 

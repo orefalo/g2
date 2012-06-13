@@ -261,8 +261,8 @@ cwd_truncate() {
 		fi
 		
         if [[ -z $h_color && -x /usr/bin/cksum ]] ;  then
-                cksum_color_no=`echo $uphost | cksum  | awk '{print $1%11}'`
-                color_index=(green GREEN yellow YELLOW blue BLUE magenta MAGENTA cyan CYAN white)              # FIXME:  bw,  color-256
+                cksum_color_no=`echo $uphost | cksum  | awk '{print $1%14}'`
+                color_index=(green GREEN red RED yellow YELLOW blue BLUE magenta MAGENTA cyan CYAN white WHITE)              # FIXME:  bw,  color-256
                 h_color=${color_index[cksum_color_no]}
 		        h_color=${!h_color}
         fi
