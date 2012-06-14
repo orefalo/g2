@@ -29,14 +29,14 @@ fi
 
 g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
 if [[ -z $g2count ]]; then
-    read -p "Count files in the bash prompt? (true)" -e g2count
+    read -p "Count files in the bash prompt? (true): " -e g2count
 else
     read -p "Count files in the bash prompt? ($g2count): " -e g2count
 fi
 
 g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
 if [[ -z $g2excludes ]]; then
-    read -p "Files to keep untouched (ie. \"-e .classpath -e .settings -e *.iml\"):" -e g2excludes
+    read -p "Files to keep untouched (ie. \"-e .classpath -e .settings -e *.iml\"): " -e g2excludes
 else
     read -p "Files to keep untouched ($g2excludes): " -e g2excludes
 fi
