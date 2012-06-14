@@ -1,6 +1,8 @@
 #!/bin/bash
 #
 
+[[ $1 == "upstream" ]] && pullOnly=true && shift
+
 [[ $# -gt 0 ]] && echo "Usage: <sync>" && echo "Remember, <sync>hing applies to the working branch, when <pull>ing applies when merging feature branches" && exit 1
 
 remote=$("$GIT_EXE" g2getremote)
@@ -27,5 +29,5 @@ rchg=$(grep -c "^>" /tmp/git_upstream_status_delta);
         exit 1;
     }
 }
-[[ $lchg -gt 0 ]] && { "$GIT_EXE" push || exit $?; }
+[[ -z $pullOnly && $lchg -gt 0 ]] && { "$GIT_EXE" push || exit $?; }
 exit 0;
