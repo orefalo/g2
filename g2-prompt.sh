@@ -17,7 +17,7 @@ unset rawhex_len
 
 conf=g2-prompt.conf;                   [[ -r $conf ]]  && . $conf
 conf=/etc/profile.d/g2-prompt.conf;    [[ -r $conf ]]  && . $conf
-conf=/etc/g2/g2-prompt.conf;              [[ -r $conf ]]  && . $conf
+conf=/etc/g2/g2-prompt.conf;           [[ -r $conf ]]  && . $conf
 conf=/etc/g2-prompt.conf;              [[ -r $conf ]]  && . $conf
 conf=~/.g2-prompt.conf;                [[ -r $conf ]]  && . $conf
 unset conf

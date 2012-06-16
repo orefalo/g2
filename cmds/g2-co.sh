@@ -15,6 +15,6 @@ isBranch=$("$GIT_EXE" branch -a | grep -c "$1")
     exit $?;
 }
 
-echo "There is no branch with that name, you may want to run 'g fetch <remote_name>' to refresh from the server"
-echo "If you are trying to revert a file from the index, consider 'g undo <file>'"
+echo "There is no branch called '$1', you may want to run 'g fetch <remote_name>' to refresh from the server"
+echo "If you are trying to revert a file, consider 'g undo <file>'"
 
