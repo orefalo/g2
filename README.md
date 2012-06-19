@@ -266,17 +266,20 @@ While based on git, **g2** enforces a simplier merge flow.
 So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens auto-magically. But in a few instances, you will need to resolve **conflicts** manually.
 
 
-When this happens, you will notice that the smart prompt turns red and shows an unfamiliar status: either detached or merge.
+When this happens, g2 will stop to command flow: I want to enphasize what that means.
+
+* If you are merging, a conflicts will stop before the final commit.
+* If you are rebasing, a conflicts will on the current replay step.
 
 
-TODO: SCREENSHOT
+You may resolve conflicts by issueing a `g mt` (mt=mergetool) that will open your favorite visual mergetool and let you resolve each conflicting file manually.
 
+But that's not over: once completed, you will need to resume the merge/rebase process manually.  
+Now, If you are a git expert, you know that there are actually 3 commands to resume form the 2 scenarios above. This is SO lame!
 
-How to resolv conflicts? Simple, issue a `g mt` (mt=mergetool). git will open your favorite visual mergetool and let you resolv each conflicting file manually.
+With **g2** we simplified it, no matter what flow you are in, manually resolving conflicts is resumes with a unique command: `g continue`, that's it!
 
-Once completed, type `g continue`. **g2** will resume the merge from where it stopped.
-
-There is also a `g abort` that cancels an ongoing merge/rebase. handy to revert back to state prior to triggering the merge.
+Finally I should probably mention `g abort` that cancels an ongoing merge/rebase and reverts back to state prior to triggering the merge.
 
 
 ##Tracking
