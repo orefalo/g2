@@ -170,7 +170,7 @@ The key's randomart image is:
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYUTgzU9zjsdda9WBEED5bH+SVMq5bYoIxPSzop2IqUBoyyOlRdHt4dy2r/MWiB2eKQOQmPRE7SeawhFWYbCwEdi6BtEe8m4PiZd3OIRV13TlPj54Hi6Q1Ab8emEAH026L4kwef46+j0aJf/7tZzUw/uZW9Wrnf1VN+J1VlWvmYaG9JpPBuatAlTV9rhCeQ2WO39KYWVYJxH1mO0zPEpuTBojji7HYJtlS4OCKgY9mCVBPiUzzLfmrlIhZz+k5rMWv6i4tQtats23qtHEOi9GxJm4+TSGLwM89/C186CJ+8Yx0g/c2DIbVtPm2VMwUayu8wU4GfBHtOwin4cLWsvT orefalo@yahoo.com
 ```
 
-##Basic commands
+##Committing
 
 Git is often referenced as a content SCM that freezes the state of the repository on every commit. So rather than providing the rather granular commands `git add` and `git rm` commands, **g2** introduces `freeze` and `unfreeze`.
 
@@ -182,6 +182,7 @@ Equally straightforward is the `g unfreeze` command, which unstages the files fo
 
 The contents of the staging area can be committed with the `g ci -m "msg"` command. No rocket science here, you may however like the `g undo commit` command that reverts the last commit
 
+I would recommend a look at the cheatsheet to better understand how these commands work: [CheatSheet](http://orefalo.github.com/g2/)
 
 ##History
 
