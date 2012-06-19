@@ -167,7 +167,7 @@ The key's randomart image is:
 |    o.= .        |
 |     +..         |
 +-----------------+
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYUTgzU9zjsdda9WBEED5bH+SVMq5bYoIxPSzop2IqUBoyyOlRdHt4dy2r/MWiB2eKQOQmPRE7SeawhFWYbCwEdi6BtEe8m4PiZd3OIRV13TlPj54Hi6Q1Ab8emEAH026L4kwef46+j0aJf/7tZzUw/uZW9Wrnf1VN+J1VlWvmYaG9JpPBuatAlTV9rhCeQ2WO39KYWVYJxH1mO0zPEpuTBojji7HYJtlS4OCKgY9mCVBPiUzzLfmrlIhZz+k5rMWv6i4tQtats23qtHEOi9GxJm4+TSGLwM89/C186CJ+8Yx0g/c2DIbVtPm2VMwUayu8wU4GfBHtOwin4cLWsvT orefalo@yahoo.com
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYUTgzU9zjsdda9WBEED5bH+SVMq5bYoIxPSzop2IqUBoyyOlRdHt4dy2r/MWiB2eKQOQmPRE7SeawhFWYbCwEdi6BtEe8m4PiZd3OIRV13TlPj54Hi6Q1Ab8emEAH026L4kwef46+j0aJf/7tZzUw/uZW9Wrnf1VN+J1VlWvmYaG9JpPBuatAlTV9rhCeQ2WO39KYWVYJxH1mO0zPEpuTBojji7HYJtlS4OCKgY9mCVBPiUzzLfmrlIhZz+k5rMWv6i4tQtats23qtHEOi9GxJm4+TSmaiGLwM89/C186CJ+8Yx0g/c2DIbVtPm2VMwUayu8wU4GfBHtOwin4cLWsvT orefalo@yahoo.com
 ```
 
 ##Committing
@@ -318,7 +318,7 @@ The above graph is 30+ developers working together on about 20 active feature br
 In order to achieve this result, **g2** enforces two different merging scenarios, each backed by a different command.
 
 1. Saving the code into its working branch, that's what we do most of the time
-2. Merging features branches, like merging the latest changes from production.
+2. Merging features from other branches, like merging the latest changes from production.
 
 The matching commands are `g sync` and `g pull`, here is how to use them:
 
@@ -331,7 +331,7 @@ For the git expert, the command issues a _fetch, a rebase and a push_ with a mul
 
 ##Saving the Work In Progress (WIP)
 
-Saving the _work in progress_ is a common task: Typically, git _stash_ comes to the rescue. The issue with stashing is that you typically loose track of which branch the stash was created from. Stashing is indeed a short term solution to save the work in progress.
+Saving the _work in progress_ is a common task: Typically, git _stash_ comes to the rescue. The issue with stashing is that you typically loose track of which branch it was created from. Stashing is indeed a short term solution.
 
 **g2** introduces `wip` and `unwip`. Two handy commands that you will learn to love. Unlike stashing, wip commits the work in progress as a regular commit.
 
@@ -359,11 +359,12 @@ M	g2-prompt.sh
 $
 ```
 
-But unlike commits, wip commits **CANNOT** be **merged, pushed or synched**. You **cannot commit** on top of them either. In orther words, a wip commit in meant to stay at the tip of the branch until you are ready to `unwip` and resume your development.
+But unlike commits, wip commits **CANNOT** be **merged, pushed or synched**. You **cannot commit** on top of them either.  
+In orther words, a wip commit in meant to stay at the tip of the branch until you are ready to `unwip` and resume your development.
 
 ## Upstream
 
-For convinience, several commands have been enhanced to accept the "upstream" keywork.
+For convinience, several commands have been enhanced to accept the "upstream" keywork. As discussed earlier, the upstream is the on the server that syncs with your local branch. To see tracking setting, just enter `g track`
 
 * g rs upstream - resets the current branch to the state of the upstream (read the state of the branch on the server)
 * g merge upstream - merge local branch from the contents from the upstream
@@ -411,13 +412,12 @@ Distributed under the GNU General Public License, version 2.0.
 * g as - aliasing
 * g rebase upstream
 * g merge upstream
-* add doc about, g sync upstream
 * g undo needs more validations
 * enforce completions for undo *, and all the upstream commands
 
 ## FIXED
 
-
+* add doc about, g sync upstream + completion
 * g sync upstream
 * sm - not working
 * g undo merge = reset --hard ORIG_HEAD

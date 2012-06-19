@@ -1333,6 +1333,19 @@ _git_submodule ()
 	fi
 }
 
+
+_git_sync ()
+{
+    case "$cur" in
+        u*)
+            __gitcomp "upstream"
+            return
+        ;;
+    esac
+    COMPREPLY=()
+}
+
+
 _git_tg ()
 {
 	local i c=1 f=0
