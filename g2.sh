@@ -144,6 +144,7 @@ function __g2_eval() {
     "undo" ""
     "unfreeze" ""
     "unwip" ""
+    "version" "g2version"
     "wip" ""
 	 );
 	local cmd=$(__g2_contains "${A[@]}" $1 )

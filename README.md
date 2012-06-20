@@ -417,6 +417,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED
 
+* g version
 * add doc about, g sync upstream + completion
 * g sync upstream
 * sm - not working
