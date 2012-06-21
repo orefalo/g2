@@ -53,7 +53,9 @@ LOCKFILE=$(which lockfile)
 [[ -n $LOCKFILE ]] && lockfile -2 -r 3 /tmp/git-config.lock
 
 save_config
-test -f ~/.gitconfig && mv -f ~/.gitconfig ~/.gitconfig.pre-g2
+[[ -f ~/.gitconfig && $(grep "#G2 - https://github.com/orefalo/g2" ~/.gitconfig | wc -l ) -eq 0 ]] && mv -f ~/.gitconfig ~/.gitconfig.pre-g2
+
+echo "#G2 - https://github.com/orefalo/g2" > ~/.gitconfig
 apply_config
 
 $GIT_EXE config --global core.excludesfile ~/.gitignore_global
