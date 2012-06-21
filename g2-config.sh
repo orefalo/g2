@@ -53,7 +53,7 @@ LOCKFILE=$(which lockfile)
 [[ -n $LOCKFILE ]] && lockfile -2 -r 3 /tmp/git-config.lock
 
 save_config
-rm -f ~/.gitconfig
+test -f ~/.gitconfig && mv -f ~/.gitconfig ~/.gitconfig.pre-g2
 apply_config
 
 $GIT_EXE config --global core.excludesfile ~/.gitignore_global
