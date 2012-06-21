@@ -288,23 +288,26 @@ The whole concept of _tracking_ is broken in git. It's not so much the feature, 
 
 Backup… let's start from the beginning, the **g2** way this time:
 
-Most G2 commands only apply to branch you are in, there is no magic updates happening behind the scene. Please type the following command: `g track`, you should see something as such:
+Most G2 commands only apply to the branch you are in, there is no magic updates happening behind the scene: for instance, when you get changes from the server, they only apply to your current branch.
+
+Please type the following command: `g track`, you should see something as such:
 
 ![image](http://orefalo.github.com/g2/images/track.png)
 
-That's the tracking table. the first sections shows how each local branch is _linked_ to its upstream remote/branch.
+That's the tracking table. the first sections shows how each local branch is _linked_ to its **upstream** remote/branch. In other words, what you see is the mapping between your local branches and the ones on the server(s). clear?
 
-So how to use it? 
+Ok... and now what? 
 
-When you synchronize the current branch, g2 reads that table, figured the upstream and automatically pushes and pulls to the remote branch that it is connected with.
+Well tracking is used accross several commands in **g2**, the most common one is `g sync` which you will learn in the next section. But you can also issue a `g reset upstream` or a `g diff upstream`. Even when you create a branch, **g2** reads to current tracking to figure where to create the remote branch.
 
-It is also common to see branches with no upstream, in which can you may use `g track remote/branch` to set it.
+Note that it is also common to see branches with no upstream branch, in which case you may use `g track remote/branch` to enforce the mapping.
 
 
 ##Synching
 
-Before introducing one of the main **g2** features, let me talk about what **NOT** to do when merging with git.    
-Look at these graphs taken from various projects on github. Note how the branches overlap and how these loops make the graphic extremely difficult to read as the number of commiters increases.
+Before introducing one of the main **g2** features, let me talk about what **NOT** to do when merging with git.  
+    
+Please have a glance at these graphs taken from various projects on github. Note how the branches overlap and how these loops make the graphic extremely difficult to read as the number of commiters increases.
 
 ![image](http://orefalo.github.com/g2/images/h2.jpg)
 ![image](http://orefalo.github.com/g2/images/h3.jpg)
@@ -313,11 +316,11 @@ Looks familiar? Wouldn't it be nicer to have straight lines, with segments showi
 
 ![image](http://orefalo.github.com/g2/images/good_branching.png)
 
-The above graph is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to read.
+The above graph is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to read. Two types of flows… the work on the branch itself, and merging contents/features from others, we will get back on this in a minute.
 
-In order to achieve this result, **g2** enforces two different merging scenarios, each backed by a different command.
+In order to achieve this result, **g2** enforces two different merging scenarios, each backed by a different command:
 
-1. Saving the code into its working branch, that's what we do most of the time
+1. Saving the code in the working branch, that's what we do most of the time
 2. Merging features from other branches, like merging the latest changes from production.
 
 The matching commands are `g sync` and `g pull`, here is how to use them:
@@ -328,6 +331,8 @@ For the git expert, the command issues a _fetch, a rebase and a push_ with a mul
 
 * Use `g pull` when merging contents from a feature branches.
 
+
+Note: **g2** also supports `g sync upstream` which only fetch and rebase, handy with read-only clones ;-)
 
 ##Saving the Work In Progress (WIP)
 
@@ -411,6 +416,7 @@ Distributed under the GNU General Public License, version 2.0.
 * g mode - for advanced users
 * g as - aliasing
 * g rebase upstream
+* g diff upstream
 * g merge upstream
 * g undo needs more validations
 * enforce completions for undo *, and all the upstream commands
