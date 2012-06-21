@@ -6,6 +6,17 @@
 # Conceptually based on gitcompletion (http://gitweb.hawaga.org.uk/).
 # Distributed under the GNU General Public License, version 2.0.
 #
+# The contained completion routines provide support for completing:
+#
+#    *) local and remote branch names
+#    *) local and remote tag names
+#    *) .git/remotes file names
+#    *) git 'subcommands'
+#    *) tree paths within 'ref:path/to/file' expressions
+#    *) common --long-options
+#
+# Script modified to accomodate G2
+#   - orefalo
 
 if [[ -n ${ZSH_VERSION-} ]]; then
 	autoload -U +X bashcompinit && bashcompinit
@@ -35,7 +46,8 @@ __gitdir ()
 	fi
 }
 
-# __gitcomp_1 requires 2 arguments
+# GIT_PS1 removed, G2 provides g2-prompt
+
 __gitcomp_1 ()
 {
 	local c IFS=$' \t\n'
@@ -241,13 +253,6 @@ __gitcomp ()
 __gitcomp_nl ()
 {
 	local IFS=$'\n'
-
-	# ZSH would quote the trailing space added with -S. bash users
-	# will appreciate the extra space to compensate the use of -o nospace.
-	if [ -n "${ZSH_VERSION-}" ] && [ "$suffix" = " " ]; then
-		suffix=""
-	fi
-
 	COMPREPLY=($(compgen -P "${2-}" -S "${4- }" -W "$1" -- "${3-$cur}"))
 }
 
@@ -276,16 +281,9 @@ __git_tags ()
 # by checkout for tracking branches
 __git_refs ()
 {
-    echo params- "${1-}" "${2-}" >> /tmp/debug
-
 	local i hash dir="$(__gitdir "${1-}")" track="${2-}"
-
-    echo dir - $dir >> /tmp/debug
-
 	local format refs
 	if [ -d "$dir" ]; then
-        echo $cur >> /tmp/debug
-
 		case "$cur" in
 		refs|refs/*)
 			format="refname"
@@ -422,9 +420,7 @@ __git_complete_revlist_file ()
 		*)   pfx="$ref:$pfx" ;;
 		esac
 
-		local IFS=$'\n'
-		COMPREPLY=($(compgen -P "$pfx" \
-			-W "$("$GIT_EXE" --git-dir="$(__gitdir)" ls-tree "$ls" \
+		__gitcomp_nl "$("$GIT_EXE" --git-dir="$(__gitdir)" ls-tree "$ls" \
 				| sed '/^100... blob /{
 				           s,^.*	,,
 				           s,$, ,
@@ -438,7 +434,7 @@ __git_complete_revlist_file ()
 				           s,$,/,
 				       }
 				       s/^.*	//')" \
-			-- "$cur_"))
+			"$pfx" "$cur_" ""
 		;;
 	*...*)
 		pfx="${cur_%...*}..."
@@ -471,7 +467,6 @@ __git_complete_remote_or_refspec ()
 {
 	local cur_="$cur" cmd="${words[1]}"
 	local i c=2 remote="" pfx="" lhs=1 no_complete_refspec=0
-    echo $cmd >> /tmp/debug
 	if [ "$cmd" = "remote" ]; then
 		((c++))
 	fi
@@ -517,11 +512,6 @@ __git_complete_remote_or_refspec ()
 		cur_="${cur_#+}"
 		;;
 	esac
-    echo cmd $cmd >> /tmp/debug
-    echo lhs $lhs >> /tmp/debug
-    echo pfx "$pfx" >> /tmp/debug
-    echo cur_ $cur_ >> /tmp/debug
-    echo remote $remote >> /tmp/debug
 	case "$cmd" in
 	fetch)
 		if [ $lhs = 1 ]; then
@@ -531,7 +521,6 @@ __git_complete_remote_or_refspec ()
 		fi
 		;;
 	pull|rt|remote)
-        echo pull case >> /tmp/debug
 		if [ $lhs = 1 ]; then
 			__gitcomp_nl "$(__git_refs "$remote")" "$pfx" "$cur_"
 		else
@@ -577,6 +566,7 @@ __git_compute_all_commands ()
 	__git_all_commands=$(__git_list_all_commands)
 }
 
+# __git_list_porcelain_commands REMOVED
 __git_pretty_aliases ()
 {
 	local i IFS=$'\n'
@@ -837,6 +827,10 @@ _git_df ()
 			"
 		return
 		;;
+	u*)
+               __gitcomp "upstream"
+               return
+               ;;
 	esac
 	__git_complete_revlist_file
 }
@@ -866,6 +860,10 @@ _git_dt ()
 			--tool="
 		return
 		;;
+	u*)
+               __gitcomp "upstream"
+               return
+               ;;
 	esac
 	__git_complete_file
 }
@@ -1098,6 +1096,11 @@ _git_mg ()
 	--*)
 		__gitcomp "$__git_merge_options"
 		return
+        ;;
+	 u*)
+        __gitcomp "upstream"
+        return
+        ;;
 	esac
 	__gitcomp_nl "$(__git_refs)"
 }
@@ -1203,6 +1206,11 @@ _git_rb ()
 			"
 
 		return
+		;;
+	u*)
+               __gitcomp "upstream"
+               return
+               ;;
 	esac
 	__gitcomp_nl "$(__git_refs)"
 }
@@ -1315,6 +1323,51 @@ _git_show ()
 	_git_sh
 }
 
+_git_stash ()
+{
+	local save_opts='--keep-index --no-keep-index --quiet --patch'
+	local subcommands='save list show apply clear drop pop create branch'
+	local subcommand="$(__git_find_on_cmdline "$subcommands")"
+	if [ -z "$subcommand" ]; then
+		case "$cur" in
+		--*)
+			__gitcomp "$save_opts"
+			;;
+		*)
+			if [ -z "$(__git_find_on_cmdline "$save_opts")" ]; then
+				__gitcomp "$subcommands"
+			else
+				COMPREPLY=()
+			fi
+			;;
+		esac
+	else
+		case "$subcommand,$cur" in
+		save,--*)
+			__gitcomp "$save_opts"
+			;;
+		apply,--*|pop,--*)
+			__gitcomp "--index --quiet"
+			;;
+		show,--*|drop,--*|branch,--*)
+			COMPREPLY=()
+			;;
+		show,*|apply,*|drop,*|pop,*|branch,*)
+			__gitcomp_nl "$("$GIT_EXE" --git-dir="$(__gitdir)" stash list \
+					| sed -n -e 's/:.*//p')"
+			;;
+		*)
+			COMPREPLY=()
+			;;
+		esac
+	fi
+}
+
+_git_ss()
+{
+  _git_stash
+}
+
 _git_submodule ()
 {
 	__git_has_doubledash && return
@@ -1333,6 +1386,10 @@ _git_submodule ()
 	fi
 }
 
+_git_sm()
+{
+  _git_submodule
+}
 
 _git_sync ()
 {
@@ -1390,25 +1447,10 @@ _git_track ()
 	__gitcomp_nl "$(__git_refs)"
 }
 
-_git ()
+__git_main ()
 {
 	local i c=1 command __git_dir
 
-	if [[ -n ${ZSH_VERSION-} ]]; then
-		emulate -L bash
-		setopt KSH_TYPESET
-
-		# workaround zsh's bug that leaves 'words' as a special
-		# variable in versions < 4.3.12
-		typeset -h words
-
-		# workaround zsh's bug that quotes spaces in the COMPREPLY
-		# array if IFS doesn't contain spaces.
-		typeset -h IFS
-	fi
-
-	local cur words cword prev
-	_get_comp_words_by_ref -n =: cur words cword prev
 	while [ $c -lt $cword ]; do
 		i="${words[c]}"
 		case "$i" in
@@ -1451,12 +1493,56 @@ _git ()
 	local completion_func="_git_${command//-/_}"
 	declare -f $completion_func >/dev/null && $completion_func && return
 
+#	local expansion=$(__git_aliased_command "$command")
+#	if [ -n "$expansion" ]; then
+#		completion_func="_git_${expansion//-/_}"
+#		declare -f $completion_func >/dev/null && $completion_func
+#	fi
 }
 
+__git_func_wrap ()
+{
+	if [[ -n ${ZSH_VERSION-} ]]; then
+		emulate -L bash
+		setopt KSH_TYPESET
 
-complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
-	|| complete -o default -o nospace -F _git g
+		# workaround zsh's bug that leaves 'words' as a special
+		# variable in versions < 4.3.12
+		typeset -h words
 
-complete -o bashdefault -o default -o nospace -F _git git 2>/dev/null \
-	|| complete -o default -o nospace -F _git git
+		# workaround zsh's bug that quotes spaces in the COMPREPLY
+		# array if IFS doesn't contain spaces.
+		typeset -h IFS
+	fi
+	local cur words cword prev
+	_get_comp_words_by_ref -n =: cur words cword prev
+	$1
+}
+
+# Setup completion for certain functions defined above by setting common
+# variables and workarounds.
+# This is NOT a public function; use at your own risk.
+__git_complete ()
+{
+	local wrapper="__git_wrap${2}"
+	eval "$wrapper () { __git_func_wrap $2 ; }"
+	complete -o bashdefault -o default -o nospace -F $wrapper $1 2>/dev/null \
+		|| complete -o default -o nospace -F $wrapper $1
+}
+
+# wrapper for backwards compatibility
+_git ()
+{
+	__git_wrap__git_main
+}
+__git_complete git __git_main
+__git_complete g __git_main
+
+# The following are necessary only for Cygwin, and only are needed
+# when the user has tab-completed the executable name and consequently
+# included the '.exe' suffix.
+#
+if [ Cygwin = "$(uname -o 2>/dev/null)" ]; then
+__git_complete git.exe __git_main
+fi
 
