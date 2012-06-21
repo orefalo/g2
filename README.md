@@ -14,7 +14,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 * **g2** provides two letter acronyms for most commands.
 * **g2** eases the merge process.
 * **g2** provides a reduced set of commands which give guidance on what to do next.
-* **g2** enhances command line experience with TAB completion and a smart prompt.
+* **g2** enhances command line experience auto-completion and a smart prompt.
 * **g2** warns when a branch history was changed on the server (forced pushed).
 * **g2** checks the freshness of the branch prior to merging and warns accordingly.
 * **g2** enforces a clean linear history by introducing new commands.
@@ -62,7 +62,7 @@ Add the following script to **/etc/bashrc** or **~/.bashrc** (or any other file 
 
 ###Windows:
 
-Git is not a prerequisit on windows as the installer comes bundled with it.
+Git is not a prerequisit on Windows as the installer comes bundled with it.
 
 Please download the Windows native installer from [this link](https://github.com/orefalo/g2/downloads).
 
@@ -119,9 +119,23 @@ Usage:
 
 On top of providing two letters acronyms for most git commands, **g2** has interesting features which enhance command line experience.
 
-## The Prompt
+## Prompt & Completion
 
-TODO
+Let's start with the "sexy" one: the g2 prompt. 
+
+![image](http://orefalo.github.com/g2/images/g2-prompt.jpg)
+
+The prompt shows:
+
+* The current branch name and the hash of the last commit. **M** is used as a subtitute for "master"
+* File counts: staged, changed and untracked filed.
+* Obviously username and host.
+* And finally the path, which smartly truncates at 40 caracters.
+* The prompt colors will adjust depending of the state of the repositoty: clean, modified, comflict resolution... etc
+* Not visible on this screenshot is the optional error code should a shell command fail.
+
+Note: file counters can be expensive with large repositories. You may turn off the feature by running `g setup` and setting "Count files in the bash prompt? (true):" to **false**.
+
 
 ##Setup
 
@@ -137,38 +151,12 @@ allright, with **g2** this is how it works:
 
 At anytime in the future, you may display your ssh public key with: `g key`. copy/paste it into github. You are done.
 
-```
-$ git key
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYUTgzU9zjsdda9WBEED5bH+SVMq5bYoIxPSzop2IqUBoyyOlRdHt4dy2r/MWiB2eKQOQmPRE7SeawhFWYbCwEdi6BtEe8m4PiZd3OIRV13TlPj54Hi6Q1Ab8emEAH026L4kwef46+j0aJf/7tZzUw/uZW9Wrnf1VN+J1VlWvmYaG9JpPBuatAlTV9rhCeQ2WO39KYWVYJxH1mO0zPEpuTBojji7HYJtlS4OCKgY9mCVBPiUzzLfmrlIhZz+k5rMWv6i4tQtats23qtHEOi9GxJm4+TSGLwM89/C186CJ+8Yx0g/c2DIbVtPm2VMwUayu8wU4GfBHtOwin4cLWsvT orefalo@dummy.com
-```
+![image](http://orefalo.github.com/g2/images/key.jpg)
 
 Should you need to regenerate the key pair, the process is equally user friendly: use `g key -gen`
 
-```
-$ git key -gen
-Regenerate SSH Key (y/n)? y
-Generating SSH keys...
-Generating public/private rsa key pair.
-/Users/orefalo/.ssh/id_rsa already exists.
-Overwrite (y/n)? y
-Your identification has been saved in /Users/orefalo/.ssh/id_rsa.
-Your public key has been saved in /Users/orefalo/.ssh/id_rsa.pub.
-The key fingerprint is:
-57:60:84:fa:0e:3b:96:12:15:2e:f3:d5:30:ce:aa:4f orefalo@yahoo.com
-The key's randomart image is:
-+--[ RSA 2048]----+
-|         o+      |
-|      . +. .     |
-|     . = +  .    |
-|    o + + ..     |
-|     = +S .      |
-|    . + ..       |
-|     oE=         |
-|    o.= .        |
-|     +..         |
-+-----------------+
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDYUTgzU9zjsdda9WBEED5bH+SVMq5bYoIxPSzop2IqUBoyyOlRdHt4dy2r/MWiB2eKQOQmPRE7SeawhFWYbCwEdi6BtEe8m4PiZd3OIRV13TlPj54Hi6Q1Ab8emEAH026L4kwef46+j0aJf/7tZzUw/uZW9Wrnf1VN+J1VlWvmYaG9JpPBuatAlTV9rhCeQ2WO39KYWVYJxH1mO0zPEpuTBojji7HYJtlS4OCKgY9mCVBPiUzzLfmrlIhZz+k5rMWv6i4tQtats23qtHEOi9GxJm4+TSmaiGLwM89/C186CJ+8Yx0g/c2DIbVtPm2VMwUayu8wU4GfBHtOwin4cLWsvT orefalo@yahoo.com
-```
+![image](http://orefalo.github.com/g2/images/key_gen.jpg)
+
 
 ##Committing
 
@@ -232,7 +220,7 @@ master (ahead 0) | (behind 0) origin/master
 
 Given a parameter, the command creates a new branch. **g2** walks you though the steps that will typically take git 3 to 4 commands.
 
-TODO:Screenshot
+![image](http://orefalo.github.com/g2/images/newbranch.jpg)
 
 
 Use checkout `g co NEW_branch` to switch to that branch.
@@ -382,19 +370,27 @@ Please refer to the [cheatsheet](http://orefalo.github.com/g2/).
 
 #FAQ
 
-###Why "g2" ?
+###Why "g2"?
 
-* `g` is the command, and it obviously comes from **git**
+* `g` is the command and it obviously comes from **git**
 * `2` because most of the actions are two letters long.
 
-
-###Is it a new git-flow ?
+###Is it a new git-flow?
 
 No, **g2** doesn't enforce any branching policy.  
 
+###Is G2 compatible with git?
+
+* From a source control standpoint, yes **g2** is interopable with git.
+* From a command line parameters standpoint, definitly NOT. **g2** grammar is simplified and hence doesn't support all the options available in git.
+
+###Why is G2 reinstalled on every launch?
+
+To ensure the git configuration is in a stable, known state.
+
 ###What if my favorite command is missing?
 
-Please notify us via the project issue tracker. For the time being, please use `$GIT_EXE`
+Please notify us via the project issue tracker. For the time being, please use `$GIT_EXE` to run the real git command.
 
 #Credits
 
@@ -404,6 +400,7 @@ Author: [Olivier Refalo](https://github.com/orefalo)
 * Contains a modified version of git-completion.bash - Shawn O. Pearce
 * [GUM](https://github.com/saintsjd/gum) by saintsjd. Wonder why this project feelt short on delivery.
 * Andrew Peterson/ NDP Software for their cool interactive Cheatsheet
+* The mainteners behind msysgit who made git on windows all possible
 
 ##License
 
@@ -411,18 +408,23 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* some completions are not properly working - git push origin <TAB> not working ?
-* completion, rename __git to avoid conflicts
+* upgrade g2-msys to 1.7.11
+* doc: provide basic guidance on how a commit is performed using g2
+* doc: add typical solutions:  
+* doc: talk about gc
+* doc: talk about g am
+* some completions are not properly working - git push origin <TAB> not working ? -> upgrade the completion script from upstream git
 * g mode - for advanced users
 * g as - aliasing
-* g rebase upstream
-* g diff upstream
-* g merge upstream
+* g rb upstream
+* g df upstream
+* g mg upstream
 * g undo needs more validations
 * enforce completions for undo *, and all the upstream commands
 
 ## FIXED
 
+* completion, rename __git to avoid conflicts -> cancelled: probably better this way
 * g version
 * add doc about, g sync upstream + completion
 * g sync upstream
