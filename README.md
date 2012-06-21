@@ -254,20 +254,19 @@ While based on git, **g2** enforces a simplier merge flow.
 So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens auto-magically. But in a few instances, you will need to resolve **conflicts** manually.
 
 
-When this happens, g2 will stop to command flow: I want to enphasize what that means.
+When this happens, g2 will stop the command flow. Let me enphasize what that means:
 
 * If you are merging, a conflicts will stop before the final commit.
-* If you are rebasing, a conflicts will on the current replay step.
+* If you are rebasing or syncing, a conflicts will stop on the current replay step.
 
+You may resolve conflicts by issueing a `g mt` (mt=mergetool). The default visual mergetool will show up and let you resolve each conflicting file manually. Typically, you will see your file on one side, the file you are merging with on the other and the common ancestor. The common ancestor is here to quickly pick what happened to the file: you can quickly pick additions and removals.
 
-You may resolve conflicts by issueing a `g mt` (mt=mergetool) that will open your favorite visual mergetool and let you resolve each conflicting file manually.
+Once conflict resolution is completed, the merge process needs to be resumed manually.  
+Now, If you are a git expert, you know that there are actually 3 commands to resume form the 2 scenarios above. git makes it so confusing, doesn't it?
 
-But that's not over: once completed, you will need to resume the merge/rebase process manually.  
-Now, If you are a git expert, you know that there are actually 3 commands to resume form the 2 scenarios above. This is SO lame!
+With **g2** we simplified the process: no matter what flow you are in, there is only one command to resume: `g continue`. That's it!
 
-With **g2** we simplified it, no matter what flow you are in, manually resolving conflicts is resumes with a unique command: `g continue`, that's it!
-
-Finally I should probably mention `g abort` that cancels an ongoing merge/rebase and reverts back to state prior to triggering the merge.
+Finally I should probably mention `g abort` that cancels an ongoing merge/rebase and reverts back to the state prior to the merge attempt.
 
 
 ##Tracking
@@ -413,17 +412,18 @@ Distributed under the GNU General Public License, version 2.0.
 * doc: add typical solutions:  
 * doc: talk about gc
 * doc: talk about g am
-* some completions are not properly working - git push origin <TAB> not working ? -> upgrade the completion script from upstream git
 * g mode - for advanced users
 * g as - aliasing
-* g rb upstream
-* g df upstream
-* g mg upstream
 * g undo needs more validations
 * enforce completions for undo *, and all the upstream commands
 
 ## FIXED
 
+* g dt upstream
+* g rb upstream
+* g df upstream
+* g mg upstream
+* g2 completion - merged with upstream git 1.7.11 completion
 * completion, rename __git to avoid conflicts -> cancelled: probably better this way
 * g version
 * add doc about, g sync upstream + completion

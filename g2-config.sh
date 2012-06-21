@@ -61,8 +61,6 @@ $GIT_EXE config --global core.excludesfile ~/.gitignore_global
 # SHORT ALIASES -----------
 "$GIT_EXE" config --global alias.ls ls-files
 "$GIT_EXE" config --global alias.mt mergetool
-"$GIT_EXE" config --global alias.dt difftool
-"$GIT_EXE" config --global alias.df diff
 "$GIT_EXE" config --global alias.bs bisect
 "$GIT_EXE" config --global alias.gp grep
 "$GIT_EXE" config --global alias.tg tag
