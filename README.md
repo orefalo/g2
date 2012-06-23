@@ -195,11 +195,11 @@ Since we are talking about history, I should probably mention that **g2** will *
 
 ##Panic!
 
-It happened to all of us. You try a new command (like a rebase) and things don't work as expected. Suddenly, you feel the urgency to hunt an expert advise. So you start looking for the closest git-master: bad luck he's not around! there no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming… "CVS is so much betttter!"
+It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird stauts. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
 
 Well, you are panicking… and we built a command especially for you: `g panic`
 
-`panic` checks out the last good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats and your git-master can rest.
+Use `panic` when you feel like getting help from your git master. It checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats and your git-master can rest.
 
 
 ##Branching
