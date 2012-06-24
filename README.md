@@ -148,7 +148,6 @@ allright, with **g2** this is how it works:
 
 ![image](http://orefalo.github.com/g2/images/setup.png)
 
-
 At anytime in the future, you may display your ssh public key with: `g key`. copy/paste it into github. You are done.
 
 ![image](http://orefalo.github.com/g2/images/key.jpg)
@@ -157,10 +156,11 @@ Should you need to regenerate the key pair, the process is equally user friendly
 
 ![image](http://orefalo.github.com/g2/images/key_gen.jpg)
 
-
 ##Committing
 
 Git is often referenced as a content SCM that freezes the state of the repository on every commit. So rather than providing the rather granular commands `git add` and `git rm` commands, **g2** introduces `freeze` and `unfreeze`.
+
+![image](http://orefalo.github.com/g2/images/freeze.jpg)
 
 Without arguments, `g freeze` literally freezes the state of the workspace into the staging area. Should you need to freeze just one file, or one folder, use `g freeze <path>`.
 
@@ -172,6 +172,15 @@ The contents of the staging area can be committed with the `g ci -m "msg"` comma
 
 I would recommend a look at the cheatsheet to better understand how these commands work: [CheatSheet](http://orefalo.github.com/g2/)
 
+##Undoing
+
+Since we introduced undoing in the previous section, let's cover it all.  
+**g2** comes with the following undo scenarios:
+
+* `g undo commit` - undo the last commit, put changes back into the staging area
+* `g undo merge` - reverts all commits up to the state before the last merge
+* `g undo myfile.txt` - reverts the changes in myfile.txt with the version from the repository.
+
 ##History
 
 It's so easy to get lost when starting git! Working with beginners, I found that an easy way to keep them focused is to provide _visuals_. Now this is not the github network graph, but it's close enough to get them focused. Type `g lg` and enjoy the enhanced colorized commit log output.
@@ -182,17 +191,6 @@ Learn to read that tree, it's important: it holds the commit history for the cur
 
 Since we are talking about history, I should probably mention that **g2** will **ALWAYS** prompt before running any destructive actions.
 
-
-##Undoing
-
-**g2** comes with the following undo scenarios:
-
-
-* `g undo commit` - undo the last commit, put changes back into the staging area
-* `g undo merge` - reverts all commits up to the state before the last merge
-* `g undo myfile.txt` - reverts the changes in myfile.txt with the version from the repository.
-
-
 ##Panic!
 
 It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird stauts. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
@@ -200,7 +198,6 @@ It happened to all of us. You try a new command (like a rebase) and things don't
 Well, you are panicking… and we built a command especially for you: `g panic`
 
 Use `panic` when you feel like getting help from your git master. It checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats and your git-master can rest.
-
 
 ##Branching
 
@@ -221,7 +218,6 @@ master (ahead 0) | (behind 0) origin/master
 Given a parameter, the command creates a new branch. **g2** walks you though the steps that will typically take git 3 to 4 commands.
 
 ![image](http://orefalo.github.com/g2/images/newbranch.jpg)
-
 
 Use checkout `g co NEW_branch` to switch to that branch.
 
@@ -250,6 +246,9 @@ A _stable state_ means: **no modified files, no staged files**. Should you have 
 ##Merging
 
 While based on git, **g2** enforces a simplier merge flow.
+
+![image](http://orefalo.github.com/g2/images/conflicts.jpg)
+
 
 So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens auto-magically. But in a few instances, you will need to resolve **conflicts** manually.
 
@@ -311,6 +310,8 @@ In order to achieve this result, **g2** enforces two different merging scenarios
 2. Merging features from other branches, like merging the latest changes from production.
 
 The matching commands are `g sync` and `g pull`, here is how to use them:
+
+![image](http://orefalo.github.com/g2/images/sync.jpg)
 
 * Use `g sync` to synchronize the current branch. The command doesn't take any parameters because it uses the tracking table to figure the remote/branch. To enforce a clean linear history, the changes are always appended to the end of the branch. Once completed, the changes are sent back to the server.
 
