@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# push, but with a bunch of validations
+#  forbids wip commits from being pushed
+#  forbids push to the working branch
 
 error() {
     echo "fatal: sorry you can't use <push> in this context, please use the <sync> command to synchronize the current branch"

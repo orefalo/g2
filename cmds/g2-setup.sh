@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Sets up git by prompting user questions
 
 echo "Running G2 setup, press <ENTER> to select the default setting:"
 

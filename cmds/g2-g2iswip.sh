@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# returns true if there is a wip commit at the tip of the branch
 
 remote=$1
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote)

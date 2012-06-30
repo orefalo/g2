@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Returns true if the branch is behind its upstream branch
 
 local=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
 remote=$1

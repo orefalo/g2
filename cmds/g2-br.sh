@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# Displays list of all branches (local and upstream)
+#
+# Can also delete, rename and create branches (wizards)
 
 hasDMFlag() {
     local opt

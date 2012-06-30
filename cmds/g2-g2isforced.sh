@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# returns true if the branch in parameter was forced update
+#   if no parameters, figures the upstream branch from the tracking table
 
 remote=$1
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote)

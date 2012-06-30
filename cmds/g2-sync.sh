@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-
+# Performs a fetch, rebase, push with a bunch of validations
+#
 [[ $1 == "upstream" ]] && pullOnly=true && shift
 
 [[ $# -gt 0 ]] && echo "Usage: <sync>" && echo "Remember, <sync>hing applies to the working branch, when <pull>ing applies when merging feature branches" && exit 1

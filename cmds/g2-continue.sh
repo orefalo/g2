@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# This command is used to resume a conflict, either rebase or merge
-#  it will smartly do a rebase --skip when necessary
+# This command is used to resume conflict resolution,
+# Unlike git, it detects what needs to be resumed: rebase or merge
+#  and smartly run the right command
 
 state=$("$GIT_EXE" g2brstatus)
 

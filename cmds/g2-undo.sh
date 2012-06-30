@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# easy undo a file, a commit or a merge
 
 if [ $# -lt 1 ]
 then
