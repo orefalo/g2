@@ -419,7 +419,7 @@ Distributed under the GNU General Public License, version 2.0.
 * enforce completions for undo *, and all the upstream commands
 
 ## FIXED
-
+* g rv wasn't working
 * g dt upstream
 * g rb upstream
 * g df upstream
