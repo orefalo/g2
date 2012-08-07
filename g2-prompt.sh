@@ -383,7 +383,7 @@ parse_g2_status() {
 
         #### GET THE BRANCH NAME
         local branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
-        branch=${branch/master/M}
+        branch=${branch/#master/M}
 
         # another method of above:
         # branch=$(git symbolic-ref -q HEAD || { echo -n "detached:" ; git name-rev --name-only HEAD 2>/dev/null; } )
@@ -399,7 +399,7 @@ parse_g2_status() {
                         branch="<detached:$("$GIT_EXE" name-rev --name-only HEAD 2>/dev/null)"
                 elif   [[ "$op" ]];  then
                         branch="$op:$branch"
-                        [[ "$op" = "merge" ]] && branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
+                        [[ "$op" == "merge" ]] && branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
                         #branch="<$branch>"
                 fi
                 vcs_info="$branch$rawhex"
