@@ -38,7 +38,7 @@ Usage:
 	cp <commit> - cherry-pick
 	ci <?params...> - commit
 	clone <url> - clone a remote repository
-	df/dt <?params...> - compares files
+	df/dt <?params...> <file> or <upstream> - compares files
 	fetch - synchronizes remote branches
 	freeze/unfreeze <?-m comment> <?file> - freeze/unfreeze files
 	gc - garbage collects: run fsck & gc
@@ -54,10 +54,10 @@ Usage:
 	ls <?params...> - list files under source control
 	panic - gets you back on HEAD, cleans all untracked files
 	pull/push <?opts> <remote> <branch> - deals with other branches
-	rb <?params...> <branch> - rebase
+	rb <?params...> <branch> or <upstream> - rebase
 	rm <params...> - remove
 	rs <params...> - reset
-	rs 'upstream' - resets branch to upstream state
+	rs upstream - resets branch to upstream state
 	rt <?params...> - remote
 	rv <commit> - revert
 	setup - configures user, key, editor, tools
@@ -65,10 +65,10 @@ Usage:
 	sm <?params...> - submodule
 	ss <?params> - stash
 	st <?params...> - status
-	sync - syncs working branch: fetch, rebase & push
+	sync <?upstream> - syncs working branch: fetch, rebase & push
 	tg - tag
 	track <?upstream_branch> - shows/set tracking
-	undo file|'commit'|'merge'
+	undo <file>|commit <hash>|merge - reverts changes
 	wip/unwip - save/restore work in progress to branch
 EOF
 	return 0;

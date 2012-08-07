@@ -73,6 +73,10 @@ $GIT_EXE config --global core.excludesfile ~/.gitignore_global
 
 #"$GIT_EXE" config --global alias.alias "!"$GIT_EXE" config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\: \\2/' | sort"
 
+
+#TODO
+# inline freeze, undo, co
+
 # tells what branch have merged with master
 #"$GIT_EXE" config --global alias.ismerged 'branch -a --merged master'
 
@@ -108,7 +112,7 @@ cd $DIR
 # Process all aliases dynamically
 for cmd in $cmds
 do
-    al=$( basename $cmd )
+    al=$(basename $cmd)
     al=${al/g2-/}
     al=${al/\.sh/}
     al=${al/ /}

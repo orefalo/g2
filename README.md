@@ -408,7 +408,6 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* upgrade g2-msys to 1.7.11
 * doc: provide basic guidance on how a commit is performed using g2
 * doc: add typical solutions:  
 * doc: talk about gc
@@ -419,6 +418,9 @@ Distributed under the GNU General Public License, version 2.0.
 * enforce completions for undo *, and all the upstream commands
 
 ## FIXED
+
+* upgrade g2-msys to 1.7.11
+* fix little issue with undo,freeze,dt,ig
 * g rv wasn't working
 * g dt upstream
 * g rb upstream

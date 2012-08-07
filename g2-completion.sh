@@ -1447,6 +1447,23 @@ _git_track ()
 	__gitcomp_nl "$(__git_refs)"
 }
 
+_git_undo()
+{
+    case "$cur" in
+        c*)
+            __gitcomp "commit"
+            return
+        ;;
+        m*)
+            __gitcomp "merge"
+            return
+        ;;
+    esac
+    COMPREPLY=()
+
+}
+
+
 __git_main ()
 {
 	local i c=1 command __git_dir
