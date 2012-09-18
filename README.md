@@ -408,6 +408,8 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* allow g co <hash>
+* g2-co: check if branch is local then checkout branch, if remote checkout -b branch origin/branch
 * doc: provide basic guidance on how a commit is performed using g2
 * doc: add typical solutions:  
 * doc: talk about gc
@@ -419,6 +421,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED
 
+* issue with bash 3.2
 * upgrade g2-msys to 1.7.11
 * fix little issue with undo,freeze,dt,ig
 * g rv wasn't working

@@ -159,5 +159,3 @@ function __g2_eval() {
 	);
 }
 
-alias g=__g2_eval;
-alias git=__g2_eval;

@@ -20,6 +20,9 @@ source ./g2.sh
 echo -n "."
 source ./g2-prompt.sh
 
+alias g=__g2_eval;
+alias git=__g2_eval;
+
 echo " Enjoy!"
 
 cd $OLDpwd
