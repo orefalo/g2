@@ -408,6 +408,9 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* on windows: get version fails wth git path issue \program
+* on windows: get freeze .gitignore fails with path issue
+* g br newbranch (from a branch with no remote) -> does prompt to create the branch
 * allow g co <hash>
 * g2-co: check if branch is local then checkout branch, if remote checkout -b branch origin/branch
 * doc: provide basic guidance on how a commit is performed using g2
