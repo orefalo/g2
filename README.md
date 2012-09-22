@@ -408,8 +408,6 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* on windows: get version fails wth git path issue \program
-* on windows: get freeze .gitignore fails with path issue
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
 * allow g co <hash>
 * g2-co: check if branch is local then checkout branch, if remote checkout -b branch origin/branch
@@ -424,6 +422,9 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED
 
+* non-issue: g2-windows needs a new build - on windows: get freeze .gitignore fails with path issue
+* non-issue: g2-windows needs a new build - on windows: get version fails wth git path issue \program
+* g sync won't update the local branch
 * issue with bash 3.2
 * upgrade g2-msys to 1.7.11
 * fix little issue with undo,freeze,dt,ig

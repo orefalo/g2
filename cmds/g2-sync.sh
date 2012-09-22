@@ -17,7 +17,7 @@ remote=$("$GIT_EXE" g2getremote)
 	  echo " please issue a <g rs upstream> or a <g rb $remote> to resume" &&
 	  exit 1;
 branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
-"$GIT_EXE" rev-list --left-right $branch...$remote -- 2> /dev/null > /tmp/git_upstream_status_delta || exit $?
+"$GIT_EXE" rev-list --left-right $branch...$remote -- 2> /dev/null > /tmp/git_upstream_status_delta
 lchg=$(grep -c "^<" /tmp/git_upstream_status_delta);
 rchg=$(grep -c "^>" /tmp/git_upstream_status_delta);
 [[ $rchg -gt 0 ]] && { "$GIT_EXE" rebase $remote || {
