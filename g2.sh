@@ -38,7 +38,7 @@ Usage:
 	cp <commit> - cherry-pick
 	ci <?params...> - commit
 	clone <url> - clone a remote repository
-	df/dt <?params...> <file> or <upstream> - compares files
+	df/dt <?params...> <file> - compares files
 	fetch - synchronizes remote branches
 	freeze/unfreeze <?-m comment> <?file> - freeze/unfreeze files
 	gc - garbage collects: run fsck & gc
@@ -95,7 +95,6 @@ function __g2_eval() {
     "df" "g2diff"
     "diff" "g2diff"
     "dt" ""
-    "difftool" "dt"
     "fetch" ""
     "freeze" ""
     "gc" "g2gc"

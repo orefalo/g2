@@ -860,10 +860,6 @@ _git_dt ()
 			--tool="
 		return
 		;;
-	u*)
-               __gitcomp "upstream"
-               return
-               ;;
 	esac
 	__git_complete_file
 }
