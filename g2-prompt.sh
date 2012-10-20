@@ -111,7 +111,7 @@ rawhex_len=${rawhex_len:-5}
                CYAN='\[\033[1;36m\]'
               WHITE='\[\033[1;37m\]'
 
-		  goto_1col='\[\033[G\]'
+	  goto_1col='\[\033[G\]'
        colors_reset='\[\e[0m\]'
 
         # replace symbolic colors names to raw treminfo strings
@@ -121,6 +121,7 @@ rawhex_len=${rawhex_len:-5}
                 clean_vcs_color=${!clean_vcs_color}
                 added_vcs_color=${!added_vcs_color}
                    op_vcs_color=${!op_vcs_color}
+             addmoded_vcs_color=${!addmoded_vcs_color}
              detached_vcs_color=${!detached_vcs_color}
                   hex_vcs_color=${!hex_vcs_color}
 
@@ -135,8 +136,7 @@ rawhex_len=${rawhex_len:-5}
         fi
 
         ####################################################################  MARKERS
-        screen_marker="sCRn"
-        if [[ $LC_CTYPE = *UTF* && $TERM != "linux" ]];  then
+        if [[ "$LC_CTYPE $LC_ALL" =~ "UTF" && $TERM != "linux" ]];  then
                 elipses_marker="…"
         else
                 elipses_marker="..."
@@ -196,8 +196,9 @@ cwd_truncate() {
                     middle_tail=${BASH_REMATCH[1]}
 
                     # use truncated only if we cut at least 4 chars
-                    [[ $((  ${#path_middle} - ${#middle_tail}))  -gt 4  ]] && cwd=$path_head$elipses_marker$middle_tail$path_last_dir
-
+		    if [[ $((  ${#path_middle} - ${#middle_tail}))  -gt 4  ]];  then
+			cwd=$path_head$elipses_marker$middle_tail$path_last_dir
+		    fi
                 fi
         fi
         return
@@ -243,30 +244,36 @@ cwd_truncate() {
         #then
 
         host=${HOSTNAME}
-        if [[ $short_hostname = "on" && $(uname -s) != MINGW* ]]; then
+        if [[ $short_hostname = "on" ]]; then
+          if [[ "$(uname -s)" != MINGW* ]]; then
             host=$(hostname)
+          elif [[ "$(uname)" =~ CYGWIN* ]]; then
+	    host=`hostname`
+	  else
+	   host=`hostname -s`
+	  fi
         fi
         host=${host#$default_host}
-        uphost=`echo ${host} | tr a-z A-Z`
+        uphost=`echo ${host} | tr a-z-. A-Z_`
         if [[ $upcase_hostname = "on" ]]; then
                 host=${uphost}
         fi
 
-		h_color=${uphost}_host_color
-		h_color=${!h_color}
+	h_color=${uphost}_host_color
+	h_color=${!h_color}
 		
         if [[ -z $h_color ]] ;  then
-			h_color=$host_color
-			h_color=${!h_color}
-		fi
+	   h_color=$host_color
+	   h_color=${!h_color}
+	fi
 		
         if [[ -z $h_color && -x /usr/bin/cksum ]] ;  then
-                cksum_color_no=`echo $uphost | cksum  | awk '{print $1%14}'`
-                color_index=(green GREEN red RED yellow YELLOW blue BLUE magenta MAGENTA cyan CYAN white WHITE)              # FIXME:  bw,  color-256
-                h_color=${color_index[cksum_color_no]}
-		        h_color=${!h_color}
+            cksum_color_no=`echo $uphost | cksum  | awk '{print $1%14}'`
+            color_index=(green GREEN red RED yellow YELLOW blue BLUE magenta MAGENTA cyan CYAN white WHITE)              # FIXME:  bw,  color-256
+            h_color=${color_index[cksum_color_no]}
+	    h_color=${!h_color}
         fi
-
+      
         # we might already have short host name
         host=${host%.$default_domain}
 
@@ -381,7 +388,7 @@ parse_g2_status() {
                 rawhex="=$hex_vcs_color${rawhex:0:$rawhex_len}"
         fi
 
-        #### GET THE BRANCH NAME
+        #### branch
         local branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
         branch=${branch/#master/M}
 
@@ -399,7 +406,9 @@ parse_g2_status() {
                         branch="<detached:$("$GIT_EXE" name-rev --name-only HEAD 2>/dev/null)"
                 elif   [[ "$op" ]];  then
                         branch="$op:$branch"
-                        [[ "$op" == "merge" ]] && branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
+                        if [[ "$op" == "merge" ]] ;  then
+                            branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
+                        fi
                         #branch="<$branch>"
                 fi
                 vcs_info="$branch$rawhex"
@@ -433,8 +442,8 @@ parse_g2_status() {
 
 prompt_command_function() {
 
-        rc=$?
-        if [[ $rc -eq 0 ]]; then
+        rc="$?"
+        if [[ "$rc" == "0" ]]; then
                 rc=""
         else
                 rc="$rc_color$rc$colors_reset "
