@@ -8,7 +8,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 ##Benefits
 
-* **g2** will save you time by providing hight level commands.
+* **g2** will save you time by providing high level commands.
 * **g2** is generally safer than git as it prompts before destructive actions.
 * **g2** helps setup git settings : sshkeys, username, email and tools.
 * **g2** provides two letter acronyms for most commands.
@@ -62,7 +62,7 @@ Add the following script to **/etc/bashrc** or **~/.bashrc** (or any other file 
 
 ###Windows:
 
-Git is not a prerequisit on Windows as the installer comes bundled with it.
+Git is not a prerequisite on Windows as the installer comes bundled with it.
 
 Please download the Windows native installer from [this link](https://github.com/orefalo/g2/downloads).
 
@@ -127,12 +127,12 @@ Let's start with the "sexy" one: the g2 prompt.
 
 The prompt shows:
 
-* The current branch name and the hash of the last commit. **M** is used as a subtitute for "master"
+* The current branch name and the hash of the last commit. **M** is used as a substitute for "master"
 * File counts: staged, changed and untracked filed.
 * Obviously username and host.
-* And finally the path, which smartly truncates at 40 caracters.
-* The prompt colors will adjust depending of the state of the repositoty: clean, modified, comflict resolution... etc
-* Not visible on this screenshot is the optional error code should a shell command fail.
+* And finally the path, which smartly truncates at 40 characters.
+* The prompt colors will adjust depending of the state of the repository: clean, modified, conflict resolution... etc
+* Not visible on this screen shot is the optional error code should a shell command fail.
 
 Note: file counters can be expensive with large repositories. You may turn off the feature by running `g setup` and setting "Count files in the bash prompt? (true):" to **false**.
 
@@ -141,7 +141,7 @@ Note: file counters can be expensive with large repositories. You may turn off t
 
 So here you go, you downloaded git for the first time and I bet you are stuck on the ssh key generation. git is so lame and user unfriendly.
 
-allright, with **g2** this is how it works:
+alright, with **g2** this is how it works:
 
 1. type `g setup` and answer the questions.
 2. **that's it**! 
@@ -170,7 +170,7 @@ Equally straightforward is the `g unfreeze` command, which unstages the files fo
 
 The contents of the staging area can be committed with the `g ci -m "msg"` command. No rocket science here, you may however like the `g undo commit` command that reverts the last commit
 
-I would recommend a look at the cheatsheet to better understand how these commands work: [CheatSheet](http://orefalo.github.com/g2/)
+I would recommend a look at the cheat sheet to better understand how these commands work: [CheatSheet](http://orefalo.github.com/g2/)
 
 ##Undoing
 
@@ -193,7 +193,7 @@ Since we are talking about history, I should probably mention that **g2** will *
 
 ##Panic!
 
-It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird stauts. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
+It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird status. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
 
 Well, you are panicking… and we built a command especially for you: `g panic`
 
@@ -245,7 +245,7 @@ A _stable state_ means: **no modified files, no staged files**. Should you have 
 
 ##Merging
 
-While based on git, **g2** enforces a simplier merge flow.
+While based on git, **g2** enforces a simpler merge flow.
 
 ![image](http://orefalo.github.com/g2/images/conflicts.jpg)
 
@@ -253,12 +253,12 @@ While based on git, **g2** enforces a simplier merge flow.
 So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens auto-magically. But in a few instances, you will need to resolve **conflicts** manually.
 
 
-When this happens, g2 will stop the command flow. Let me enphasize what that means:
+When this happens, g2 will stop the command flow. Let me emphasize what that means:
 
 * If you are merging, a conflicts will stop before the final commit.
 * If you are rebasing or syncing, a conflicts will stop on the current replay step.
 
-You may resolve conflicts by issueing a `g mt` (mt=mergetool). The default visual mergetool will show up and let you resolve each conflicting file manually. Typically, you will see your file on one side, the file you are merging with on the other and the common ancestor. The common ancestor is here to quickly pick what happened to the file: you can quickly pick additions and removals.
+You may resolve conflicts by issuing a `g mt` (mt=mergetool). The default visual mergetool will show up and let you resolve each conflicting file manually. Typically, you will see your file on one side, the file you are merging with on the other and the common ancestor. The common ancestor is here to quickly pick what happened to the file: you can quickly pick additions and removals.
 
 Once conflict resolution is completed, the merge process needs to be resumed manually.  
 Now, If you are a git expert, you know that there are actually 3 commands to resume form the 2 scenarios above. git makes it so confusing, doesn't it?
@@ -270,7 +270,7 @@ Finally I should probably mention `g abort` that cancels an ongoing merge/rebase
 
 ##Tracking
 
-The whole concept of _tracking_ is broken in git. It's not so much the feature, it's the way it is typically explained. All beginers wonder "What the hell is a **tracking branch** and how is it different from a regular branch?"
+The whole concept of _tracking_ is broken in git. It's not so much the feature, it's the way it is typically explained. All beginners wonder "What the hell is a **tracking branch** and how is it different from a regular branch?"
 
 Backup… let's start from the beginning, the **g2** way this time:
 
@@ -284,7 +284,7 @@ That's the tracking table. the first sections shows how each local branch is _li
 
 Ok... and now what? 
 
-Well tracking is used accross several commands in **g2**, the most common one is `g sync` which you will learn in the next section. But you can also issue a `g reset upstream` or a `g diff upstream`. Even when you create a branch, **g2** reads to current tracking to figure where to create the remote branch.
+Well tracking is used across several commands in **g2**, the most common one is `g sync` which you will learn in the next section. But you can also issue a `g reset upstream` or a `g diff upstream`. Even when you create a branch, **g2** reads to current tracking to figure where to create the remote branch.
 
 Note that it is also common to see branches with no upstream branch, in which case you may use `g track remote/branch` to enforce the mapping.
 
@@ -353,11 +353,11 @@ $
 ```
 
 But unlike commits, wip commits **CANNOT** be **merged, pushed or synched**. You **cannot commit** on top of them either.  
-In orther words, a wip commit in meant to stay at the tip of the branch until you are ready to `unwip` and resume your development.
+In other words, a wip commit in meant to stay at the tip of the branch until you are ready to `unwip` and resume your development.
 
 ## Upstream
 
-For convinience, several commands have been enhanced to accept the "upstream" keywork. As discussed earlier, the upstream is the on the server that syncs with your local branch. To see tracking setting, just enter `g track`
+For convenience, several commands have been enhanced to accept the "upstream" keyword. As discussed earlier, the upstream is the on the server that syncs with your local branch. To see tracking setting, just enter `g track`
 
 * g rs upstream - resets the current branch to the state of the upstream (read the state of the branch on the server)
 * g merge upstream - merge local branch from the contents from the upstream
@@ -381,8 +381,8 @@ No, **g2** doesn't enforce any branching policy.
 
 ###Is G2 compatible with git?
 
-* From a source control standpoint, yes **g2** is interopable with git.
-* From a command line parameters standpoint, definitly NOT. **g2** grammar is simplified and hence doesn't support all the options available in git.
+* From a source control standpoint, yes **g2** is interoperable with git.
+* From a command line parameters standpoint, definitely NOT. **g2** grammar is simplified and hence doesn't support all the options available in git.
 
 ###Why is G2 reinstalled on every launch?
 
@@ -398,9 +398,9 @@ Author: [Olivier Refalo](https://github.com/orefalo)
 
 * Contains a modified version of [git-prompt](http://volnitsky.com/project/git-prompt/) - Leonid Volnitsky
 * Contains a modified version of git-completion.bash - Shawn O. Pearce
-* [GUM](https://github.com/saintsjd/gum) by saintsjd. Wonder why this project feelt short on delivery.
-* Andrew Peterson/ NDP Software for their cool interactive Cheatsheet
-* The mainteners behind msysgit who made git on windows all possible
+* [GUM](https://github.com/saintsjd/gum) by saintsjd. Wonder why this project felt short on delivery.
+* Andrew Peterson/ NDP Software for their cool interactive Cheat sheet
+* The maintainers behind msysgit who made git on windows all possible
 
 ##License
 
