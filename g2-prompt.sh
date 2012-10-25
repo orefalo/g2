@@ -148,7 +148,7 @@ rawhex_len=${rawhex_len:-5}
         fi
 
         ####################################################################  MARKERS
-        if [[ "$LC_CTYPE $LC_ALL" = "*UTF*" && $TERM != "linux" ]];  then
+        if [[ "$LC_CTYPE $LC_ALL" = *UTF* && $TERM != "linux" ]];  then
                 elipses_marker="…"
         else
                 elipses_marker="..."
@@ -257,7 +257,7 @@ cwd_truncate() {
 
         host=${HOSTNAME}
         if [[ $short_hostname = "on" ]]; then
-          if [[ "$(uname -s)" != MINGW* ]]; then
+          if [[ "$(uname -s)" = MINGW* ]]; then
             host=$(hostname)
           elif [[ "$(uname)" = CYGWIN* ]]; then
 	    host=`hostname`
