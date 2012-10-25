@@ -1,11 +1,18 @@
 #!/bin/bash
 
 GIT_EXE=$(which git)
-[[ -z "$GIT_EXE" ]] && echo "Sorry git not found in the PATH";
-export GIT_EXE
+if [ -z "$GIT_EXE" ]; then
+  echo "Sorry git not found in the PATH";
+  return;
+fi
+export GIT_EXE;
 
 # don't set prompt if this is not interactive shell
-[[ $- != *i* ]]  &&  return
+if [ -n "$BASH_VERSION" ]; then
+    if [[ $- != *i* ]]; then
+        return;
+    fi
+fi
 
 ###################################################################   CONFIG
 
@@ -15,11 +22,16 @@ unset dir_color rc_color user_id_color root_id_color init_vcs_color clean_vcs_co
 unset modified_vcs_color added_vcs_color untracked_vcs_color op_vcs_color detached_vcs_color hex_vcs_color
 unset rawhex_len
 
-conf=g2-prompt.conf;                   [[ -r $conf ]]  && . $conf
-conf=/etc/profile.d/g2-prompt.conf;    [[ -r $conf ]]  && . $conf
-conf=/etc/g2/g2-prompt.conf;           [[ -r $conf ]]  && . $conf
-conf=/etc/g2-prompt.conf;              [[ -r $conf ]]  && . $conf
-conf=~/.g2-prompt.conf;                [[ -r $conf ]]  && . $conf
+conf=g2-prompt.conf;
+if [ -r $conf ]; then . $conf; fi
+conf=/etc/profile.d/g2-prompt.conf;
+if [ -r $conf ]; then . $conf; fi
+conf=/etc/g2/g2-prompt.conf;
+if [ -r $conf ]; then . $conf; fi
+conf=/etc/g2-prompt.conf;
+if [ -r $conf ]; then . $conf; fi
+conf=~/.g2-prompt.conf;
+if [ -r $conf ]; then . $conf; fi
 unset conf
 
 
@@ -44,7 +56,7 @@ fi
 unset cols
 
 #### prompt character, for root/non-root
-if [[ $(uname -s) = "Darwin" ]]; then
+if [ $(uname -s) = "Darwin" ]; then
     prompt_char=${prompt_char:-'➤'}
 else
     prompt_char=${prompt_char:-'>'}
@@ -136,7 +148,7 @@ rawhex_len=${rawhex_len:-5}
         fi
 
         ####################################################################  MARKERS
-        if [[ "$LC_CTYPE $LC_ALL" =~ "UTF" && $TERM != "linux" ]];  then
+        if [[ "$LC_CTYPE $LC_ALL" = "*UTF*" && $TERM != "linux" ]];  then
                 elipses_marker="…"
         else
                 elipses_marker="..."
@@ -185,7 +197,7 @@ cwd_truncate() {
 
 
 		# trunc middle if over limit
-                if   [[ ${#path_middle}   -gt   $(( $cwd_middle_max + ${#elipses_marker} + 5 )) ]];   then
+                if [ ${#path_middle}   -gt   $(( $cwd_middle_max + ${#elipses_marker} + 5 )) ];   then
 			
                     # truncate
                     middle_tail=${path_middle:${#path_middle}-${cwd_middle_max}}
@@ -196,9 +208,9 @@ cwd_truncate() {
                     middle_tail=${BASH_REMATCH[1]}
 
                     # use truncated only if we cut at least 4 chars
-		    if [[ $((  ${#path_middle} - ${#middle_tail}))  -gt 4  ]];  then
-			cwd=$path_head$elipses_marker$middle_tail$path_last_dir
-		    fi
+                    if [ $((  ${#path_middle} - ${#middle_tail}))  -gt 4  ];  then
+                        cwd=$path_head$elipses_marker$middle_tail$path_last_dir
+                    fi
                 fi
         fi
         return
@@ -213,7 +225,7 @@ cwd_truncate() {
         tty=`echo $tty | sed "s:/dev/pts/:p:; s:/dev/tty::" `           # RH tty devs
         tty=`echo $tty | sed "s:/dev/vc/:vc:" `                         # gentoo tty devs
 
-        if [[ "$TERM" = "screen" ]] ;  then
+        if [ "$TERM" = "screen" ] ;  then
 
                 #       [ "$WINDOW" = "" ] && WINDOW="?"
                 #
@@ -247,7 +259,7 @@ cwd_truncate() {
         if [[ $short_hostname = "on" ]]; then
           if [[ "$(uname -s)" != MINGW* ]]; then
             host=$(hostname)
-          elif [[ "$(uname)" =~ CYGWIN* ]]; then
+          elif [[ "$(uname)" = CYGWIN* ]]; then
 	    host=`hostname`
 	  else
 	   host=`hostname -s`
@@ -399,14 +411,14 @@ parse_g2_status() {
         ### compose vcs_info
 
         local vcs_info
-        if [[ $init ]];  then
+        if [ $init ];  then
                 vcs_info=${WHITE}init
         else
-                if [[ "$detached" ]] ;  then
+                if [ "$detached" ] ;  then
                         branch="<detached:$("$GIT_EXE" name-rev --name-only HEAD 2>/dev/null)"
-                elif   [[ "$op" ]];  then
+                elif [ "$op" ];  then
                         branch="$op:$branch"
-                        if [[ "$op" == "merge" ]] ;  then
+                        if [ "$op" == "merge" ] ;  then
                             branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
                         fi
                         #branch="<$branch>"
@@ -464,5 +476,3 @@ prompt_command_function() {
 
 unset rc id tty
 PROMPT_COMMAND=prompt_command_function
-
-
