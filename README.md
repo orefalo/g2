@@ -423,6 +423,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED
 
+* fix warning when running: g track <remote/branch>
 * `g dt` was failing when comparing with other branches. reverted.
 * non-issue: g2-windows needs a new build - on windows: get freeze .gitignore fails with path issue
 * non-issue: g2-windows needs a new build - on windows: get version fails wth git path issue \program
