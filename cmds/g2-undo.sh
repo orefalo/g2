@@ -24,6 +24,7 @@ case "$1" in
         echo "Reverting back prior to the last merge."
         "$GIT_EXE" reset --hard ORIG_HEAD
     ;;
-    *) "$GIT_EXE" checkout -- "$GIT_PREFIX/$1"
+    *)
+	"$GIT_EXE" checkout -- "$GIT_PREFIX$1"
     ;;
 esac
