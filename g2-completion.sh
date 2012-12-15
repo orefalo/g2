@@ -827,10 +827,6 @@ _git_df ()
 			"
 		return
 		;;
-	u*)
-               __gitcomp "upstream"
-               return
-               ;;
 	esac
 	__git_complete_revlist_file
 }
