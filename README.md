@@ -183,7 +183,7 @@ Since we introduced undoing in the previous section, let's cover it all.
 
 ##History
 
-It's so easy to get lost when starting git! Working with beginners, I found that an easy way to keep them focused is to provide _visuals_. Now this is not the github network graph, but it's close enough to get them focused. Type `g lg` and enjoy the enhanced colorized commit log output.
+Working with beginners, I found that an easy way to keep them focused is to provide _visuals_. Now this is not the github network graph, but it's close enough to get them focused. Type `g lg` and enjoy the enhanced colorized commit log output.
 
 ![image](http://orefalo.github.com/g2/images/lg.png)
 
@@ -195,7 +195,7 @@ Since we are talking about history, I should probably mention that **g2** will *
 
 It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird status. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
 
-Well, you are panicking… and we built a command especially for you: `g panic`
+Well, you are panicking... and we built a command especially for you: `g panic`
 
 Use `panic` when you feel like getting help from your git master. It checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats and your git-master can rest.
 
@@ -239,7 +239,7 @@ $
 
 If you are familiar with git, this is no rocket science. There is however a hidden gem which might save you headaches going forward: **g2** is extremely strict when it comes to switching branches: it only works from a stable state.
 
-A _stable state_ means: **no modified files, no staged files**. Should you have any changes, **g2** will complain with the following message:
+By _stable state_ I mean: **no modified files, no staged files**. Should you have any changes, **g2** will complain with the following message:
 
     fatal: some files were changed on this branch, either commit <ci>, <wip> or <panic>.
 
@@ -258,7 +258,7 @@ When this happens, g2 will stop the command flow. Let me emphasize what that mea
 * If you are merging, a conflicts will stop before the final commit.
 * If you are rebasing or syncing, a conflicts will stop on the current replay step.
 
-You may resolve conflicts by issuing a `g mt` (mt=mergetool). The default visual mergetool will show up and let you resolve each conflicting file manually. Typically, you will see your file on one side, the file you are merging with on the other and the common ancestor. The common ancestor is here to quickly pick what happened to the file: you can quickly pick additions and removals.
+You may resolve conflicts by issuing a `g mt` (mt=mergetool). The default visual mergetool will show up and let you resolve each conflicting file manually. Typically, you will see your file on one side, the file you are merging with on the other and the common ancestor. The common ancestor is here to quickly identify what happened in the file: you can quickly pick additions and removals.
 
 Once conflict resolution is completed, the merge process needs to be resumed manually.  
 Now, If you are a git expert, you know that there are actually 3 commands to resume form the 2 scenarios above. git makes it so confusing, doesn't it?
@@ -274,8 +274,6 @@ The whole concept of _tracking_ is broken in git. It's not so much the feature, 
 
 Backup… let's start from the beginning, the **g2** way this time:
 
-Most G2 commands only apply to the branch you are in, there is no magic updates happening behind the scene: for instance, when you get changes from the server, they only apply to your current branch.
-
 Please type the following command: `g track`, you should see something as such:
 
 ![image](http://orefalo.github.com/g2/images/track.png)
@@ -286,7 +284,7 @@ Ok... and now what?
 
 Well tracking is used across several commands in **g2**, the most common one is `g sync` which you will learn in the next section. But you can also issue a `g reset upstream` or a `g diff upstream`. Even when you create a branch, **g2** reads to current tracking to figure where to create the remote branch.
 
-Note that it is also common to see branches with no upstream branch, in which case you may use `g track remote/branch` to enforce the mapping.
+Note that you may use `g track remote/branch` to set the mapping. For instance, say we are on branch test and we issue a `g track origin/mytest`. the local branch test will now synchronize with the server origin/mytest. 
 
 
 ##Synching
@@ -302,7 +300,7 @@ Looks familiar? Wouldn't it be nicer to have straight lines, with segments showi
 
 ![image](http://orefalo.github.com/g2/images/good_branching.png)
 
-The above graph is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to read. Two types of flows… the work on the branch itself, and merging contents/features from others, we will get back on this in a minute.
+The above graph is 30+ developers working together on about 20 active feature branches. Note how the graph is clean an easy to read. 
 
 In order to achieve this result, **g2** enforces two different merging scenarios, each backed by a different command:
 
