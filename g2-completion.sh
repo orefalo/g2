@@ -31,9 +31,14 @@ esac
 # returns location of .git repo
 __gitdir ()
 {
+	# Note: this function is duplicated in git-prompt.sh
+	# When updating it, make sure you update the other one to match.
 	if [ -z "${1-}" ]; then
 		if [ -n "${__git_dir-}" ]; then
 			echo "$__git_dir"
+		elif [ -n "${GIT_DIR-}" ]; then
+			test -d "${GIT_DIR-}" || return 1
+			echo "$GIT_DIR"
 		elif [ -d .git ]; then
 			echo .git
 		else
@@ -313,7 +318,7 @@ __git_refs ()
 				if [[ "$ref" == "$cur"* ]]; then
 					echo "$ref"
 				fi
-			done | uniq -u
+			done | sort | uniq -u
 		fi
 		return
 	fi
@@ -667,11 +672,15 @@ _git_br ()
 	done
 
 	case "$cur" in
+	--set-upstream-to=*)
+		__gitcomp "$(__git_refs)" "" "${cur##--set-upstream-to=}"
+		;;
 	--*)
 		__gitcomp "
 			--color --no-color --verbose --abbrev= --no-abbrev
 			--track --no-track --contains --merged --no-merged
-			--set-upstream --edit-description --list
+			--set-upstream-to= --edit-description --list
+			--unset-upstream
 			"
 		;;
 	*)
@@ -754,6 +763,8 @@ _git_clone ()
 			--upload-pack
 			--template=
 			--depth
+			--single-branch
+			--branch
 			"
 		return
 		;;
@@ -783,7 +794,8 @@ _git_ci ()
 	--*)
 		__gitcomp "
 			--all --author= --signoff --verify --no-verify
-			--edit --amend --include --only --interactive
+			--edit --no-edit
+			--amend --include --only --interactive
 			--dry-run --reuse-message= --reedit-message=
 			--reset-author --file= --message= --template=
 			--cleanup= --untracked-files --untracked-files=
@@ -836,7 +848,7 @@ _git_diff () {
 }
 
 __git_mergetools_common="diffuse ecmerge emerge kdiff3 meld opendiff
-			tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc3
+			tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc3 codecompare
 "
 
 _git_dt ()
