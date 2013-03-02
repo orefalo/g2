@@ -406,6 +406,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* g remote: when resetting origin, prompt user
 * g track origin/blabla - if origin/blabla not setup, prompt user to create the branch
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
 * allow g co <hash>
@@ -421,6 +422,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED
 
+* fix issue with --set-upstream being deprecated
 * fix warning when running: g track <remote/branch>
 * `g dt` was failing when comparing with other branches. reverted.
 * non-issue: g2-windows needs a new build - on windows: get freeze .gitignore fails with path issue
