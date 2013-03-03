@@ -19,3 +19,8 @@ g2_initializeANSI()
 }
 
 g2_initializeANSI
+
+echo_fatal()
+{
+echo -e "${redf}$1${reset}";
+}

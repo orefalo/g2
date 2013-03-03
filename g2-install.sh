@@ -10,6 +10,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 OLDpwd=$PWD
 cd $DIR
 
+export G2_HOME=$DIR
+
 source ./cmds/color.sh
 
 tips=(
