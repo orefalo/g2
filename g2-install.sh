@@ -10,29 +10,31 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 OLDpwd=$PWD
 cd $DIR
 
+source ./cmds/color.sh
 
 tips=(
-"g sync adds your changes to the tip of the branch and synchronizes with the servers both ways."
-"g freeze is  a handy command to litteraly freeze the state of the repository."
-"g2 saves time by providing high level commands."
-"g2 is generally safer than git as it prompts before destructive actions."
-"run 'g setup' to configure git."
-"g2 provides two letter acronyms for most commands."
-"g2 eases the merge process by introducing 'g continue' and 'g abort'."
-"g2 purposely provides a reduced set of commands."
-"g2 enhances command line experience with auto-completion <TAB-key> and a smart prompt."
-"g2 warns when the branch history was changed on the server (forced pushed)."
-"g2 checks the branch freshness prior to merging and warns accordingly."
-"g2 enforces a clean linear history by introducing new commands."
-"g2 requires a clean state before rebasing, checking out, branching or merging."
-"g2 provides guidance when it cannot perform an operation."
-"g2 brings a number of friendly commands such as : panic, sync, freeze, wip."
-"g2 eases branch creation. try it 'g br myBranchName'."
-"g2 is just easier at undoing things: try 'g undo commit' or 'g undo merge'."
-"When lost, 'g panic' is the easiest way to get you back on track."
-)
+"${italicson}g sync${italicsoff} adds your changes to the tip of the branch and synchronizes with the servers both ways."
+"${italicson}g freeze${italicsoff} is  a handy command to litteraly freeze the state of the repository."
+"${boldon}g2${boldoff} saves time by providing high level commands."
+"${boldon}g2${boldoff} is safer than git as it prompts before destructive actions."
+"run ${boldon}g setup${boldoff} to configure git."
+"${boldon}g2${boldoff} provides two letter acronyms for most commands."
+"${boldon}g2${boldoff} eases the merge process by introducing ${boldon}g continue${boldoff} and ${boldon}g abort${boldoff}."
+"${boldon}g2${boldoff} purposely provides a reduced set of commands."
+"${boldon}g2${boldoff} enhances command line experience with auto-completion <TAB-key> and a smart prompt."
+"${boldon}g2${boldoff} warns when the branch history was changed on the server (forced pushed)."
+"${boldon}g2${boldoff} checks the branch freshness prior to merging and warns accordingly."
+"${boldon}g2${boldoff} enforces a clean linear history by introducing new commands."
+"${boldon}g2${boldoff} requires a clean state before rebasing, checking out, branching or merging."
+"${boldon}g2${boldoff} provides guidance when it cannot perform an operation."
+"${boldon}g2${boldoff} brings a number of friendly commands such as : ${boldon}panic, sync, freeze, wip${boldoff}."
+"${boldon}g2${boldoff} eases branch creation. try it ${boldon}g br myBranchName${boldoff}."
+"Need to display your ssh public key? try ${boldon}g key${boldoff}."
+"${boldon}g2${boldoff} is just easier at undoing things: try ${boldon}g undo commit${boldoff} or ${boldon}g undo merge${boldoff}."
+"When lost, ${boldon}g panic${boldoff} is the easiest way to get you back on track."
+);
 
-echo -n "Installing G2.."
+echo -n -e "Installing ${boldon}G2${boldoff}.."
 
 source ./g2-completion.sh
 echo -n "."
@@ -47,7 +49,7 @@ alias git=__g2_eval;
 
 echo " Enjoy!"
 
-printf "\nTip of the day: %s \n" "${tips[RANDOM % ${#tips[@]}]}"
+echo -e "${boldon}Tip of the day${boldoff} : ${tips[RANDOM % ${#tips[@]}]} ${reset}"
 
 
 cd $OLDpwd
