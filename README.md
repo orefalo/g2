@@ -8,7 +8,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 ##Benefits
 
-* **g2** will save you time by providing high level commands.
+* **g2** saves time by providing high level commands.
 * **g2** is generally safer than git as it prompts before destructive actions.
 * **g2** helps setup git settings : sshkeys, username, email and tools.
 * **g2** provides two letter acronyms for most commands.
@@ -420,8 +420,9 @@ Distributed under the GNU General Public License, version 2.0.
 * g undo needs more validations
 * enforce completions for undo *, and all the upstream commands
 
-## FIXED
+## FIXED / DONE
 
+* Added tips of the day
 * fix issue with --set-upstream being deprecated
 * fix warning when running: g track <remote/branch>
 * `g dt` was failing when comparing with other branches. reverted.
