@@ -14,6 +14,8 @@ GIT_EXE=$(which git)
 [[ -z "$GIT_EXE" ]] && echo "Sorry git not found in the PATH";
 export GIT_EXE
 
+source "$G2_HOME/cmds/color.sh"
+
 function __g2_contains() {
 	local n=$#
 	local value=${!n}
@@ -27,50 +29,49 @@ function __g2_contains() {
 }
 
 function __g2_usage() {
-	cat << EOF
-Usage:
-	abort - aborts any rebase/merge
-	am <?-f> - amends last commit with staging area
-	br <?-D> <?-M> <?branch> - list or create branches
-	bs - bisect
-	co <branch> - switches branch (either local/remote)
-	continue - resumes a conflict resolution
-	cp <commit> - cherry-pick
-	ci <?params...> - commit
-	clone <url> - clone a remote repository
-	df/dt <?params...> <file> - compares files
-	fetch - synchronizes remote branches
-	freeze/unfreeze <?-m comment> <?file> - freeze/unfreeze files
-	gc - garbage collects: run fsck & gc
-	gp - grep
-	gui - launches the GUI
-	ig <file> - adds to gitignore & removes from source control
-	init <folder> - init a repository
-	key <?-gen> - displays/generates your ssh public key
-	mg <?params...> <branch> - merge
-	mt <?params...> - fixes conflicts by opening a visual mergetool
-	mv - move (rename) a file
-	lg - displays commit log
-	ls <?params...> - list files under source control
-	panic - gets you back on HEAD, cleans all untracked files
-	pull/push <?opts> <remote> <branch> - deals with other branches
-	rb <?params...> <branch> or <upstream> - rebase
-	rm <params...> - remove
-	rs <params...> - reset
-	rs upstream - resets branch to upstream state
-	rt <?params...> - remote
-	rv <commit> - revert
-	setup - configures user, key, editor, tools
-	sh <?-deep> - show commit contents
-	sm <?params...> - submodule
-	ss <?params> - stash
-	st <?params...> - status
-	sync <?upstream> - syncs working branch: fetch, rebase & push
-	tg - tag
-	track <?upstream_branch> - shows/set tracking
-	undo <file>|commit <hash>|merge - reverts changes
-	wip/unwip - save/restore work in progress to branch
-EOF
+	echo -e "G2 Usage:
+	${boldon}abort${boldoff} - aborts any rebase/merge
+	${boldon}am <?-f>${boldoff} - amends last commit with staging area
+	${boldon}br <?-D> <?-M> <?branch>${boldoff} - list or create branches
+	${boldon}bs${boldoff} - bisect
+	${boldon}co <branch>${boldoff} - switches branch (either local/remote)
+	${boldon}continue${boldoff} - resumes a conflict resolution
+	${boldon}cp <commit>${boldoff} - cherry-pick
+	${boldon}ci <?params...>${boldoff} - commit
+	${boldon}clone <url>${boldoff} - clone a remote repository
+	${boldon}df/dt <?params...> <file>${boldoff} - compares files
+	${boldon}fetch${boldoff} - gets changes sitting on the server
+	${boldon}freeze/unfreeze <?-m comment> <?file>${boldoff} - freeze/unfreeze files
+	${boldon}gc${boldoff} - garbage collects: run fsck & gc
+	${boldon}gp${boldoff} - grep
+	${boldon}gui${boldoff} - launches the GUI
+	${boldon}ig <file>${boldoff} - adds to gitignore & removes from source control
+	${boldon}init <folder>${boldoff} - init a repository
+	${boldon}key <?-gen>${boldoff} - displays/generates your ssh public key
+	${boldon}mg <?params...> <branch>${boldoff} - merge
+	${boldon}mt <?params...>${boldoff} - fixes conflicts by opening a visual mergetool
+	${boldon}mv${boldoff} - move (rename) a file
+	${boldon}lg${boldoff} - displays commit log
+	${boldon}ls <?params...>${boldoff} - list files under source control
+	${boldon}panic${boldoff} - gets you back on HEAD, cleans all untracked files
+	${boldon}pull/push <?opts> <remote> <branch>${boldoff} - deals with other branches
+	${boldon}rb <?params...> <branch> or <upstream>${boldoff} - rebase
+	${boldon}rm <params...>${boldoff} - remove files
+	${boldon}rs <params...>${boldoff} - reset branch status
+	${boldon}rs upstream${boldoff} - resets branch to upstream state
+	${boldon}rt <?params...>${boldoff} - remote management
+	${boldon}rv <commit>${boldoff} - reverts commits
+	${boldon}setup${boldoff} - configures user, key, editor, tools
+	${boldon}sh <?-deep>${boldoff} - show commit contents
+	${boldon}sm <?params...>${boldoff} - submodule
+	${boldon}ss <?params>${boldoff} - stash
+	${boldon}st <?params...>${boldoff} - status
+	${boldon}sync <?upstream>${boldoff} - syncs working branch: fetch, rebase & push
+	${boldon}tg${boldoff} - tag
+	${boldon}track <?upstream_branch>${boldoff} - shows/set tracking
+	${boldon}undo <file>|commit <hash>|merge${boldoff} - reverts changes
+	${boldon}wip/unwip${boldoff} - save/restore work in progress to branch"
+
 	return 0;
 }
 

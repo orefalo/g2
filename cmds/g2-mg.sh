@@ -1,7 +1,9 @@
 #!/bin/bash
 #
 
-[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: merging on a wip commit is forbiden, please <unwip> and commit <ci> first..." && exit 1
+source "$G2_HOME/cmds/color.sh"
+
+[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo_fatal "fatal: merging on a wip commit is forbiden, please <unwip> and commit <ci> first..." && exit 1
 
 # substitute "upstream" with real upstream name
 declare -a v=("$@")
@@ -10,7 +12,7 @@ for a in "${v[@]}"
 do
     [[ "$a" = "upstream" ]] && {
         remote=$("$GIT_EXE" g2getremote)
-        [[ -z $remote ]] && echo "fatal: upstream not found, please setup tracking for this branch, ie. <g track remote/branch>" && exit 1
+        [[ -z $remote ]] && echo_fatal "fatal: upstream not found, please setup tracking for this branch, ie. <g track remote/branch>" && exit 1
         set -- "${@:1:$i}" "origin/master" "${@:($i+2)}";
     } && break
     let i++
@@ -23,9 +25,9 @@ done
 
     unmerged=$("$GIT_EXE" ls-files --unmerged)
     if [[ -n $unmerged ]]; then
-        echo "info: some files need to be merged manually, please use <mt> to fix conflicts..."
-        echo " once all resolved, <freeze> and <commit> the files."
-        echo " note that you may <abort> at any time."
+        echo_info "info: some files need to be merged manually, please use <mt> to fix conflicts..."
+        echo_info " once all resolved, <freeze> and <commit> the files."
+        echo_info " note that you may <abort> at any time."
     fi
     exit 1;
 }

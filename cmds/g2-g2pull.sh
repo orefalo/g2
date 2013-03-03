@@ -1,19 +1,26 @@
 #!/bin/bash
 #
 
+source "$G2_HOME/cmds/color.sh"
+
 error() {
-    echo "fatal: use <sync> to synchronize the current branch"
-    echo "remember, <sync>hing applies to the working branch, <pull>ing applies when merging feature branches."
+    echo_fatal "fatal: use <sync> to synchronize the current branch"
+    echo_info "remember, <sync>hing applies to the working branch, <pull>ing applies when merging feature branches."
+    exit 1
+}
+
+usage() {
+    echo_fatal "Usage: pull <?opts> <remote> <branch>"
     exit 1
 }
 
 n=$#;
 [[ $n -eq 0 || ${!n} = -* ]] && error
-[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: pulling on a wip commit is forbidden, please <unwip> and commit <ci>" && exit 1
-[[ ${!n} = */* ]] && echo "Usage: pull <?opts> <remote> <branch>" && exit 1
+[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo_fatal "fatal: pulling on a wip commit is forbidden, please <unwip> and commit <ci>" && exit 1
+[[ ${!n} = */* ]] && usage
 branch=${!n}
 let n--
-[[ n -gt 0 && ${!n} != -* ]] && rmt=${!n} || { echo "Usage: pull <remote> <branch>" && exit 1; }
+[[ n -gt 0 && ${!n} != -* ]] && rmt=${!n} || usage
 to="$rmt/$branch"
 remote=$("$GIT_EXE" g2getremote)
 if [[ -z $remote ]]; then

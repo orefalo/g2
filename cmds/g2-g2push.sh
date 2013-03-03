@@ -4,8 +4,15 @@
 #  forbids wip commits from being pushed
 #  forbids push to the working branch
 
+source "$G2_HOME/cmds/color.sh"
+
 error() {
-    echo "fatal: sorry you can't use <push> in this context, please use the <sync> command to synchronize the current branch"
+    echo_fatal "fatal: sorry you can't use <push> in this context, please use the <sync> command to synchronize the current branch"
+    exit 1
+}
+
+usage() {
+    echo_fatal "Usage: push <?opts> <remote> <branch>"
     exit 1
 }
 
@@ -24,7 +31,7 @@ hasFFlag() {
 fflg=$( hasFFlag "$@" )
 n=$#;
 [[ $fflg = "false" && $n -eq 0 ]] && error
-[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo "fatal: pushing a wip commit is forbiden, please <unwip> and commit <ci>" && exit 1
+[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo_fatal "fatal: pushing a wip commit is forbiden, please <unwip> and commit <ci>" && exit 1
 [[ $fflg = "true" ]] && {
     read -p "warning: you are about to force push history, please confirm (y/n)? " -n 1 -r;
     echo
@@ -33,10 +40,10 @@ n=$#;
 }
 
 branch=${!n}
-[[ $branch = */* ]] && echo "Usage: push <?opts> <remote> <branch>" && exit 1
+[[ $branch = */* ]] && usage
 
 let n--
-[[ $n -gt 0 && ${!n} != -* ]] && rmt=${!n} || { echo "Usage: push <?opts> <remote> <branch>" && exit 1; }
+[[ $n -gt 0 && ${!n} != -* ]] && rmt=${!n} || usage
 to="$rmt/$branch"
 remote=$("$GIT_EXE" g2getremote)
 if [[ -z $remote ]]; then

@@ -24,3 +24,9 @@ echo_fatal()
 {
 echo -e "${redf}$1${reset}";
 }
+
+
+echo_info()
+{
+echo -e "${boldon}$1${reset}";
+}

@@ -1,16 +1,26 @@
 #!/bin/bash
 #
 
+source "$G2_HOME/cmds/color.sh"
+
+displayKey() {
+
+ echo -e -n "${yellowf}"
+ cat "$HOME/.ssh/id_rsa.pub"
+ echo -e -n "${reset}"
+
+}
+
 gen() {
     echo "Generating SSH keys..."
     emailinput=$("$GIT_EXE" config --global --get user.email)
     ssh-keygen -t rsa -P "" -C "$emailinput" -f "$HOME/.ssh/id_rsa"
-    cat "$HOME/.ssh/id_rsa.pub"
+    displayKey
 }
 
 
 if [[ $1 != -gen ]]; then
-    [[ ! -f $HOME/.ssh/id_rsa.pub ]] && echo "fatal: SSH key not found: $HOME/.ssh/id_rsa.pub" || cat "$HOME/.ssh/id_rsa.pub"
+    [[ ! -f $HOME/.ssh/id_rsa.pub ]] && echo_fatal "fatal: SSH key not found: $HOME/.ssh/id_rsa.pub" || displayKey
 else
     if [[ -f $HOME/.ssh/id_rsa.pub ]]; then
         read -p "Regenerate SSH Key (y/n)? " -n 1 -r

@@ -15,8 +15,8 @@ export G2_HOME=$DIR
 source ./cmds/color.sh
 
 tips=(
-"${italicson}g sync${italicsoff} adds your changes to the tip of the branch and synchronizes with the servers both ways."
-"${italicson}g freeze${italicsoff} is  a handy command to litteraly freeze the state of the repository."
+"${boldon}g sync${boldoff} adds your changes to the tip of the branch and synchronizes with the servers both ways."
+"${boldon}g freeze${boldoff} is  a handy command to freeze all the changes in one shot."
 "${boldon}g2${boldoff} saves time by providing high level commands."
 "${boldon}g2${boldoff} is safer than git as it prompts before destructive actions."
 "run ${boldon}g setup${boldoff} to configure git."
@@ -34,7 +34,8 @@ tips=(
 "Need to display your ssh public key? try ${boldon}g key${boldoff}."
 "${boldon}g2${boldoff} is just easier at undoing things: try ${boldon}g undo commit${boldoff} or ${boldon}g undo merge${boldoff}."
 "When lost, ${boldon}g panic${boldoff} is the easiest way to get you back on track."
-);
+"Use ${boldon}g track${boldoff} to review how local/remote branches are setup."
+"Unlike git, ${boldon}g2${boldoff} actions only apply to the current branch.");
 
 echo -n -e "Installing ${boldon}G2${boldoff}.."
 
@@ -51,7 +52,7 @@ alias git=__g2_eval;
 
 echo " Enjoy!"
 
-echo -e "${boldon}Tip of the day${boldoff} : ${tips[RANDOM % ${#tips[@]}]} ${reset}"
+echo -e "${boldon}Tip of the day${boldoff}: ${tips[RANDOM % ${#tips[@]}]} ${reset}"
 
 
 cd $OLDpwd
