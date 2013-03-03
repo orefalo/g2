@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-read -p "Remove all un-tracked files and checkout HEAD, are you sure (y/n)? " -n 1 -r
+read -p "This action will discard all work in progress and checkout HEAD, are you sure (y/n)? " -n 1 -r
 [[ $REPLY == [yY]* ]] && {
     echo
     "$GIT_EXE" abort

@@ -1,8 +1,11 @@
 #!/bin/bash
 #
 
+source "$G2_HOME/cmds/color.sh"
+
+
 error() {
-    echo $1
+    echo_fatal $1
     exit 1
 }
 

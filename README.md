@@ -422,6 +422,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED / DONE
 
+* Many commands are now colorized
 * Added tips of the day
 * fix issue with --set-upstream being deprecated
 * fix warning when running: g track <remote/branch>
