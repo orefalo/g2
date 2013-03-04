@@ -33,7 +33,7 @@ function __g2_usage() {
 	${boldon}abort${boldoff} - aborts any rebase/merge
 	${boldon}am <?-f>${boldoff} - amends last commit with staging area
 	${boldon}br <?-D> <?-M> <?branch>${boldoff} - list or create branches
-	${boldon}bs${boldoff} - bisect
+	${boldon}bs${boldoff} - bisect, aka bug finder
 	${boldon}co <branch>${boldoff} - switches branch (either local/remote)
 	${boldon}continue${boldoff} - resumes a conflict resolution
 	${boldon}cp <commit>${boldoff} - cherry-pick
@@ -59,7 +59,7 @@ function __g2_usage() {
 	${boldon}rm <params...>${boldoff} - remove files
 	${boldon}rs <params...>${boldoff} - reset branch status
 	${boldon}rs upstream${boldoff} - resets branch to upstream state
-	${boldon}rt <?params...>${boldoff} - remote management
+	${boldon}rt <?params...>${boldoff} - git remotes management
 	${boldon}rv <commit>${boldoff} - reverts commits
 	${boldon}setup${boldoff} - configures user, key, editor, tools
 	${boldon}sh <?-deep>${boldoff} - show commit contents

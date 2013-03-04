@@ -6,13 +6,13 @@ source "$G2_HOME/cmds/color.sh"
 
 if [ $# -lt 1 ]
 then
-    echo_info "Usage : g undo <file|commit|merge> <?path>"
-    exit
+    echo_info "Usage : g undo <file|commit|merge> <?path>";
+    exit;
 fi
 
-read -p "warning: the action may discard your changes, please confirm (y/n)? " -n 1 -r
-echo
-[[ $REPLY = [nN]* ]] && exit 0
+read -p "warning: the action may discard your changes, please confirm (y/n)? " -n 1 -r;
+echo;
+[[ $REPLY = [nN]* ]] && exit 0;
 
 case "$1" in
 

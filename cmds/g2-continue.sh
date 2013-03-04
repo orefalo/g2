@@ -12,7 +12,7 @@ state=$("$GIT_EXE" g2brstatus)
 
     action="--continue"
     if git diff-index --quiet HEAD --; then
-	    echo_info "The last commit brings no significant changes -- skipping"
+	    echo_info "The last commit brings no significant changes -- automatically skipping"
 		action="--skip"
     fi
 

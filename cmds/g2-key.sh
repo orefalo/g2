@@ -1,18 +1,16 @@
 #!/bin/bash
-#
+# displays or generates ssh keys
 
 source "$G2_HOME/cmds/color.sh"
 
 displayKey() {
-
  echo -e -n "${yellowf}"
  cat "$HOME/.ssh/id_rsa.pub"
  echo -e -n "${reset}"
-
 }
 
 gen() {
-    echo "Generating SSH keys..."
+    echo_info "Generating SSH keys..."
     emailinput=$("$GIT_EXE" config --global --get user.email)
     ssh-keygen -t rsa -P "" -C "$emailinput" -f "$HOME/.ssh/id_rsa"
     displayKey

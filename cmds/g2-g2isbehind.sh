@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Returns true if the branch is behind its upstream branch
+# Returns 1 if the branch is behind its upstream branch, 0 if not
 
 local=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
 remote=$1
@@ -8,6 +8,6 @@ remote=$1
 [[ -n $remote ]] && {
     "$GIT_EXE" fetch
     RIGHT_AHEAD=$("$GIT_EXE" rev-list --left-right ${local}...${remote} -- 2> /dev/null | grep -c "^>")
-    [[ $RIGHT_AHEAD -gt 0 ]] && echo "true" && exit
+    [[ $RIGHT_AHEAD -gt 0 ]] && exit 1;
 }
-echo "false"
+exit 0;

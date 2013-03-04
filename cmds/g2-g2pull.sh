@@ -16,7 +16,7 @@ usage() {
 
 n=$#;
 [[ $n -eq 0 || ${!n} = -* ]] && error
-[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo_fatal "fatal: pulling on a wip commit is forbidden, please <unwip> and commit <ci>" && exit 1
+$("$GIT_EXE" g2iswip) || exit 1
 [[ ${!n} = */* ]] && usage
 branch=${!n}
 let n--

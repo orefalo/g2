@@ -1,5 +1,4 @@
 #!/bin/bash
 #
-# Well speaks by itself
-echo "G2 based on" $("$GIT_EXE" version)
-
+# Well, speaks by itself
+echo "G2 is based on" $("$GIT_EXE" version)

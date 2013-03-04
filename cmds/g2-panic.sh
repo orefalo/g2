@@ -2,6 +2,7 @@
 #
 
 read -p "This action will discard all work in progress and checkout HEAD, are you sure (y/n)? " -n 1 -r
+echo
 [[ $REPLY == [yY]* ]] && {
     echo
     "$GIT_EXE" abort

@@ -3,6 +3,7 @@
 
 [[ $1 == "upstream" ]] && {
     read -p "warning: resetting to the upstream may erase any local changes, are you sure (y/n)? " -n 1 -r
+    echo
     [[ $REPLY == [yY]* ]] && { echo
         "$GIT_EXE" abort
         remote=$("$GIT_EXE" g2getremote)

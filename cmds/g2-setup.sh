@@ -30,9 +30,9 @@ fi
 
 g2count=$("$GIT_EXE" config --global --bool --get g2.prompt.countfiles)
 if [[ -z $g2count ]]; then
-    read -p "Count files in the bash prompt? (true): " -e g2count
+    read -p "Count files in the bash prompt (this may cause some slowdowns)? (true): " -e g2count
 else
-    read -p "Count files in the bash prompt? ($g2count): " -e g2count
+    read -p "Count files in the bash prompt (this may cause some slowdowns)? ($g2count): " -e g2count
 fi
 
 g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)

@@ -18,11 +18,6 @@ hasDMFlag() {
     echo "false"
 }
 
-hasChanges() {
-    [[ $("$GIT_EXE" diff --cached --numstat | wc -l) -ne 0 ]] && echo "fatal: staged changed detected, please commit <ci> or <wip> them." && exit 1
-    [[ $("$GIT_EXE" diff --numstat | wc -l) -ne 0 ]] && echo "fatal: some files were modified, either commit <ci>, <wip> or <panic>." && exit 1
-}
-
 br_status() {
     "$GIT_EXE" for-each-ref --format="%(refname:short) %(upstream:short)" refs/heads |  \
     while read local remote
@@ -44,7 +39,7 @@ else
 	flag=$(hasDMFlag "$@")
 	[[ $flag = "exit" ]] && exit 1;
     [[ $flag = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
-    hasChanges
+    $("$GIT_EXE" g2haschanges) || exit 1;
 
     shift $(( OPTIND - 1 ))
     branch="${1:-/}"

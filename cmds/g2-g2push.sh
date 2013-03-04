@@ -31,7 +31,7 @@ hasFFlag() {
 fflg=$( hasFFlag "$@" )
 n=$#;
 [[ $fflg = "false" && $n -eq 0 ]] && error
-[[ $("$GIT_EXE" g2iswip) = "true" ]] && echo_fatal "fatal: pushing a wip commit is forbiden, please <unwip> and commit <ci>" && exit 1
+$("$GIT_EXE" g2iswip) || exit 1
 [[ $fflg = "true" ]] && {
     read -p "warning: you are about to force push history, please confirm (y/n)? " -n 1 -r;
     echo
