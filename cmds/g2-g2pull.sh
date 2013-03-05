@@ -3,19 +3,18 @@
 
 source "$G2_HOME/cmds/color.sh"
 
-error() {
-    echo_fatal "fatal: use <sync> to synchronize the current branch"
-    echo_info "remember, <sync>hing applies to the working branch, <pull>ing applies when merging feature branches."
-    exit 1
+err() {
+    fatal "Use ${boldon}sync${boldoff} to synchronize the current branch"
+    error "remember, ${boldon}sync${boldoff}hing applies to the working branch, ${boldon}pull${boldoff}ing applies when merging feature branches."
 }
 
 usage() {
-    echo_fatal "Usage: pull <?opts> <remote> <branch>"
+    echo_info "Usage: pull <?opts> <remote> <branch>"
     exit 1
 }
 
 n=$#;
-[[ $n -eq 0 || ${!n} = -* ]] && error
+[[ $n -eq 0 || ${!n} = -* ]] && err
 $("$GIT_EXE" g2iswip) || exit 1
 [[ ${!n} = */* ]] && usage
 branch=${!n}
@@ -27,7 +26,7 @@ if [[ -z $remote ]]; then
     read -p "Would you like to track $to (y/n)? " -n 1 -r
     echo
 else
-    [[ $to = $remote ]] && error
+    [[ $to = $remote ]] && err
 fi
 [[ $REPLY = [yY]* ]] && "$GIT_EXE" track "$to"
 "$GIT_EXE" fetch "$rmt"

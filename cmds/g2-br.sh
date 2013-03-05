@@ -4,18 +4,20 @@
 #
 # Can also delete, rename and create branches (wizards)
 
+source "$G2_HOME/cmds/color.sh"
+
 hasDMFlag() {
     local opt
     while getopts ":dDmM:" opt; do
         case $opt in
             d|D|m|M)
-					echo "true"; return ;;
+					flag="true"; return ;;
 			\?)
-					echo "Usage: g br <?-D> <?-M> <?branch>" >&2
-					echo "exit"; return ;;
+					echo_info "Usage: g br <?-D> <?-M> <?branch>" >&2
+					flag="exit"; return ;;
         esac
     done
-    echo "false"
+    flag="false"
 }
 
 br_status() {
@@ -26,7 +28,7 @@ br_status() {
         "$GIT_EXE" rev-list --left-right ${local}...${remote} -- 2> /dev/null > /tmp/git_upstream_status_delta || continue
         LEFT_AHEAD=$(grep -c "^<" /tmp/git_upstream_status_delta)
         RIGHT_AHEAD=$(grep -c "^>" /tmp/git_upstream_status_delta)
-        echo "$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+        echo_info "$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
         echo
     done
 }
@@ -36,7 +38,7 @@ if [[ $# -eq 0 ]]; then
     echo "-------"
     br_status
 else
-	flag=$(hasDMFlag "$@")
+	hasDMFlag "$@"
 	[[ $flag = "exit" ]] && exit 1;
     [[ $flag = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
     $("$GIT_EXE" g2haschanges) || exit 1;
@@ -44,8 +46,8 @@ else
     shift $(( OPTIND - 1 ))
     branch="${1:-/}"
 
-    [[ $branch = */* ]] && echo "fatal: $branch is not a valid branch name" && exit 1
-    [[ -n $("$GIT_EXE" branch | grep "^$branch$") ]] && echo "fatal: branch $branch already exist" && exit 1
+    [[ $branch = */* ]] && error "${boldon}$branch${boldoff} is not a valid branch name"
+    [[ -n $("$GIT_EXE" branch | grep "^$branch$") ]] && error "branch ${boldon}$branch${boldoff} already exist"
 
     remote=$("$GIT_EXE" g2getremote)
     [[ -n $remote ]] && {

@@ -18,7 +18,7 @@ gen() {
 
 
 if [[ $1 != -gen ]]; then
-    [[ ! -f $HOME/.ssh/id_rsa.pub ]] && echo_fatal "fatal: SSH key not found: $HOME/.ssh/id_rsa.pub" || displayKey
+    [[ ! -f $HOME/.ssh/id_rsa.pub ]] && fatal "SSH key not found at ${boldon}$HOME/.ssh/id_rsa.pub${boldoff}" || displayKey
 else
     if [[ -f $HOME/.ssh/id_rsa.pub ]]; then
         read -p "Regenerate SSH Key (y/n)? " -n 1 -r

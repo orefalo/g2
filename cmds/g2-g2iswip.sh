@@ -4,11 +4,6 @@
 
 source "$G2_HOME/cmds/color.sh"
 
-error() {
-    echo_fatal "fatal: Work In Progress (wip) detected, please run <g unwip> to resume progress first.";
-    exit 1;
-}
-
 remote=$1;
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote);
 
@@ -19,4 +14,4 @@ else
     [[ $("$GIT_EXE" log $remote..HEAD --oneline 2>/dev/null | cut -f 2 -d " " | uniq | grep -c wip) -gt 0 ]] && wip=1;
 fi
 
-[[ $wip -eq 1 ]] && error || exit 0;
+[[ $wip -eq 1 ]] && error "Work In Progress (wip) detected, please run ${boldon}g unwip${boldoff} to resume progress first." || exit 0;

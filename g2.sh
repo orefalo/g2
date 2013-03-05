@@ -150,7 +150,7 @@ function __g2_eval() {
 	 );
 	local cmd=$(__g2_contains "${A[@]}" $1 )
 	if [[ -z $cmd ]]; then
-		echo "fatal: Invalid command!"
+		fatal "Invalid command!"
 		__g2_usage
 	else
 		declare -a p=("$@")

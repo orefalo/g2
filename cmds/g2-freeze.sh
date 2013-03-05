@@ -9,7 +9,7 @@ fi
 
 ( [[ -z "$@" ]] && "$GIT_EXE" add -A || "$GIT_EXE" add -A "$GIT_PREFIX$@" ) && {
     [[ -n $msg ]] && {
-        $("$GIT_EXE" g2iswip) || exit 1
+        "$GIT_EXE" g2iswip || exit 1
         "$GIT_EXE" commit -m "$msg" && "$GIT_EXE" status -s
     }
 }

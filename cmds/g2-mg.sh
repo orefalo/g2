@@ -12,7 +12,7 @@ for a in "${v[@]}"
 do
     [[ "$a" = "upstream" ]] && {
         remote=$("$GIT_EXE" g2getremote)
-        [[ -z $remote ]] && echo_fatal "fatal: upstream not found, please setup tracking for this branch, ie. <g track remote/branch>" && exit 1
+        [[ -z $remote ]] && error "Upstream not found, please setup tracking for this branch, ie. ${boldon}g track remote/branch${boldoff}"
         set -- "${@:1:$i}" "origin/master" "${@:($i+2)}";
     } && break
     let i++

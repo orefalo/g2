@@ -3,7 +3,7 @@
 source "$G2_HOME/cmds/color.sh"
 
 if [[ $# -eq 1 ]]; then
-    [[ $1 != */* ]] && echo_fatal "fatal: $1 is not an upstream branch (ie. origin/xxx)." && exit 1
+    [[ $1 != */* ]] && error "${boldon}$1${boldoff} is not an upstream branch (ie. origin/xxx)."
     "$GIT_EXE" branch --set-upstream $1
 else
     echo -e -n "${greenf}"

@@ -6,13 +6,12 @@
 
 source "$G2_HOME/cmds/color.sh"
 
-error() {
-    echo_fatal "fatal: sorry you can't use <push> in this context, please use the <sync> command to synchronize the current branch"
-    exit 1
+err() {
+    error "sorry you can't use ${boldon}push${boldoff} in this context, please use the ${boldon}sync${boldoff} command to synchronize the current branch"
 }
 
 usage() {
-    echo_fatal "Usage: push <?opts> <remote> <branch>"
+    echo_info "Usage: push <?opts> <remote> <branch>"
     exit 1
 }
 
@@ -30,7 +29,7 @@ hasFFlag() {
 
 fflg=$( hasFFlag "$@" )
 n=$#;
-[[ $fflg = "false" && $n -eq 0 ]] && error
+[[ $fflg = "false" && $n -eq 0 ]] && err
 $("$GIT_EXE" g2iswip) || exit 1
 [[ $fflg = "true" ]] && {
     read -p "warning: you are about to force push history, please confirm (y/n)? " -n 1 -r;
@@ -50,6 +49,6 @@ if [[ -z $remote ]]; then
     read -p "Would you like to track $to (y/n)? " -n 1 -r
     echo
 else
-    [[ $to = $remote ]] && error
+    [[ $to = $remote ]] && err
 fi
 "$GIT_EXE" push "$@" && [[ $REPLY == [yY]* ]] && "$GIT_EXE" track $to

@@ -8,20 +8,17 @@ source "$G2_HOME/cmds/color.sh"
 
 state=$("$GIT_EXE" g2brstatus)
 
-[[ $state = "rebase" ]] && {
-
+if [[ $state = "rebase" ]]; then
     action="--continue"
     if git diff-index --quiet HEAD --; then
 	    echo_info "The last commit brings no significant changes -- automatically skipping"
 		action="--skip"
     fi
-
     "$GIT_EXE" rebase $action 2> /dev/null
-
-}
+fi
 
 [[ $state = "merge" ]] && {
     # Count the number of unmerged files
     count=$("$GIT_EXE" ls-files --unmerged | wc -l)
-    [[ $count -ne 0 ]] && echo_fatal "I am afraid you still have unmerged files, please run <g mt> to resolve conflicts" ||"$GIT_EXE" commit
+    [[ $count -ne 0 ]] && fatal "Hey! you still have unmerged files, please run ${boldon}g mt${boldoff} to resolve conflicts" ||"$GIT_EXE" commit
 }

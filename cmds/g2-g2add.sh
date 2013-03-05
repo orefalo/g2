@@ -1,4 +1,4 @@
 #!/bin/bash
 #
 source "$G2_HOME/cmds/color.sh"
-echo_fatal "Don't use <add> with G2, <freeze> and <unfreeze> are powerfull commands"
+fatal "Don't use ${boldon}add${boldoff} with G2, ${boldon}freeze${boldoff} and ${boldon}unfreeze${boldoff} are powerfull commands"
