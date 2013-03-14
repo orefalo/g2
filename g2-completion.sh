@@ -13,14 +13,12 @@
 #    *) .git/remotes file names
 #    *) git 'subcommands'
 #    *) tree paths within 'ref:path/to/file' expressions
+#    *) file paths within current working directory and index
 #    *) common --long-options
 #
 # Script modified to accomodate G2
 #   - orefalo
 
-if [[ -n ${ZSH_VERSION-} ]]; then
-	autoload -U +X bashcompinit && bashcompinit
-fi
 
 case "$COMP_WORDBREAKS" in
 *:*) : great ;;
@@ -166,7 +164,6 @@ __git_reassemble_comp_words_by_ref()
 }
 
 if ! type _get_comp_words_by_ref >/dev/null 2>&1; then
-if [[ -z ${ZSH_VERSION:+set} ]]; then
 _get_comp_words_by_ref ()
 {
 	local exclude cur_ words_ cword_
@@ -194,32 +191,6 @@ _get_comp_words_by_ref ()
 		shift
 	done
 }
-else
-_get_comp_words_by_ref ()
-{
-	while [ $# -gt 0 ]; do
-		case "$1" in
-		cur)
-			cur=${COMP_WORDS[COMP_CWORD]}
-			;;
-		prev)
-			prev=${COMP_WORDS[COMP_CWORD-1]}
-			;;
-		words)
-			words=("${COMP_WORDS[@]}")
-			;;
-		cword)
-			cword=$COMP_CWORD
-			;;
-		-n)
-			# assume COMP_WORDBREAKS is already set sanely
-			shift
-			;;
-		esac
-		shift
-	done
-}
-fi
 fi
 
 # Generates completion reply with compgen, appending a space to possible
@@ -259,6 +230,112 @@ __gitcomp_nl ()
 {
 	local IFS=$'\n'
 	COMPREPLY=($(compgen -P "${2-}" -S "${4- }" -W "$1" -- "${3-$cur}"))
+}
+
+# Generates completion reply with compgen from newline-separated possible
+# completion filenames.
+# It accepts 1 to 3 arguments:
+# 1: List of possible completion filenames, separated by a single newline.
+# 2: A directory prefix to be added to each possible completion filename
+#    (optional).
+# 3: Generate possible completion matches for this word (optional).
+__gitcomp_file ()
+{
+	local IFS=$'\n'
+
+	# XXX does not work when the directory prefix contains a tilde,
+	# since tilde expansion is not applied.
+	# This means that COMPREPLY will be empty and Bash default
+	# completion will be used.
+	COMPREPLY=($(compgen -P "${2-}" -W "$1" -- "${3-$cur}"))
+
+	# Tell Bash that compspec generates filenames.
+	compopt -o filenames 2>/dev/null
+}
+
+__git_index_file_list_filter_bash ()
+{
+	local path
+
+	while read -r path; do
+		case "$path" in
+		?*/*)
+			# XXX if we append a slash to directory names when using
+			# `compopt -o filenames`, Bash will append another slash.
+			# This is pretty stupid, and this the reason why we have to
+			# define a compatible version for this function.
+			echo "${path%%/*}" ;;
+		*)
+			echo "$path" ;;
+		esac
+	done
+}
+
+# Process path list returned by "ls-files" and "diff-index --name-only"
+# commands, in order to list only file names relative to a specified
+# directory, and append a slash to directory names.
+__git_index_file_list_filter ()
+{
+	# Default to Bash >= 4.x
+	__git_index_file_list_filter_bash
+}
+
+# Execute git ls-files, returning paths relative to the directory
+# specified in the first argument, and using the options specified in
+# the second argument.
+__git_ls_files_helper ()
+{
+	(
+		test -n "${CDPATH+set}" && unset CDPATH
+		# NOTE: $2 is not quoted in order to support multiple options
+		cd "$1" && "$GIT_EXE" ls-files --exclude-standard $2
+	) 2>/dev/null
+}
+
+
+# Execute git diff-index, returning paths relative to the directory
+# specified in the first argument, and using the tree object id
+# specified in the second argument.
+__git_diff_index_helper ()
+{
+	(
+		test -n "${CDPATH+set}" && unset CDPATH
+		cd "$1" && "$GIT_EXE" diff-index --name-only --relative "$2"
+	) 2>/dev/null
+}
+
+# __git_index_files accepts 1 or 2 arguments:
+# 1: Options to pass to ls-files (required).
+#    Supported options are --cached, --modified, --deleted, --others,
+#    and --directory.
+# 2: A directory path (optional).
+#    If provided, only files within the specified directory are listed.
+#    Sub directories are never recursed.  Path must have a trailing
+#    slash.
+__git_index_files ()
+{
+	local dir="$(__gitdir)" root="${2-.}"
+
+	if [ -d "$dir" ]; then
+		__git_ls_files_helper "$root" "$1" | __git_index_file_list_filter |
+			sort | uniq
+	fi
+}
+
+# __git_diff_index_files accepts 1 or 2 arguments:
+# 1) The id of a tree object.
+# 2) A directory path (optional).
+#    If provided, only files within the specified directory are listed.
+#    Sub directories are never recursed.  Path must have a trailing
+#    slash.
+__git_diff_index_files ()
+{
+	local dir="$(__gitdir)" root="${2-.}"
+
+	if [ -d "$dir" ]; then
+		__git_diff_index_helper "$root" "$1" | __git_index_file_list_filter |
+			sort | uniq
+	fi
 }
 
 __git_heads ()
@@ -425,7 +502,7 @@ __git_complete_revlist_file ()
 		*)   pfx="$ref:$pfx" ;;
 		esac
 
-		__gitcomp_nl "$("$GIT_EXE" --git-dir="$(__gitdir)" ls-tree "$ls" \
+		__gitcomp_nl "$("$GIT_EXE" --git-dir="$(__gitdir)" ls-tree "$ls" 2>/dev/null \
 				| sed '/^100... blob /{
 				           s,^.*	,,
 				           s,$, ,
@@ -457,6 +534,46 @@ __git_complete_revlist_file ()
 	esac
 }
 
+
+# __git_complete_index_file requires 1 argument: the options to pass to
+# ls-file
+__git_complete_index_file ()
+{
+	local pfx cur_="$cur"
+
+	case "$cur_" in
+	?*/*)
+		pfx="${cur_%/*}"
+		cur_="${cur_##*/}"
+		pfx="${pfx}/"
+
+		__gitcomp_file "$(__git_index_files "$1" "$pfx")" "$pfx" "$cur_"
+		;;
+	*)
+		__gitcomp_file "$(__git_index_files "$1")" "" "$cur_"
+		;;
+	esac
+}
+
+# __git_complete_diff_index_file requires 1 argument: the id of a tree
+# object
+__git_complete_diff_index_file ()
+{
+	local pfx cur_="$cur"
+
+	case "$cur_" in
+	?*/*)
+		pfx="${cur_%/*}"
+		cur_="${cur_##*/}"
+		pfx="${pfx}/"
+
+		__gitcomp_file "$(__git_diff_index_files "$1" "$pfx")" "$pfx" "$cur_"
+		;;
+	*)
+		__gitcomp_file "$(__git_diff_index_files "$1")" "" "$cur_"
+		;;
+	esac
+}
 
 __git_complete_file ()
 {
@@ -611,6 +728,43 @@ __git_has_doubledash ()
 		((c++))
 	done
 	return 1
+}
+
+# Try to count non option arguments passed on the command line for the
+# specified git command.
+# When options are used, it is necessary to use the special -- option to
+# tell the implementation were non option arguments begin.
+# XXX this can not be improved, since options can appear everywhere, as
+# an example:
+#	git mv x -n y
+#
+# __git_count_arguments requires 1 argument: the git command executed.
+__git_count_arguments ()
+{
+	local word i c=0
+
+	# Skip "git" (first argument)
+	for ((i=1; i < ${#words[@]}; i++)); do
+		word="${words[i]}"
+
+		case "$word" in
+			--)
+				# Good; we can assume that the following are only non
+				# option arguments.
+				((c = 0))
+				;;
+			"$1")
+				# Skip the specified git command and discard git
+				# main options
+				((c = 0))
+				;;
+			?*)
+				((c++))
+				;;
+		esac
+	done
+
+	printf "%d" $c
 }
 
 __git_whitespacelist="nowarn warn error error-all fix"
@@ -774,7 +928,19 @@ _git_clone ()
 
 _git_ci ()
 {
-	__git_has_doubledash && return
+	case "$prev" in
+	-c|-C)
+		__gitcomp_nl "$(__git_refs)" "" "${cur}"
+		return
+		;;
+	esac
+
+	case "$prev" in
+	-c|-C)
+		__gitcomp_nl "$(__git_refs)" "" "${cur}"
+		return
+		;;
+	esac
 
 	case "$cur" in
 	--cleanup=*)
@@ -803,13 +969,21 @@ _git_ci ()
 			"
 		return
 	esac
-	COMPREPLY=()
+
+	if git rev-parse --verify --quiet HEAD >/dev/null; then
+		__git_complete_diff_index_file "HEAD"
+	else
+		# This is the first commit
+		__git_complete_index_file "--cached"
+	fi
 }
 
 _git_commit ()
 {
 	_git_ci
 }
+
+__git_diff_algorithms="myers minimal patience histogram"
 
 __git_diff_common_options="--stat --numstat --shortstat --summary
 			--patch-with-stat --name-only --name-status --color
@@ -821,10 +995,11 @@ __git_diff_common_options="--stat --numstat --shortstat --summary
 			--no-ext-diff
 			--no-prefix --src-prefix= --dst-prefix=
 			--inter-hunk-context=
-			--patience
+			--patience --histogram --minimal
 			--raw
 			--dirstat --dirstat= --dirstat-by-file
 			--dirstat-by-file= --cumulative
+			--diff-algorithm=
 "
 
 _git_df ()
@@ -832,6 +1007,10 @@ _git_df ()
 	__git_has_doubledash && return
 
 	case "$cur" in
+	--diff-algorithm=*)
+		__gitcomp "$__git_diff_algorithms" "" "${cur##--diff-algorithm=}"
+		return
+		;;
 	--*)
 		__gitcomp "--cached --staged --pickaxe-all --pickaxe-regex
 			--base --ours --theirs --no-index
@@ -899,10 +1078,11 @@ _git_freeze ()
 		__gitcomp "-m"
 		return
 		;;
-    *)
-        COMPREPLY=()
-        ;;
 	esac
+
+	# XXX should we check for --update and --all options ?
+	__git_complete_index_file "--others --modified"
+	
 }
 
 
@@ -987,7 +1167,6 @@ _git_key ()
 
 _git_ls ()
 {
-	__git_has_doubledash && return
 
 	case "$cur" in
 	--*)
@@ -1001,7 +1180,10 @@ _git_ls ()
 		return
 		;;
 	esac
-	COMPREPLY=()
+	
+	# XXX ignore options like --modified and always suggest all cached
+	# files.
+	__git_complete_index_file "--cached"
 }
 
 _git_ls_files ()
@@ -1141,7 +1323,14 @@ _git_mv ()
 		return
 		;;
 	esac
-	COMPREPLY=()
+	
+	if [ $(__git_count_arguments "mv") -gt 0 ]; then
+		# We need to show both cached and untracked files (including
+		# empty directories) since this may not be the last argument.
+		__git_complete_index_file "--cached --others --directory"
+	else
+		__git_complete_index_file "--cached"
+	fi
 }
 
 _git_pull ()
@@ -1226,7 +1415,7 @@ _git_rebase ()
 
 _git_rt ()
 {
-	local subcommands="add rename rm set-head set-branches set-url show prune update"
+	local subcommands="add rename remove rm set-head set-branches set-url show prune update"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
 	if [ -z "$subcommand" ]; then
 		__gitcomp "$subcommands"
@@ -1234,7 +1423,7 @@ _git_rt ()
 	fi
 
 	case "$subcommand" in
-	rename|rm|set-url|show|prune)
+	rename|remove|rm|set-url|show|prune)
 		__gitcomp_nl "$(__git_remotes)"
 		;;
 	set-head|set-branches)
@@ -1299,15 +1488,13 @@ _git_revert ()
 
 _git_rm ()
 {
-	__git_has_doubledash && return
-
 	case "$cur" in
 	--*)
 		__gitcomp "--cached --dry-run --ignore-unmatch --quiet"
 		return
 		;;
 	esac
-	COMPREPLY=()
+	__git_complete_index_file "--cached"
 }
 
 _git_sh ()
@@ -1523,18 +1710,6 @@ __git_main ()
 
 __git_func_wrap ()
 {
-	if [[ -n ${ZSH_VERSION-} ]]; then
-		emulate -L bash
-		setopt KSH_TYPESET
-
-		# workaround zsh's bug that leaves 'words' as a special
-		# variable in versions < 4.3.12
-		typeset -h words
-
-		# workaround zsh's bug that quotes spaces in the COMPREPLY
-		# array if IFS doesn't contain spaces.
-		typeset -h IFS
-	fi
 	local cur words cword prev
 	_get_comp_words_by_ref -n =: cur words cword prev
 	$1
