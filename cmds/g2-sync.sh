@@ -17,9 +17,13 @@ $("$GIT_EXE" g2iswip $remote) || exit 1;
 "$GIT_EXE" fetch || exit $?;
 $("$GIT_EXE" g2isforced $remote)  && fatal "It appears the history of the branch was changed on the server." && error " please issue a ${boldon}g rs upstream${boldoff} or a ${boldon}g rb $remote${boldoff} to resume";
 branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
-"$GIT_EXE" rev-list --left-right $branch...$remote -- 2> /dev/null > /tmp/git_upstream_status_delta
-lchg=$(grep -c "^<" /tmp/git_upstream_status_delta);
-rchg=$(grep -c "^>" /tmp/git_upstream_status_delta);
+
+# count the number of changes in/out
+deltafile="/tmp/delta$RANDOM"
+"$GIT_EXE" rev-list --left-right "$branch...$remote" -- 2> /dev/null > "$deltafile"
+lchg=$(grep -c "^<" "$deltafile");
+rchg=$(grep -c "^>" "$deltafile");
+rm "$deltafile"
 
 [[ $rchg -gt 0 ]] && { "$GIT_EXE" rebase $remote || {
         unmerged=$("$GIT_EXE" ls-files --unmerged)
