@@ -4,7 +4,7 @@ source "$G2_HOME/cmds/color.sh"
 
 if [[ $# -eq 1 ]]; then
     [[ $1 != */* ]] && error "${boldon}$1${boldoff} is not an upstream branch (ie. origin/xxx)."
-    "$GIT_EXE" branch --set-upstream $1
+    "$GIT_EXE" branch --set-upstream-to $1
 else
     echo -e -n "${greenf}"
     "$GIT_EXE" for-each-ref --format="local: %(refname:short) <--sync--> remote: %(upstream:short)" refs/heads
