@@ -406,8 +406,8 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* g remote: when resetting origin, prompt user
-* g track origin/blabla - if origin/blabla not setup, prompt user to create the branch
+* g remote: when resetting origin, prompt user to override existing
+* g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
 * allow g co <hash>
 * g2-co: check if branch is local then checkout branch, if remote checkout -b branch origin/branch
