@@ -14,5 +14,5 @@ g2_initializeANSI()
 g2_initializeANSI
 
 fatal() { echo -e "${redf}fatal: $1${reset}"; }
-error() { fatal $1; exit 1; }
+error() { fatal "$1"; exit 1; }
 echo_info() { echo -e "${boldon}$1${reset}"; }
