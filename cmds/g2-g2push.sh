@@ -30,7 +30,7 @@ hasFFlag() {
 fflg=$( hasFFlag "$@" )
 n=$#;
 [[ $fflg = "false" && $n -eq 0 ]] && err
-$("$GIT_EXE" g2iswip) || exit 1
+"$GIT_EXE" g2iswip || exit 1
 [[ $fflg = "true" ]] && {
     read -p "warning: you are about to force push history, please confirm (y/n)? " -n 1 -r;
     echo

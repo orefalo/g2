@@ -15,7 +15,7 @@ usage() {
 
 n=$#;
 [[ $n -eq 0 || ${!n} = -* ]] && err
-$("$GIT_EXE" g2iswip) || exit 1
+"$GIT_EXE" g2iswip || exit 1
 [[ ${!n} = */* ]] && usage
 branch=${!n}
 let n--

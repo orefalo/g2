@@ -9,7 +9,7 @@ else
     isBranch=$("$GIT_EXE" branch -a | grep -c "$1")
     [[ $isBranch -gt 0 ]] && {
         "$GIT_EXE" abort
-        $("$GIT_EXE" g2haschanges) || exit 1
+        "$GIT_EXE" g2haschanges || exit 1
         g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
         "$GIT_EXE" checkout "$@" && "$GIT_EXE" clean -fdx $g2excludes
         exit $?;

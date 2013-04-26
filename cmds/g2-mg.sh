@@ -3,7 +3,7 @@
 
 source "$G2_HOME/cmds/color.sh"
 
-$("$GIT_EXE" g2iswip) || exit 1
+"$GIT_EXE" g2iswip || exit 1
 
 # substitute "upstream" with real upstream name
 declare -a v=("$@")

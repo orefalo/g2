@@ -41,7 +41,7 @@ else
 	hasDMFlag "$@"
 	[[ $flag = "exit" ]] && exit 1;
     [[ $flag = "true" ]] && { "$GIT_EXE" branch "$@"; exit $?; }
-    $("$GIT_EXE" g2haschanges) || exit 1;
+    "$GIT_EXE" g2haschanges || exit 1;
 
     shift $(( OPTIND - 1 ))
     branch="${1:-/}"
