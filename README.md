@@ -37,18 +37,19 @@ This project is an attempt to make the git command line a friendly place: it eas
 * Please backup your favorite ~/.gitconfig as g2 with recreate it from scratch.
 * For now G2 only runs on **bash**
 
+###MacOS:
+
+The software is now available via [HomeBrew](http://mxcl.github.com/homebrew/).
+
+    brew install https://raw.github.com/orefalo/g2/master/homebrew/g2.rb
+
+
 ###Linux (RedHat/Ubuntu):
 
 Please clone the repository, edit either **/etc/bashrc**, **/etc/bash.bashrc** or **~/.bashrc** and add the following code:
 
     [[ $PS1 && -f /path/to/g2-install.sh ]] && \
          . /path/to/g2-install.sh
-
-###MacOS:
-
-Same as Linux, make the change in `~/.bash_profile`
-
-The software will soon be available via a [HomeBrew](http://mxcl.github.com/homebrew/) package, stay tuned.
 
 
 ###Solaris (Partially tested):
@@ -410,17 +411,12 @@ Distributed under the GNU General Public License, version 2.0.
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
 * g2-co: check if branch is local then checkout branch, if remote checkout -b branch origin/branch
-* doc: provide basic guidance on how a commit is performed using g2
-* doc: add typical solutions:  
-* doc: talk about gc
-* doc: talk about g am
-* g mode - for advanced users
 * g as - aliasing
 * g undo needs more validations
-* enforce completions for undo *, and all the upstream commands
 
 ## FIXED / DONE
 
+* Homebrew fomula is now live
 * allow g co <hash>
 * Many commands are now colorized
 * Added tips of the day
