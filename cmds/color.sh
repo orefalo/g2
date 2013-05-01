@@ -1,6 +1,7 @@
+#!/bin/sh
 g2_initializeANSI()
 {
-  g2esc="\033"
+  g2esc="\033";
   
   blackf="${g2esc}[30m";   redf="${g2esc}[31m";    greenf="${g2esc}[32m";
   yellowf="${g2esc}[33m";  bluef="${g2esc}[34m";   purplef="${g2esc}[35m";

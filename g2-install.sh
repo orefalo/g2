@@ -2,6 +2,8 @@
 #
 # Call this program to install G2
 
+[ `basename $BASH` != "bash" ] && echo "G2 only supports bash at the moment, thank you for trying." && exit 1
+
 # Figure the script HOME PATH
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
