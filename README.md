@@ -10,19 +10,19 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 * **g2** saves time by providing high level commands.
 * **g2** is generally safer than git as it prompts before destructive actions.
-* **g2** helps setup git settings : sshkeys, username, email and tools.
+* **g2** helps setup git: sshkeys, username, email and tools.
 * **g2** provides two letter acronyms for most commands.
-* **g2** eases the merge process.
+* **g2** eases the merge process by introducing three new verbs:**sync**, **abort** and **continue**.
 * **g2** provides a reduced set of commands which give guidance on what to do next.
 * **g2** enhances command line experience auto-completion and a smart prompt.
 * **g2** warns when a branch history was changed on the server (forced pushed).
 * **g2** checks the freshness of the branch prior to merging and warns accordingly.
 * **g2** enforces a clean linear history by introducing new commands.
-* **g2** requires a clean state before rebasing, checking out, branching or merging.
+* **g2** requires a **clean state** before rebasing, checking out, branching or merging.
 * **g2** provides guidance when it cannot perform an operation.
-* **g2** brings a number of friendly commands such as : panic, sync, freeze, wip.
+* **g2** brings a number of friendly commands such as : **panic**, **track**, **freeze**, **wip**.
 * **g2** eases branch creation.
-* **g2** is just easier at undoing things.
+* **g2** is just easier at undoing things, see the **undo** command
 
 ###What G2 is not
 
@@ -42,6 +42,11 @@ This project is an attempt to make the git command line a friendly place: it eas
 The software is now available via [HomeBrew](http://mxcl.github.com/homebrew/).
 
     brew install https://raw.github.com/orefalo/g2/master/homebrew/g2.rb
+
+If you already have git installed outside of Brew, the following command should do
+
+    brew install --without-git https://raw.github.com/orefalo/g2/master/homebrew/g2.rb
+
 
 
 ###Linux (RedHat/Ubuntu):
@@ -407,6 +412,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* g track in non repo -> should warn early, also applies to other cmds
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
