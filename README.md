@@ -75,22 +75,22 @@ Please download the Windows native installer from [this link](https://github.com
 
 #How to use
 
-The project introduces the `g` alias. Taken without parameters it displays the following output.
+The project overides the `g` and `git` commands. Taken without parameters it displays the following output.
 
 ```
 $ g
-Usage:
+G2 Usage:
 	abort - aborts any rebase/merge
 	am <?-f> - amends last commit with staging area
 	br <?-D> <?-M> <?branch> - list or create branches
-	bs - bisect
+	bs - bisect, aka bug finder
 	co <branch> - switches branch (either local/remote)
 	continue - resumes a conflict resolution
 	cp <commit> - cherry-pick
 	ci <?params...> - commit
 	clone <url> - clone a remote repository
-	df/dt <?params...> - compares files
-	fetch - synchronizes remote branches
+	df/dt <?params...> <file> - compares files
+	fetch - gets changes sitting on the server
 	freeze/unfreeze <?-m comment> <?file> - freeze/unfreeze files
 	gc - garbage collects: run fsck & gc
 	gp - grep
@@ -105,21 +105,21 @@ Usage:
 	ls <?params...> - list files under source control
 	panic - gets you back on HEAD, cleans all untracked files
 	pull/push <?opts> <remote> <branch> - deals with other branches
-	rb <?params...> <branch> - rebase
-	rm <params...> - remove
-	rs <params...> - reset
-	rs 'upstream' - resets branch to upstream state
-	rt <?params...> - remote
-	rv <commit> - revert
+	rb <?params...> <branch> or <upstream> - rebase
+	rm <params...> - remove files
+	rs <params...> - reset branch status
+	rs upstream - resets branch to upstream state
+	rt <?params...> - git remotes management
+	rv <commit> - reverts commits
 	setup - configures user, key, editor, tools
 	sh <?-deep> - show commit contents
 	sm <?params...> - submodule
 	ss <?params> - stash
 	st <?params...> - status
-	sync - syncs working branch: fetch, rebase & push
+	sync <?upstream> - syncs working branch: fetch, rebase & push
 	tg - tag
 	track <?upstream_branch> - shows/set tracking
-	undo file|'commit'|'merge'
+	undo <file>|commit <hash>|merge - reverts changes
 	wip/unwip - save/restore work in progress to branch
 ```
 
@@ -162,32 +162,34 @@ Should you need to regenerate the key pair, the process is equally user friendly
 
 ![image](http://orefalo.github.com/g2/images/key_gen.jpg)
 
-##Committing
+##Freeze, Unfreeze & Commit
 
-Git is often referenced as a content SCM that freezes the state of the repository on every commit. So rather than providing the rather granular commands `git add` and `git rm` commands, **g2** introduces `freeze` and `unfreeze`.
+I have some files I want to stage. Do I want `git add .`, `git add -u`, or `git add -A`? Which does what again? Confused. What about staging deletions?
+
+**g2** comes with simplicity in mind, rather the using some of the commands above, **g2** introduces `freeze` and `unfreeze`.
 
 ![image](http://orefalo.github.com/g2/images/freeze.jpg)
 
-Without arguments, `g freeze` literally freezes the state of the workspace into the staging area. Should you need to freeze just one file, or one folder, use `g freeze <path>`.
+Without arguments, `g freeze` literally freezes the state of the workspace into the staging area. It's convenient, one command to stage all the changes: additions and deletions. If I need to point the file to stage, I can use `g freeze <path>`.
 
+Once changes are frozen, they can be commited with: `g ci -m "commit description"`
 There is also a handy one way command `g freeze -m "msg"`, that skips the staging area and commits directly.
-Equally straightforward is the `g unfreeze` command, which unstages the files form the index back into the workspace.
 
+Ooops, I staged a change that I do not want to commit: I would then use `g unfreeze <path>` to get the file(s) out of the way.
 
-The contents of the staging area can be committed with the `g ci -m "msg"` command. No rocket science here, you may however like the `g undo commit` command that reverts the last commit
+Try the [CheatSheet](http://orefalo.github.com/g2/) it helps visualize what commands do.
 
-I would recommend a look at the cheat sheet to better understand how these commands work: [CheatSheet](http://orefalo.github.com/g2/)
+##Undoing changes
 
-##Undoing
+Since we introduced **unfreeze** in the previous section, let's cover undoing: Standard git commands are very confusing when it comes to undoing things. It requires using the **reset** command which has a bunch of strange parameters that make writes to the git index. In fact, in order to undo changes properly, the reset command requires the user to have a clear understanding of the guts of the git index. This should not be the case for a common command, like undo.
 
-Since we introduced undoing in the previous section, let's cover it all.  
-**g2** comes with the following undo scenarios:
+So here comes **g2** with the following undo scenarios:
 
-* `g undo commit` - undo the last commit, put changes back into the staging area
-* `g undo merge` - reverts all commits up to the state before the last merge
-* `g undo myfile.txt` - reverts the changes in myfile.txt with the version from the repository.
+* `g undo commit` - undo the last commit, put changes back into the staging area.
+* `g undo merge` - reverts all commits up to the state before the last merge.
+* `g undo myfile.txt` - reverts any changes made to myfile.txt.
 
-##History
+##Reviewing the History
 
 Working with beginners, I found that an easy way to keep them focused is to provide _visuals_. Now this is not the github network graph, but it's close enough to get them focused. Type `g lg` and enjoy the enhanced colorized commit log output.
 
@@ -195,7 +197,6 @@ Working with beginners, I found that an easy way to keep them focused is to prov
 
 Learn to read that tree, it's important: it holds the commit history for the current branch.
 
-Since we are talking about history, I should probably mention that **g2** will **ALWAYS** prompt before running any destructive actions.
 
 ##Panic!
 
@@ -249,17 +250,17 @@ By _stable state_ I mean: **no modified files, no staged files**. Should you hav
 
     fatal: some files were changed on this branch, either commit <ci>, <wip> or <panic>.
 
-##Merging
+##Merging,continue & abort
 
-While based on git, **g2** enforces a simpler merge flow.
+**g2** enforces a simpler merge flow by introducing commands `abort` & `continue`.
 
 ![image](http://orefalo.github.com/g2/images/conflicts.jpg)
 
 
-So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens auto-magically. But in a few instances, you will need to resolve **conflicts** manually.
+So what commands can get you into **merge mode**? Well the ones that merge contents: `sync`, `pull`, `rebase`, `merge` and `cherry-pick` to name just a few. Merging with git is a revolution compared to other source control systems, most of the time it happens automatically. But in a few instances, you will need to resolve **conflicts** manually.
 
 
-When this happens, g2 will stop the command flow. Let me emphasize what that means:
+When this happens, g2 will stop the merge flow. Let me emphasize what that means:
 
 * If you are merging, a conflicts will stop before the final commit.
 * If you are rebasing or syncing, a conflicts will stop on the current replay step.
@@ -379,7 +380,7 @@ Please refer to the [cheatsheet](http://orefalo.github.com/g2/).
 * `g` is the command and it obviously comes from **git**
 * `2` because most of the actions are two letters long.
 
-###Is it a new git-flow?
+###Is G2 a new git-flow?
 
 No, **g2** doesn't enforce any branching policy.  
 
@@ -390,7 +391,7 @@ No, **g2** doesn't enforce any branching policy.
 
 ###Why is G2 reinstalled on every launch?
 
-To ensure the git configuration is in a stable, known state.
+To ensure the git configuration is in a stable, known state. Beginers can screw pretty bad when editing their gitconfig file.
 
 ###What if my favorite command is missing?
 
@@ -412,6 +413,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* git-prompt: detect rebase, rather than displaying detached-branch
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
