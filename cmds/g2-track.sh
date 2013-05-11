@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 if [[ $# -eq 1 ]]; then

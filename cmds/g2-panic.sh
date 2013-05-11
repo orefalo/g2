@@ -1,6 +1,8 @@
 #!/bin/bash
 #
 
+"$GIT_EXE" rev-parse || exit 1
+
 read -p "This action will discard all work in progress and checkout HEAD, are you sure (y/n)? " -n 1 -r
 echo
 [[ $REPLY == [yY]* ]] && {

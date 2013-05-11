@@ -3,6 +3,8 @@
 # Performs a fetch, rebase, push with a bunch of validations
 #
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 [[ $1 == "upstream" ]] && pullOnly=true && shift

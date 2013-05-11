@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 [[ $("$GIT_EXE" diff --cached --numstat | wc -l) -eq 0 ]] && error "No files to amend, please use ${boldon}g freeze${boldoff} to stage the changes to amend."

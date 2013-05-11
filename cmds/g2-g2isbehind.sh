@@ -2,6 +2,8 @@
 #
 # Returns 0 if the branch is behind its upstream branch, 1 if not
 
+"$GIT_EXE" rev-parse || exit 1
+
 local=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
 remote=$1
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote)

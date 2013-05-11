@@ -3,6 +3,8 @@
 # returns 0 if the given branch was force updated, 1 if not
 #   if no parameters, figures the upstream branch from the tracking table
 
+"$GIT_EXE" rev-parse || exit 1
+
 remote=$1
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote)
 [[ -n $remote ]] && {

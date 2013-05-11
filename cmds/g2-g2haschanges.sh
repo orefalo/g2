@@ -2,6 +2,8 @@
 #
 # returns 0 if no pending changes, 1 if any (workspace or index)
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh";
 
 if [[ $("$GIT_EXE" diff --cached --numstat | wc -l) -ne 0 ]]; then

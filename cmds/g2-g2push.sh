@@ -4,6 +4,8 @@
 #  forbids wip commits from being pushed
 #  forbids push to the working branch
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 err() {

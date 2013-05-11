@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 
+
 source "$G2_HOME/cmds/color.sh"
 
 "$GIT_EXE" g2iswip || exit 1

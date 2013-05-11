@@ -2,6 +2,8 @@
 #
 # easy undo a file, a commit or a merge
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 if [ $# -lt 1 ]

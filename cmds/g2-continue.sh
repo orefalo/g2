@@ -4,6 +4,8 @@
 # Unlike git, it detects what needs to be resumed: rebase or merge
 #  and smartly run the right command
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 state=$("$GIT_EXE" g2brstatus)

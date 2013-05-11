@@ -1,6 +1,8 @@
 #!/bin/bash
 #
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 if [ "$(echo "$1" | grep -e "^[0-9A-Fa-f]*$")" == "$1" ]; then

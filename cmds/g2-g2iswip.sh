@@ -2,6 +2,8 @@
 # returns 1 if there is a wip commit at the tip of the branch, 0 if not
 # Typical usage $("$GIT_EXE" g2iswip) || exit 1
 
+"$GIT_EXE" rev-parse || exit 1
+
 source "$G2_HOME/cmds/color.sh"
 
 remote=$1;
