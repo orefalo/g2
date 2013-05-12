@@ -338,60 +338,73 @@ parse_g2_status() {
 
 
         ####  GET GIT OP
-        local   modified untracked added init detached
+        local   modified added init detached
+
+        # Figures the state of the repo
+        local op=""
+		local branch=""
+		local step=""
+		local total=""
+
 
         $("$GIT_EXE" ls-tree HEAD &>/dev/null)
         [[ $? -eq 128 ]] && init=init || {
 
-            if  ! grep -q "^ref:" $git_dir/HEAD  2>/dev/null; then
-                  detached=detached
-            fi
+            if [ -d "$git_dir/rebase-merge" ]; then
 
-            [[ $(( $untracked_files + $modified_files + $added_files )) -eq 0 ]] && clean=clean || {
-                [[ $untracked_files -gt 0 ]] && untracked=untracked;
-                [[ $modified_files -gt 0 ]] && modified=modified;
-                [[ $added_files -gt 0 ]] && added=added;
-            }
-        }
-
-        local op
-        if [[ -d "$git_dir/.dotest" ]] ;  then
-
-                if [[ -f "$git_dir/.dotest/rebasing" ]] ;  then
-                        op="rebase"
-
-                elif [[ -f "$git_dir/.dotest/applying" ]] ; then
-                        op="am"
-
+                step=$(cat "$git_dir/rebase-merge/msgnum")
+                total=$(cat "$git_dir/rebase-merge/end")
+                branch="$(cat "$git_dir/rebase-merge/head-name") $step/$total"
+                if [ -f "$git_dir/rebase-merge/interactive" ]; then
+                    op="rebase -i"
                 else
+                    op="rebase -m"
+                fi
+            else
+                if [ -d "$git_dir/rebase-apply" ]; then
+                    step=$(cat "$git_dir/rebase-apply/next")
+                    total=$(cat "$git_dir/rebase-apply/last")
+                    if [ -f "$git_dir/rebase-apply/rebasing" ]; then
+                        op="rebase"
+                    elif [ -f "$git_dir/rebase-apply/applying" ]; then
+                        op="am"
+                    else
                         op="am/rebase"
-
+                    fi
+                elif [ -f "$git_dir/MERGE_HEAD" ]; then
+                    op="merge"
+                elif [ -f "$git_dir/CHERRY_PICK_HEAD" ]; then
+                    op="cherrypick"
+                elif [ -f "$git_dir/REVERT_HEAD" ]; then
+                    op="revert"
+                elif [ -f "$git_dir/BISECT_LOG" ]; then
+                    op="bisect"
                 fi
 
-        elif  [[ -f "$git_dir/.dotest-merge/interactive" ]] ;  then
-                op="rebase -i"
-                # ??? branch="$(cat "$git_dir/.dotest-merge/head-name")"
+                branch="$($GIT_EXE symbolic-ref HEAD 2>/dev/null)" || {
+                    [ -z "$op" ] && op="detached" && detached=detached
+                    branch="$(
+                    case "${GIT_PS1_DESCRIBE_STYLE-}" in
+                    (contains)
+                        $GIT_EXE describe --contains HEAD ;;
+                    (branch)
+                        $GIT_EXE describe --contains --all HEAD ;;
+                    (describe)
+                        $GIT_EXE describe HEAD ;;
+                    (* | default)
+                        $GIT_EXE describe --tags --exact-match HEAD ;;
+                    esac 2>/dev/null)" ||
 
-        elif  [[ -d "$git_dir/.dotest-merge" ]] ;  then
-                op="rebase -m"
-                # ??? branch="$(cat "$git_dir/.dotest-merge/head-name")"
+                    branch="$(cut -c1-7 "$git_dir/HEAD" 2>/dev/null)..." ||
+                    branch="unknown"
 
-        # lvv: not always works. Should  ./.dotest  be used instead?
-        elif  [[ -f "$git_dir/MERGE_HEAD" ]] ;  then
-                op="merge"
-                # ??? branch="$(git symbolic-ref HEAD 2>/dev/null)"
-
-        elif  [[ -f "$git_dir/index.lock" ]] ;  then
-                op="locked"
-
-        else
-                [[  -f "$git_dir/BISECT_LOG"  ]]   &&  op="bisect"
-                # ??? branch="$(git symbolic-ref HEAD 2>/dev/null)" || \
-                #    branch="$(git describe --exact-match HEAD 2>/dev/null)" || \
-                #    branch="$(cut -c1-7 "$git_dir/HEAD")..."
-        fi
-
-
+                    if [ -n "$step" ] && [ -n "$total" ]; then
+                        branch="$branch $step/$total"
+                    fi
+                    branch="[$branch]"
+                }
+            fi
+        }
         ####  GET GIT HEX-REVISION
         local rawhex=""
         if  [[ $rawhex_len -gt 0 ]] ;  then
@@ -400,34 +413,22 @@ parse_g2_status() {
                 rawhex="=$hex_vcs_color${rawhex:0:$rawhex_len}"
         fi
 
-        #### branch
-        local branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
-        branch=${branch/#master/M}
-
-        # another method of above:
-        # branch=$(git symbolic-ref -q HEAD || { echo -n "detached:" ; git name-rev --name-only HEAD 2>/dev/null; } )
-        # branch=${branch#refs/heads/}
+       #### remove junk from branch name, substitute master to M
+       branch=${branch/#refs\/heads\//}
+       branch=${branch/#master/M}
 
         ### compose vcs_info
-
         local vcs_info
         if [ $init ];  then
                 vcs_info=${WHITE}init
         else
-                if [ "$detached" ] ;  then
-                        branch="<detached:$("$GIT_EXE" name-rev --name-only HEAD 2>/dev/null)"
-                elif [ "$op" ];  then
-                        branch="$op:$branch"
-                        if [ "$op" == "merge" ] ;  then
-                            branch+="<--$("$GIT_EXE" name-rev --name-only $(<$git_dir/MERGE_HEAD))"
-                        fi
-                        #branch="<$branch>"
-                fi
-                vcs_info="$branch$rawhex"
+            if [ "$op" ];  then
+                branch="$op:$branch"
+            fi
+            vcs_info="$branch$rawhex"
         fi
 
         ### status:  choose primary (for branch color)
-    #    unset status
         local status=${op:+op}
         status=${status:-$detached}
         status=${status:-$clean}
@@ -435,10 +436,9 @@ parse_g2_status() {
         status=${status:-$added}
         status=${status:-$untracked}
         status=${status:-$init}
-                                # at least one should be set
-                                : ${status?prompt internal error: git status}
+        # at least one should be set
+        : ${status?prompt internal error: git status}
         eval vcs_color="\${${status}_vcs_color}"
-                                # no def:  vcs_color=${vcs_color:-$WHITE}    # default
 
        ### file list
         local status_info=""

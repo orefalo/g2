@@ -13,6 +13,7 @@ OLDpwd=$PWD
 cd $DIR
 
 export G2_HOME=$DIR
+export GIT_PS1_DESCRIBE_STYLE=branch
 
 source ./cmds/color.sh
 

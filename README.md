@@ -413,7 +413,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-* git-prompt: detect rebase, rather than displaying detached-branch
+
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
@@ -423,6 +423,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED / DONE
 
+* git-prompt: detect rebase, rather than displaying detached-branch
 * Validate that we are in a git repo before any action is run
 * Homebrew fomula is now live
 * allow g co <hash>
