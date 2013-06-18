@@ -11,6 +11,6 @@ echo
     g2excludes=$("$GIT_EXE" config --global --get g2.panic.excludes)
     "$GIT_EXE" reset --hard HEAD && "$GIT_EXE" clean -fdx $g2excludes
 
-    branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
+    branch=$("$GIT_EXE" branch | sed -n '/\* /s///p')
     [[ $branch = "(no branch)" ]] && "$GIT_EXE" checkout master
 }

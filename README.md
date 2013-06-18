@@ -423,6 +423,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED / DONE
 
+* optimized branch identification logic
 * git-prompt: detect rebase, rather than displaying detached-branch
 * Validate that we are in a git repo before any action is run
 * Homebrew fomula is now live

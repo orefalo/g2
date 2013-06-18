@@ -18,7 +18,7 @@ remote=$("$GIT_EXE" g2getremote)
 [[ $# -ne 0 ]] && fatal "Sorry, you may only ${boldon}sync${boldoff} against the tracking remote/branch, use ${boldon}pull${boldoff} or ${boldon}push${boldoff} to deal with other branches." && exit 3
 "$GIT_EXE" fetch || exit $?;
 "$GIT_EXE" g2isforced $remote && fatal "It appears the history of the branch was changed on the server." && error "please issue a ${boldon}g rs upstream${boldoff} or a ${boldon}g rb $remote${boldoff} to resume";
-branch=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
+branch=$("$GIT_EXE" branch | sed -n '/\* /s///p')
 
 # count the number of changes in/out
 deltafile="/tmp/delta$RANDOM"

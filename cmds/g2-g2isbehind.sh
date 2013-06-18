@@ -4,7 +4,7 @@
 
 "$GIT_EXE" rev-parse || exit 1
 
-local=$("$GIT_EXE" branch | grep "*" | sed "s/* //")
+local=$("$GIT_EXE" branch | sed -n '/\* /s///p')
 remote=$1
 [[ -z $1 ]] && remote=$("$GIT_EXE" g2getremote)
 [[ -n $remote ]] && {
