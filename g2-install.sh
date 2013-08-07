@@ -38,6 +38,7 @@ tips=(
 "${boldon}g2${boldoff} is just easier at undoing things: try ${boldon}g undo commit${boldoff} or ${boldon}g undo merge${boldoff}."
 "When lost, ${boldon}g panic${boldoff} is the easiest way to get back on track."
 "Use ${boldon}g track${boldoff} to review how local/remote branches are setup."
+"Remember, you may always access the native git command using \"\$GIT_EXE\"."
 "Unlike git, ${boldon}g2${boldoff} actions only apply to the current branch.");
 
 echo -n -e "Installing ${boldon}G2${boldoff}.."

@@ -41,13 +41,11 @@ This project is an attempt to make the git command line a friendly place: it eas
 
 The software is now available via [HomeBrew](http://mxcl.github.com/homebrew/).
 
-    brew install https://raw.github.com/orefalo/g2/master/homebrew/g2.rb
+    brew install g2
 
 If you already have git installed outside of Brew, the following command should do
 
     brew install --without-git https://raw.github.com/orefalo/g2/master/homebrew/g2.rb
-
-
 
 ###Linux (RedHat/Ubuntu):
 
@@ -55,7 +53,6 @@ Please clone the repository, edit either **/etc/bashrc**, **/etc/bash.bashrc** o
 
     [[ $PS1 && -f /path/to/g2-install.sh ]] && \
          . /path/to/g2-install.sh
-
 
 ###Solaris (Partially tested):
 
@@ -72,10 +69,9 @@ Git is not a prerequisite on Windows as the installer comes bundled with it.
 
 Please download the Windows native installer from [this link](https://github.com/orefalo/g2/downloads).
 
-
 #How to use
 
-The project overides the `g` and `git` commands. Taken without parameters it displays the following output.
+The project overrides the `g` and `git` commands. Taken without parameters it displays the following output.
 
 ```
 $ g
@@ -99,11 +95,11 @@ G2 Usage:
 	init <folder> - init a repository
 	key <?-gen> - displays/generates your ssh public key
 	mg <?params...> <branch> - merge
-	mt <?params...> - fixes conflicts by opening a visual mergetool
+	mt <?params...> - fixes conflicts by opening a visual merge-tool
 	mv - move (rename) a file
 	lg - displays commit log
 	ls <?params...> - list files under source control
-	panic - gets you back on HEAD, cleans all untracked files
+	panic - gets you back on HEAD, cleans all un-tracked files
 	pull/push <?opts> <remote> <branch> - deals with other branches
 	rb <?params...> <branch> or <upstream> - rebase
 	rm <params...> - remove files
@@ -111,9 +107,10 @@ G2 Usage:
 	rs upstream - resets branch to upstream state
 	rt <?params...> - git remotes management
 	rv <commit> - reverts commits
+	server - starts a local git:// server on current repo
 	setup - configures user, key, editor, tools
 	sh <?-deep> - show commit contents
-	sm <?params...> - submodule
+	sm <?params...> - sub-module
 	ss <?params> - stash
 	st <?params...> - status
 	sync <?upstream> - syncs working branch: fetch, rebase & push
@@ -134,14 +131,13 @@ Let's start with the "sexy" one: the g2 prompt.
 The prompt shows:
 
 * The current branch name and the hash of the last commit. **M** is used as a substitute for "master"
-* File counts: staged, changed and untracked filed.
+* File counts: staged, changed and un-tracked filed.
 * Obviously username and host.
 * And finally the path, which smartly truncates at 40 characters.
 * The prompt colors will adjust depending of the state of the repository: clean, modified, conflict resolution... etc
 * Not visible on this screen shot is the optional error code should a shell command fail.
 
 Note: file counters can be expensive with large repositories. You may turn off the feature by running `g setup` and setting "Count files in the bash prompt? (true):" to **false**.
-
 
 ##Setup
 
@@ -172,7 +168,7 @@ I have some files I want to stage. Do I want `git add .`, `git add -u`, or `git 
 
 Without arguments, `g freeze` literally freezes the state of the workspace into the staging area. It's convenient, one command to stage all the changes: additions and deletions. If I need to point the file to stage, I can use `g freeze <path>`.
 
-Once changes are frozen, they can be commited with: `g ci -m "commit description"`
+Once changes are frozen, they can be committed with: `g ci -m "commit description"`
 There is also a handy one way command `g freeze -m "msg"`, that skips the staging area and commits directly.
 
 Ooops, I staged a change that I do not want to commit: I would then use `g unfreeze <path>` to get the file(s) out of the way.
@@ -196,7 +192,6 @@ Working with beginners, I found that an easy way to keep them focused is to prov
 ![image](http://orefalo.github.com/g2/images/lg.png)
 
 Learn to read that tree, it's important: it holds the commit history for the current branch.
-
 
 ##Panic!
 
@@ -298,7 +293,7 @@ Note that you may use `g track remote/branch` to set the mapping. For instance, 
 
 Before introducing one of the main **g2** features, let me talk about what **NOT** to do when merging with git.  
     
-Please have a glance at these graphs taken from various projects on github. Note how the branches overlap and how these loops make the graphic extremely difficult to read as the number of commiters increases.
+Please have a glance at these graphs taken from various projects on github. Note how the branches overlap and how these loops make the graphic extremely difficult to read as the number of committers increases.
 
 ![image](http://orefalo.github.com/g2/images/h2.jpg)
 ![image](http://orefalo.github.com/g2/images/h3.jpg)
@@ -323,7 +318,6 @@ The matching commands are `g sync` and `g pull`, here is how to use them:
 For the git expert, the command issues a _fetch, a rebase and a push_ with a multitude of validations in between. For instance, it will block if the remote history was force updated; also it won't push a wip commit (see below).
 
 * Use `g pull` when merging contents from a feature branches.
-
 
 Note: **g2** also supports `g sync upstream` which only fetch and rebase, handy with read-only clones ;-)
 
@@ -367,7 +361,6 @@ For convenience, several commands have been enhanced to accept the "upstream" ke
 * g rs upstream - resets the current branch to the state of the upstream (read the state of the branch on the server)
 * g merge upstream - merge local branch from the contents from the upstream
 * g sync upstream - pull contents from the server, rebase but **DON'T** push
-
 
 ##List of Commands
 
@@ -413,7 +406,6 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
-
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
@@ -423,6 +415,8 @@ Distributed under the GNU General Public License, version 2.0.
 
 ## FIXED / DONE
 
+* g2 is an official homebrew formula
+* g server - will start a local git server
 * optimized branch identification logic
 * git-prompt: detect rebase, rather than displaying detached-branch
 * Validate that we are in a git repo before any action is run

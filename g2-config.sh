@@ -72,6 +72,7 @@ $GIT_EXE config --global core.excludesfile ~/.gitignore_global
 "$GIT_EXE" config --global alias.st status
 "$GIT_EXE" config --global alias.ss stash
 "$GIT_EXE" config --global alias.sm submodule
+"$GIT_EXE" config --global alias.server "daemon --verbose --export-all --base-path=.git --reuseaddr --strict-paths .git/"
 
 #"$GIT_EXE" config --global alias.alias "!"$GIT_EXE" config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\: \\2/' | sort"
 

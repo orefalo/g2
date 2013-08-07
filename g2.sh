@@ -61,6 +61,7 @@ function __g2_usage() {
 	${boldon}rs upstream${boldoff} - resets branch to upstream state
 	${boldon}rt <?params...>${boldoff} - git remotes management
 	${boldon}rv <commit>${boldoff} - reverts commits
+	${boldon}server${boldoff} - starts a local git:// server on current repo
 	${boldon}setup${boldoff} - configures user, key, editor, tools
 	${boldon}sh <?-deep>${boldoff} - show commit contents
 	${boldon}sm <?params...>${boldoff} - submodule
@@ -130,6 +131,7 @@ function __g2_eval() {
     "rv" "revert"
     "revert" ""
     "setup" ""
+    "server" ""
     "sh" ""
     "show" "sh"
     "sm" ""
