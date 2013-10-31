@@ -1,0 +1,18 @@
+
+setup advanved mode
+g check
+
+add right prompt
+
+check if merge/commit in undo
+
+
+    if test (command git diff --cached --numstat | wc -l)  -eq 0
+       __g2_fatal 'No changes to amend, please use <g freeze> to stage your modification, then try amending again.'
+       return 1
+    end
+    -- better
+    if not git diff --cached --no-ext-diff --quiet --exit-code
+         __g2_fatal 'No changes to amend, please use <g freeze> to stage your modification, then try amending again.'
+       return 1
+    end
