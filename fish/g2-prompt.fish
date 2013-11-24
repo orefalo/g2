@@ -385,9 +385,47 @@ function fish_prompt
 end
 
 function fish_right_prompt
-  set_color $fish_color_autosuggestion[1]
-  printf (date "+$c2%H$c0:$c2%M$c0:$c2%S")
-  set_color normal
+    set_color $fish_color_autosuggestion[1]
+    printf (date "+$c2%H$c0:$c2%M$c0:$c2%S")
+
+    set -l now (date +%s)
+    if test $last_exec_timestamp
+        set -l taken (math $now - $last_exec_timestamp)
+        if test $taken -gt 10
+            echo -n ', taken:'
+            set_color $lt_orange
+            echo -n $taken's'
+            set_color $fish_color_autosuggestion[1]
+        end
+    end
+    set -g last_exec_timestamp $now
+
+    # Show loadavg when too high
+    set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
+    set -l ncpu 1
+    # osx
+    if not set ncpu (sysctl hw.ncpu | cut -f2 -d' ')
+      #linux
+        if not set ncpu (grep -c ^processor /proc/cpuinfo)
+            set ncpu 1
+        end
+    end
+    set -l load1m_test (math $load1m \* 100 / $ncpu)
+    if test $load1m_test -gt 100
+      echo -n ', load:'
+      set_color $lt_orange
+      echo -n $load1m
+      set_color $fish_color_autosuggestion[1]
+    end
+
+    # Show disk usage when low
+    set -l du (df / | tail -n1 | sed "s/  */ /g" | cut -d' ' -f 5 | cut -d'%' -f1)
+    if test $du -gt 80
+      echo -n ', du:'
+      set_color $lt_orange
+      echo -n $du
+      set_color $fish_color_autosuggestion[1]
+    end
+
+    set_color normal
 end
-
-
