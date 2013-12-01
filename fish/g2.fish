@@ -828,18 +828,19 @@ function __g2_sync --argument-names flag
     rm -f "$tmpfile"
 
     if test $rchg -gt 0
-        command git rebase $remote;
-    else
-        set unmerged (command git ls-files --unmerged)
-        if test "$unmerged"
-            __g2_info "A few files need to be merged manually, please use <g mt> to fix conflicts."
-            __g2_info " Once all conflicts are resolved, do NOT commit, but use <g continue> to resume."
-            __g2_info " Note: you may abort the merge at any time with <g abort>."
-            return 1;
+        if not command git rebase $remote
+            set unmerged (command git ls-files --unmerged)
+            if test "$unmerged"
+                __g2_info "A few files need to be merged manually, please use <g mt> to fix conflicts."
+                __g2_info " Once all conflicts are resolved, do NOT commit, but use <g continue> to resume."
+                __g2_info " Note: you may abort the merge at any time with <g abort>."
+                return 1;
+            end
         end
     end
 
-    if test $pullOnly -eq 0 -a \( $rchg -gt 0 -o $lchg -gt 0 \)
+    echo "pullOnly:$pullOnly  rchg:$rchg  lchg:$lchg"
+    if test $pullOnly -eq 0 -a $lchg -gt 0
         command git push
         return $status
     end
