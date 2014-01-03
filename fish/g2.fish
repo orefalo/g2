@@ -821,13 +821,18 @@ function __g2_sync --argument-names flag
     set -l branch (command git rev-parse --symbolic-full-name --abbrev-ref HEAD)
 
     # count the number of changes in/out
-    set -l tmpfile "/tmp/delta$RANDOM"
-    command git rev-list --left-right "$branch...$remote" -- ^ /dev/null > "$tmpfile"
-    set -l lchg (grep -c '^<' "$tmpfile");
-    set -l rchg (grep -c '^>' "$tmpfile");
-    rm -f "$tmpfile"
+    #set -l tmpfile "/tmp/delta$RANDOM"
 
+    set -l count (command git rev-list --left-right --count "$branch...$remote" -- ^/dev/null |tr \t \n)
+    
+
+    # command git rev-list --left-right "$branch...$remote" -- ^ /dev/null > "$tmpfile"
+    set -l lchg $count[1]
+    set -l rchg $count[2]
+
+    echo "pullOnly:$pullOnly  rchg:$rchg  lchg:$lchg"
     if test $rchg -gt 0
+        echo rebasing...
         if not command git rebase $remote
             set unmerged (command git ls-files --unmerged)
             if test "$unmerged"
@@ -841,6 +846,7 @@ function __g2_sync --argument-names flag
 
     echo "pullOnly:$pullOnly  rchg:$rchg  lchg:$lchg"
     if test $pullOnly -eq 0 -a $lchg -gt 0
+        echo pushing...
         command git push
         return $status
     end
