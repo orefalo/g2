@@ -541,7 +541,8 @@ function __g2_track --argument-names branch
             return 1
         end
 
-        if test (command git ls-remote --exit-code . "$branch"  >/dev/null ^&1) -ne 0
+        command git ls-remote --exit-code . "$branch"  >/dev/null ^&1
+        if test $status -ne 0
 
             if not __g2_askYN "Remote branch not found, would you like to refresh from the server"
                 command git fetch
