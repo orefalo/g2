@@ -820,14 +820,7 @@ function __g2_sync --argument-names flag
     end
 
     set -l branch (command git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-
-    # count the number of changes in/out
-    #set -l tmpfile "/tmp/delta$RANDOM"
-
     set -l count (command git rev-list --left-right --count "$branch...$remote" -- ^/dev/null |tr \t \n)
-    
-
-    # command git rev-list --left-right "$branch...$remote" -- ^ /dev/null > "$tmpfile"
     set -l lchg $count[1]
     set -l rchg $count[2]
 
@@ -852,6 +845,16 @@ function __g2_sync --argument-names flag
         return $status
     end
     return 0;
+end
+
+function __g2_rv
+    
+   command git rev-parse; or return 1
+   __g2_iswip; or return 1
+   __g2_isdirty; or return 1
+
+   command git revert $argv
+
 end
 
 function __g2_mg
