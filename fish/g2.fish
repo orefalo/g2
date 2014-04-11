@@ -604,7 +604,7 @@ function __g2_mg
     command git rev-parse; or return 1
 
     if test (__g2_isbehind) -eq 1
-        __g2_askYN 'It appears the current branch is in the past, proceed with the merge'; and return 1
+        __g2_askYN 'It appears the server branch has new updates, you should probably <sync> this branch first. proceed with the merge'; and return 1
     end
 
     # merge returns 0 when it merges correctly
@@ -863,7 +863,7 @@ function __g2_mg
    __g2_iswip; or return 1
 
     if not __g2_isbehind
-        __g2_askYN "It appears the current branch is in the past, proceed with the merge"; and return 1
+        __g2_askYN "It appears the server branch has new updates, you should probably <sync> this branch first. proceed with the merge"; and return 1
     end
 
     # merge returns 0 when it merges correctly
