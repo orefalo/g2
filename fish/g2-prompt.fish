@@ -53,10 +53,6 @@ set lt_grey    ccc
 # Helper methods
 # ===========================
 
-function __g2prompt_in_git
-  command git rev-parse --is-inside-work-tree >/dev/null ^/dev/null
-end
-
 function __g2prompt_pretty_parent -d 'Print a parent directory, shortened to fit the prompt'
   echo -n (dirname $argv[1]) | sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g' -e 's|/$||'
 end
@@ -169,6 +165,9 @@ function __g2prompt_getBranchOp
         end
 
     end
+
+    echo $branch >> /tmp/debug.log
+
     echo $branch | sed  's/refs\/heads\///g'
     echo $op
 end
@@ -375,7 +374,7 @@ function fish_prompt
   __g2prompt_prompt_status
   __g2prompt_prompt_user
 
-  if __g2prompt_in_git
+  if test (command git rev-parse --is-inside-work-tree ^/dev/null) = "true"
     __g2prompt_prompt_git
   else
     __g2prompt_prompt_dir
