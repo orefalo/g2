@@ -374,7 +374,8 @@ function fish_prompt
   __g2prompt_prompt_status
   __g2prompt_prompt_user
 
-  command git rev-parse --is-inside-work-tree ^/dev/null
+  # don't use fish redirection here
+  command git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null
   if test $status -eq 0
     __g2prompt_prompt_git
   else
