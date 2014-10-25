@@ -374,7 +374,8 @@ function fish_prompt
   __g2prompt_prompt_status
   __g2prompt_prompt_user
 
-  if test (command git rev-parse --is-inside-work-tree ^/dev/null) = "true"
+  command git rev-parse --is-inside-work-tree ^/dev/null
+  if test $status -eq 0
     __g2prompt_prompt_git
   else
     __g2prompt_prompt_dir

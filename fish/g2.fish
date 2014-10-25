@@ -535,8 +535,9 @@ function __g2_track --argument-names branch
 
     command git rev-parse; or return 1
     if test "$branch"
-
-        if test (echo $branch | grep -e '^[()a-zA-Z0-9\._\-]*/[()a-zA-Z0-9\._\-]*$' | wc -l) -ne 1
+        
+        test (echo $branch | grep -e '^[()a-zA-Z0-9\._\-]*/[()a-zA-Z0-9\._\-]*$' | wc -l) -ne 1
+        if test $status -eq 0
             __g2_fatal "The remote branch mush be specified in the form remote/branchname."
             return 1
         end
