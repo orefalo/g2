@@ -403,14 +403,17 @@ function fish_right_prompt
 
     # Show loadavg when too high
     set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
-    set -l ncpu 1
+	
     # osx
-    if not set ncpu (sysctl hw.ncpu | cut -f2 -d' ')
+    if not set ncpu (sysctl hw.ncpu 2>/dev/null | cut -f2 -d' ')
       #linux
-        if not set ncpu (grep -c ^processor /proc/cpuinfo)
-            set ncpu 1
-        end
+      set ncpu (cat /proc/cpuinfo | grep -c processor)
     end
+
+    if not set ncpu
+        set -l ncpu 1
+    end
+	
     set -l load1m_test (math $load1m \* 100 / $ncpu)
     if test $load1m_test -gt 100
       echo -n ', load:'
