@@ -402,25 +402,26 @@ function fish_right_prompt
     set -g last_exec_timestamp $now
 
     # Show loadavg when too high
-    set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
+#    set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
+#	set -l ncpu 1
 	
     # osx
-    if not set ncpu (sysctl hw.ncpu 2>/dev/null | cut -f2 -d' ')
+#    if not set ncpu (sysctl hw.ncpu 2>/dev/null | cut -f2 -d' ')
       #linux
-      set ncpu (cat /proc/cpuinfo | grep -c processor)
-    end
+#      set ncpu (cat /proc/cpuinfo | grep -c processor)
+#    end
 
-    if not set ncpu
-        set -l ncpu 1
-    end
+#    if not set ncpu
+#        set -l ncpu 1
+#    end
 	
-    set -l load1m_test (math $load1m \* 100 / $ncpu)
-    if test $load1m_test -gt 100
-      echo -n ', load:'
-      set_color $lt_orange
-      echo -n $load1m
-      set_color $fish_color_autosuggestion[1]
-    end
+#    set -l load1m_test (math $load1m \* 100 / $ncpu)
+#    if test $load1m_test -gt 100
+#      echo -n ', load:'
+#      set_color $lt_orange
+#      echo -n $load1m
+#      set_color $fish_color_autosuggestion[1]
+#    end
 
     # Show disk usage when low
     set -l du (df / | tail -n1 | sed "s/  */ /g" | cut -d' ' -f 5 | cut -d'%' -f1)
