@@ -406,6 +406,7 @@ Distributed under the GNU General Public License, version 2.0.
 
 ##TODO
 
+* g ignore alias for ig
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
