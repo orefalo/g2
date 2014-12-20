@@ -53,6 +53,16 @@ set lt_grey    ccc
 # Helper methods
 # ===========================
 
+function __g2_getremote
+    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' ^/dev/null)
+    if test "$remote" = '@{u}'
+        echo ''
+    else
+        echo $remote
+    end
+end
+
+
 function __g2prompt_pretty_parent -d 'Print a parent directory, shortened to fit the prompt'
   echo -n (dirname $argv[1]) | sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g' -e 's|/$||'
 end
