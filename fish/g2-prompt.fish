@@ -53,16 +53,6 @@ set lt_grey    ccc
 # Helper methods
 # ===========================
 
-function __g2_getremote
-    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' ^/dev/null)
-    if test "$remote" = '@{u}'
-        echo ''
-    else
-        echo $remote
-    end
-end
-
-
 function __g2prompt_pretty_parent -d 'Print a parent directory, shortened to fit the prompt'
   echo -n (dirname $argv[1]) | sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g' -e 's|/$||'
 end
@@ -77,15 +67,18 @@ function __g2prompt_project_pwd -d 'Print the working directory relative to proj
 end
 
 function __g2prompt_aheadbehind --argument-names local
+
     if test "$local"
       set -l remote (__g2_getremote)
+      set -l cnt (command git rev-list --left-right --count $local...$remote -- ^/dev/null |tr \t \n)
+      if test -n "$cnt"
+        if test $cnt[1] -gt 0 -a $cnt[2] -gt 0
+            echo -n ' ±'
+        else
 
-      set -l cnt (command git rev-list --left-right --count $local...$remote -- ^/dev/null |tr \t \n)    
-      if [ $cnt[1] -gt 0 -a $cnt[2] -gt 0 ]
-          echo -n ' ±'
-      else
-          test $cnt[1] -gt 0; and echo -n ' +'
-          test $cnt[2] -gt 0; and echo -n ' -'
+            test $cnt[1] -gt 0; and echo -n ' +'
+            test $cnt[2] -gt 0; and echo -n ' -'
+        end
       end
     end
 end
@@ -101,7 +94,7 @@ function __g2prompt_getBranchOp
 
     command git ls-tree HEAD >/dev/null ^/dev/null
 
-    if test $status -eq 128 
+    if test $status -eq 128
         set op 'init'
     else
 
@@ -123,7 +116,7 @@ function __g2prompt_getBranchOp
         else
 
             if test -d "$git_dir/rebase-apply"
-                
+
                 set step (cat "$git_dir/rebase-apply/next")
                 set total (cat "$git_dir/rebase-apply/last")
 
@@ -165,7 +158,7 @@ function __g2prompt_getBranchOp
                     end
                 end
 
-                if test "$step" -a "$total" 
+                if test "$step" -a "$total"
                     set branch "[$branch $step/$total]"
                 else
                     set branch "[$branch]"
@@ -329,6 +322,7 @@ function __g2prompt_prompt_git -d 'Display the actual git state'
   set -l flag_fg 000
 
   if test -n "$op"
+
     if test "$op" = 'init'
       set flag_bg fff
       set flag_fg 000
@@ -339,6 +333,7 @@ function __g2prompt_prompt_git -d 'Display the actual git state'
       set branch "$op:$branch"
     end
   else
+
       if test $staged -gt 0
         set flag_bg $lt_green
         set flag_fg $dk_green
@@ -386,7 +381,7 @@ function fish_prompt
 
   # don't use fish redirection here
   command git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null
-  if test $status -eq 0
+  if test "$status" -eq "0"
     __g2prompt_prompt_git
   else
     __g2prompt_prompt_dir
@@ -412,26 +407,22 @@ function fish_right_prompt
     set -g last_exec_timestamp $now
 
     # Show loadavg when too high
-#    set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
-#	set -l ncpu 1
-	
+    set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
+    set -l ncpu 1
     # osx
-#    if not set ncpu (sysctl hw.ncpu 2>/dev/null | cut -f2 -d' ')
+    if not set ncpu (sysctl hw.ncpu | cut -f2 -d' ')
       #linux
-#      set ncpu (cat /proc/cpuinfo | grep -c processor)
-#    end
-
-#    if not set ncpu
-#        set -l ncpu 1
-#    end
-	
-#    set -l load1m_test (math $load1m \* 100 / $ncpu)
-#    if test $load1m_test -gt 100
-#      echo -n ', load:'
-#      set_color $lt_orange
-#      echo -n $load1m
-#      set_color $fish_color_autosuggestion[1]
-#    end
+        if not set ncpu (grep -c ^processor /proc/cpuinfo)
+            set ncpu 1
+        end
+    end
+    set -l load1m_test (math $load1m \* 100 / $ncpu)
+    if test $load1m_test -gt 100
+      echo -n ', load:'
+      set_color $lt_orange
+      echo -n $load1m
+      set_color $fish_color_autosuggestion[1]
+    end
 
     # Show disk usage when low
     set -l du (df / | tail -n1 | sed "s/  */ /g" | cut -d' ' -f 5 | cut -d'%' -f1)
