@@ -1,2 +1,0 @@
-
-command git rev-parse --is-bare-repository
