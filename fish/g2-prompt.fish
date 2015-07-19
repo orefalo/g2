@@ -392,19 +392,16 @@ end
 
 function fish_right_prompt
     set_color $fish_color_autosuggestion[1]
+
     printf (date "+$c2%H$c0:$c2%M$c0:$c2%S")
 
-    set -l now (date +%s)
-    if test $last_exec_timestamp
-        set -l taken (math $now - $last_exec_timestamp)
-        if test $taken -gt 10
-            echo -n ', taken:'
-            set_color $lt_orange
-            echo -n $taken's'
-            set_color $fish_color_autosuggestion[1]
-        end
+    set -l taken $CMD_DURATION
+    if test $taken -gt 5
+      echo -n ', taken:'
+      set_color $lt_orange
+      echo -n $taken's'
+      set_color $fish_color_autosuggestion[1]
     end
-    set -g last_exec_timestamp $now
 
     # Show loadavg when too high
     set -l load1m (uptime | grep -o '[0-9]\+\.[0-9]\+' | head -n1)
