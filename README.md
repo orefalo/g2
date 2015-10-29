@@ -1,5 +1,10 @@
 ![image](http://orefalo.github.com/g2/images/G2.jpg)
 
+TODO:
+  g track origin/newbranch
+      if branch doesn't exist - create it!
+      
+
 #Introduction
 
 I see it every day, beginners have a hard time picking up **git**. Aside from the DSCM concepts, the command line is not easy: it is aimed at people who know git.. advanced nerds, not beginners.

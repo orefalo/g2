@@ -367,7 +367,7 @@ function __g2_am
          __g2_fatal 'No changes to amend, please use <g freeze> to stage your modification, then try amending again.'
        return 1
     end
-    
+
     if __g2_isforward
         if test "$argv[1]" = '-f'
             __g2_askYN 'Warning: force amending will rewrite the history, please confirm'; and return 1
@@ -535,7 +535,7 @@ function __g2_track --argument-names branch
 
     command git rev-parse; or return 1
     if test "$branch"
-        
+
         test (echo $branch | grep -e '^[()a-zA-Z0-9\._\-]*/[()a-zA-Z0-9\._\-]*$' | wc -l) -ne 1
         if test $status -eq 0
             __g2_fatal "The remote branch mush be specified in the form remote/branchname."
@@ -571,7 +571,7 @@ function __g2_rs --argument-names arg1
 
     command git rev-parse; or return 1
 
-    if test "$arg1" = 'upstream'     
+    if test "$arg1" = 'upstream'
         if not __g2_askYN 'Warning: resetting to the upstream may erase local changes, are you sure'
             __g2_abort
             set -l remote (__g2_getremote)
@@ -681,7 +681,7 @@ function __g2_undo --argument-names action
             __g2_info 'Reverting back prior to the last merge.'
             command git reset --hard ORIG_HEAD
 
-        case '*'        
+        case '*'
             command git checkout -- $argv[1]
     end
 end
@@ -705,7 +705,7 @@ function __g2_push
 
     set idx (count $argv)
 
-    if test $idx -lt 2 -a $forceFlag -eq 0 
+    if test $idx -lt 2 -a $forceFlag -eq 0
         __g2_info 'Remember, you may only use <push> or <pull> against a feature branch, and <sync> against the working branch.'
         __g2_fatal 'Usage: push <?opts> <remote> <branch>'
         return 1
@@ -813,7 +813,7 @@ function __g2_sync --argument-names flag
     end
 
     command git fetch; or return $status
-    
+
     if not __g2_isforced $remote
         __g2_fatal 'It appears the history of the branch was changed on the server.'
         __g2_fatal 'please issue <g reset upstream> or <g rebase $remote> to resume'
@@ -849,7 +849,7 @@ function __g2_sync --argument-names flag
 end
 
 function __g2_rv
-    
+
    command git rev-parse; or return 1
    __g2_iswip; or return 1
    __g2_isdirty; or return 1
@@ -868,7 +868,7 @@ function __g2_mg
     end
 
     # merge returns 0 when it merges correctly
-    
+
     if command git merge $argv
         set -l unmerged (command git ls-files --unmerged)
         if test $unmerged
@@ -876,7 +876,7 @@ function __g2_mg
             __g2_info " once all resolved, <g freeze> and <g commit> the files."
             __g2_info " note: you may abort the merge at any time with <g abort> ."
         end
-        retrun 1
+        return 1
     end
 end
 
@@ -890,7 +890,7 @@ function __g2_setup
 	set -l default (command git config --global --get user.name)
 	set -l nameinput (__g2_askInput "Please input your full name" "$default" false)
     command git config --global user.name "$nameinput"
-	
+
 	## EMAIL
     __g2_info "-----------------------------------------------------"
 	set -l default (command git config --global --get user.email)
@@ -918,7 +918,7 @@ function __g2_setup
     set -l choice (__g2_askChoice 'Please select a difftool' "$difftools" "$default_dt" true)
 	command git config --global diff.tool "$choice"
 
-	## MERGETOOL	
+	## MERGETOOL
     __g2_info "-----------------------------------------------------"
 	set -l mergetools "difftools araxis bc3 diffuse emerge ecmerge gvimdiff kdiff3 kompare meld opendiff p4merge tkdiff vimdiff xxdiff deltawalker"
 	set -l default_mt (command git config merge.tool)
@@ -952,6 +952,8 @@ function __g2_setup
     command git config --global core.safecrlf warn
     command git config --global push.default current
     command git config --global mergetool.keepBackup false
+    ## git push -u , pushed and tracks the remote with the name branch name
+    command git config --global push.default current
 
     __g2_info "-----------------------------------------------------"
     __g2_info "For the prompt to display correctly, remember to have"
