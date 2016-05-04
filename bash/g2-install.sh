@@ -41,22 +41,12 @@ tips=(
 "Remember, you may always access the native git command using \"\$GIT_EXE\"."
 "Unlike git, ${boldon}g2${boldoff} actions only apply to the current branch.");
 
-echo -n -e "Installing ${boldon}G2${boldoff}.."
-
 source ./g2-completion.sh
-echo -n "."
 source ./g2-config.sh
-echo -n "."
 source ./g2.sh
-echo -n "."
 source ./g2-prompt.sh
 
 alias g=__g2_eval;
 alias git=__g2_eval;
-
-echo " Enjoy!"
-
-echo -e "${boldon}Tip of the day${boldoff}: ${tips[RANDOM % ${#tips[@]}]} ${reset}"
-
 
 cd $OLDpwd

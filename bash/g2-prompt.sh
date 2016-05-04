@@ -18,7 +18,7 @@ fi
 
 #####  read config file if any.
 
-unset dir_color rc_color user_id_color root_id_color init_vcs_color clean_vcs_color
+unset use_prompt dir_color rc_color user_id_color root_id_color init_vcs_color clean_vcs_color
 unset modified_vcs_color added_vcs_color untracked_vcs_color op_vcs_color detached_vcs_color hex_vcs_color
 unset rawhex_len
 
@@ -30,9 +30,13 @@ conf=/etc/g2/g2-prompt.conf;
 if [ -r $conf ]; then . $conf; fi
 conf=/etc/g2-prompt.conf;
 if [ -r $conf ]; then . $conf; fi
-conf=~/.g2-prompt.conf;
+conf="$HOME/.g2-prompt.conf";
 if [ -r $conf ]; then . $conf; fi
 unset conf
+
+if [[ $use_prompt = "off" ]]; then
+	return;
+fi
 
 
 #####  set defaults if not set
