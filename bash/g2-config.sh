@@ -49,8 +49,27 @@ apply_config() {
 }
 
 # Avoid errors with multiple concurrent sessions
-LOCKFILE=$(which lockfile)
-[[ -n $LOCKFILE ]] && lockfile -2 -r 3 /tmp/git-config.lock
+TMPDIR=$(dirname $(mktemp -u))
+semaphore="$TMPDIR/git-config.lock"
+
+if [[ ! -n $(which lockfile 2> /dev/null) ]]; then
+    success="false"
+    for attempt in "1 2 3"; do
+        if [ -f "$semaphore" ]; then
+            sleep 2
+        else
+            success="true"
+            touch "$semaphore"
+            break
+        fi
+        
+        if [ success = "false" ]; then
+            exit
+        fi
+    done
+else
+    lockfile -2 -r 3 "$semaphore" || exit
+fi
 
 save_config
 [[ -f ~/.gitconfig && $(grep "#G2 - https://github.com/orefalo/g2" ~/.gitconfig | wc -l ) -eq 0 ]] && mv -f ~/.gitconfig ~/.gitconfig.pre-g2
@@ -122,4 +141,6 @@ do
     "$GIT_EXE" config --global "alias.$al" "!$PREPROCESSOR$cmd"
 done
 
-[[ -n $LOCKFILE ]] && rm -f /tmp/git-config.lock && unset LOCKFILE
+# Remove the semaphore file
+rm -f "$semaphore"
+
