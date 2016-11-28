@@ -157,15 +157,17 @@ function __g2_isbehind  --argument-names remote
     return 0
 end
 
-# Returns true(1) if the branch is forward its matching upstream branch
+# Returns true(0) if the branch is forward its matching upstream branch
 function __g2_isforward  --argument-names remote
     set -l remote (__g2_getremote)
     if test "$remote"
         if test (command git rev-list --left-only --count (git_branch_name)...$remote -- ) -gt 0
-            return 1
+            return 0
         end
+    else
+        return 0
     end
-    return 0
+    return 1
 end
 
 # Returns true(1) if the given branch was force updated
