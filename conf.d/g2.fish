@@ -178,7 +178,7 @@ end
 function __g2_isforced --argument-names remote
     set -l remote (__g2_getremote)
     if test "$remote"
-        command git rev-list $remote | string match -q --invert (command git rev-parse $remote ); or return 1
+        command git rev-list $remote | string match -q -v (command git rev-parse $remote); and return 1
     end
     return 0
 end
@@ -654,7 +654,7 @@ function __g2_push
     set -l idx (count $argv)
 
     if test $idx -lt 2 -a $forceFlag -eq 0
-        __g2_info 'Remember, you may only use <push> or <pull> against a feature branch, and <sync> against the working branch.'
+        __g2_fatal 'Remember, you may only use <push> or <pull> against a feature branch, and <sync> against the working branch.'
         __g2_fatal 'Usage: push <?opts> <remote> <branch>'
         return 1
     end
@@ -739,7 +739,7 @@ function __g2_sync --argument-names flag
 
     set -l pullOnly 0
     if test "$flag" = "--pull-only"
-        set pullOnly 1
+        set -l pullOnly 1
         set -e argv[1]
     end
 
@@ -759,7 +759,7 @@ function __g2_sync --argument-names flag
 
     if not __g2_isforced $remote
         __g2_fatal 'It appears the history of the branch was changed on the server.'
-        __g2_fatal 'please issue <g reset upstream> or <g rebase $remote> to resume'
+        __g2_fatal 'please issue <g reset upstream> or <g rebase $remote> to fix'
         return 1
     end
 
