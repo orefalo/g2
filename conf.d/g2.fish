@@ -609,14 +609,16 @@ function __g2_undo --argument-names action
 
     switch $action
         case commit
-            __g2_isforward
-            __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
+            if __g2_isforward
+                __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
+            end
             __g2_info 'Undoing last commit and moving changes to the staging area.'
             command git reset --soft HEAD^
 
         case merge
-            __g2_isforward
-            __g2_askYN 'It appears you already synced the changes to the server. Are you sure you want to alter the branch history'; and return 1
+            if __g2_isforward
+                __g2_askYN 'It appears you already synced the changes to the server. Are you sure you want to alter the branch history'; and return 1
+            end
             __g2_info 'Reverting back prior to the last merge.'
             command git reset --hard ORIG_HEAD
 
