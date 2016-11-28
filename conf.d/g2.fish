@@ -101,12 +101,7 @@ end
 function __g2_askYN --argument-names prompt
 
     function __g2_askprompt --no-scope-shadowing
-        set_color --bold white;
-        echo -n $prompt
-        set_color green
-        echo -n ' [y/N]'
-        set_color normal
-        echo -n '? > '
+        cprintf "<fg:white>%s</fg><fg:green> [y/N]</fg>?>"  $prompt
     end
 
     set -l REPLY
@@ -524,7 +519,7 @@ end
 function __g2_rs --argument-names arg1
 
     if test "$arg1" = 'upstream'
-        if not __g2_askYN 'Warning: resetting to the upstream may erase local changes, are you sure'
+        if not __g2_askYN 'Warning: resetting to the server version may erase local changes, are you sure'
             __g2_abort
             set -l remote (__g2_getremote)
             if test "$remote"
@@ -612,12 +607,10 @@ function __g2_undo --argument-names action
         return 1
     end
 
-    __g2_askYN 'Warning: the action may discard your changes, would you like to continue'; and return 1
-
     switch $action
         case commit
             __g2_isforward
-            __g2_askYN 'It appears you already synced the changes to the server. Are you sure you want to alter the branch history'; and return 1
+            __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
             __g2_info 'Undoing last commit and moving changes to the staging area.'
             command git reset --soft HEAD^
 
