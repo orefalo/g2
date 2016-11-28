@@ -178,9 +178,11 @@ end
 function __g2_isforced --argument-names remote
     set -l remote (__g2_getremote)
     if test "$remote"
-        command git rev-list $remote | string match -q -v (command git rev-parse $remote); and return 1
+        command git rev-list $remote | string match -q (command git rev-parse $remote); and return 0
+    else
+        return 0
     end
-    return 0
+    return 1
 end
 
 # Returns true(1) if the repo has pending changes
