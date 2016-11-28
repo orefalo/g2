@@ -164,8 +164,6 @@ function __g2_isforward  --argument-names remote
         if test (command git rev-list --left-only --count (git_branch_name)...$remote -- ) -gt 0
             return 0
         end
-    else
-        return 0
     end
     return 1
 end
