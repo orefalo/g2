@@ -145,16 +145,16 @@ function __g2_wrkspcState
     return 1
 end
 
-# Returns true(1) if the branch is behind its matching upstream branch
+# Returns true(0) if the branch is behind its matching upstream branch
 function __g2_isbehind  --argument-names remote
     set -l remote (__g2_getremote)
     if test "$remote"
         command git fetch
         if test (command git rev-list --right-only --count (git_branch_name)...$remote -- ) -gt 0
-            return 1;
+            return 0;
         end
     end
-    return 0
+    return 1
 end
 
 # Returns true(0) if the branch is forward its matching upstream branch
@@ -168,35 +168,35 @@ function __g2_isforward  --argument-names remote
     return 1
 end
 
-# Returns true(1) if the given branch was force updated
+# Returns true(0) if the given branch was force updated
 #   if no parameters are provided, figures the upstream branch from the tracking table
-function __g2_isforced --argument-names remote
+function __g2_isforced
     set -l remote (__g2_getremote)
     if test "$remote"
-        command git rev-list $remote | string match -q (command git rev-parse $remote); and return 0
+        command git rev-list $remote | string match -q (command git rev-parse $remote); and return 1
     else
-        return 0
+        return 1
     end
-    return 1
+    return 0
 end
 
-# Returns true(1) if the repo has pending changes
+# Returns true(0) if the repo has pending changes
 function __g2_isdirty
     if command git diff-files --quiet
-        command git diff-index --quiet --cached HEAD; and return 0
+        command git diff-index --quiet --cached HEAD; and return 1
     end
     __g2_fatal 'Changes detected, please commit them or get them out of the way <g wip>. You may also discard them with a <g panic>.'
-    return 1
+    return 0
 end
 
-# return true(1) if top commit is wip - work in progress
+# return true(0) if top commit is wip - work in progress
 # the proper validation is __g2_iswip; or return 1
 function __g2_iswip
     if command git log --oneline -1 --pretty=format:'%s' ^/dev/null | string match -q -i WIPWIPWIPWIP
         __g2_fatal 'Sorry, a WIP commit must remain local, please run <g unwip> to resume work items.'
-        return 1
+        return 0
     end
-    return 0
+    return 1
 end
 
 #### Now the real thing ------------------------------------------------------------------
@@ -303,7 +303,7 @@ function __g2_unfreeze
 end
 
 function __g2_ci
-    __g2_iswip; or return 1
+    __g2_iswip; and return 1
 
     if test (__g2_wrkspcState) != 'false'
         __g2_fatal 'Please use <g continue> to close defect resolution step.'
@@ -343,7 +343,7 @@ function __g2_cp
         return 1
     end
 
-    __g2_iswip; or return 1
+    __g2_iswip; and return 1
     command git cherry-pick $argv
 end
 
@@ -464,8 +464,7 @@ function __g2_key --argument-names opt
 end
 
 function __g2_wip
-    __g2_iswip
-    if test $status -eq 1
+    if __g2_iswip
         __g2_info "Amending previous wip commit..."
         __g2_freeze; and command git commit --amend -C HEAD
     else
@@ -474,16 +473,14 @@ function __g2_wip
 end
 
 function __g2_unwip
-    __g2_iswip >> /dev/null
-    if test $status -eq 0
-        __g2_fatal "There is nothing to unwip..."
-    else
+    if __g2_iswip ^/dev/null
         command git reset HEAD~1
+    else
+        __g2_fatal "There is nothing to unwip..."
     end
 end
 
 function __g2_track --argument-names branch
-
     if test "$branch"
 
         test (echo $branch | grep -e '^[()a-zA-Z0-9\._\-]*/[()a-zA-Z0-9\._\-]*$' | wc -l) -ne 1
@@ -545,7 +542,7 @@ end
 
 function __g2_mg
 
-    if test (__g2_isbehind) -eq 1
+    if __g2_isbehind
         __g2_askYN 'It appears the server branch has new updates, you should probably <sync> this branch first. proceed with the merge'; and return 1
     end
 
@@ -575,7 +572,7 @@ function __g2_co --argument-names branch
 
         if test (command git branch -a | grep -c "$branch") -gt 0
             __g2_abort
-            __g2_isdirty; or return 1
+            __g2_isdirty; and return 1
             set -l g2excludes (command git config --global --get g2.panic.excludes)
             command git checkout $argv; and command git clean -fdx $g2excludes
             return $status
@@ -591,7 +588,7 @@ function __g2_co --argument-names branch
 end
 
 function __g2_add
-    __g2_iswip; or return 1
+    __g2_iswip; and return 1
     __g2_fatal "Please don't use <add> with G2, <freeze> and <unfreeze> are powerful commands"
 end
 
@@ -634,7 +631,7 @@ function __g2_push
         return 1
     end
 
-    __g2_iswip; or return 1
+    __g2_iswip; and return 1
 
     # figure if the force flag is being used
     set -l forceFlag 0
@@ -692,7 +689,7 @@ function __g2_pull
         return 1
     end
 
-    __g2_iswip; or return 1
+    __g2_iswip; and return 1
 
     set -l idx (count $argv)
     if test $idx -lt 2
@@ -731,8 +728,8 @@ function __g2_sync --argument-names flag
         return 1
     end
 
-    __g2_iswip; or return 1
-    __g2_isdirty; or return 1
+    __g2_iswip; and return 1
+    __g2_isdirty; and return 1
 
     set -l pullOnly 0
     if test "$flag" = "--pull-only"
@@ -754,7 +751,7 @@ function __g2_sync --argument-names flag
 
     command git fetch; or return $status
 
-    if not __g2_isforced $remote
+    if __g2_isforced
         __g2_fatal 'It appears the history of the branch was changed on the server.'
         __g2_fatal 'please issue <g reset upstream> or <g rebase $remote> to fix'
         return 1
@@ -794,8 +791,8 @@ function __g2_rv
     end
 
    command git rev-parse; or return 1
-   __g2_iswip; or return 1
-   __g2_isdirty; or return 1
+   __g2_iswip; and return 1
+   __g2_isdirty; and return 1
 
    command git revert $argv
 end
@@ -808,9 +805,9 @@ function __g2_mg
     end
 
    command git rev-parse; or return 1
-   __g2_iswip; or return 1
+   __g2_iswip; and return 1
 
-    if not __g2_isbehind
+    if __g2_isbehind
         __g2_askYN "It appears the server branch has new updates, you should probably <sync> this branch first. proceed with the merge"; and return 1
     end
 
