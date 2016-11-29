@@ -900,13 +900,6 @@ function __g2_setup
     ## git push -u , pushed and tracks the remote with the name branch name
     command git config --global push.default current
 
-    __g2_info "-----------------------------------------------------"
-    __g2_info "For the prompt to display correctly, remember to have"
-    __g2_info " your terminal use a Powerline-patched font."
-    __g2_info "Sample Powerline-p fonts can be downloaded from"
-    __g2_info "          https://github.com/Lokaltog/powerline-fonts"
-    __g2_info "-----------------------------------------------------"
-
     ## SSH KEY
     __g2_key -gen
 
