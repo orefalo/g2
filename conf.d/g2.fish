@@ -606,7 +606,7 @@ function __g2_undo --argument-names action
         return 1
     end
 
-    if __g2_isforward
+    if not __g2_isbehind
         __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
     end
 
