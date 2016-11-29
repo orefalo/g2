@@ -146,7 +146,7 @@ function __g2_wrkspcState
 end
 
 # Returns true(0) if the branch is behind its matching upstream branch
-function __g2_isbehind  --argument-names remote
+function __g2_isbehind
     set -l remote (__g2_getremote)
     if test "$remote"
         command git fetch
@@ -158,7 +158,7 @@ function __g2_isbehind  --argument-names remote
 end
 
 # Returns true(0) if the branch is forward its matching upstream branch
-function __g2_isforward  --argument-names remote
+function __g2_isforward
     set -l remote (__g2_getremote)
     if test "$remote"
         if test (command git rev-list --left-only --count (git_branch_name)...$remote -- ) -gt 0
@@ -185,15 +185,17 @@ function __g2_isdirty
     if command git diff-files --quiet
         command git diff-index --quiet --cached HEAD; and return 1
     end
-    __g2_fatal 'Changes detected, please commit them or get them out of the way <g wip>. You may also discard them with a <g panic>.'
+    __g2_fatal 'Changes detected, please commit or get them out of the way <g wip>. You may also discard them with a <g panic>.'
     return 0
 end
 
 # return true(0) if top commit is wip - work in progress
 # the proper validation is __g2_iswip; or return 1
-function __g2_iswip
+function __g2_iswip  --argument-names hideError
     if command git log --oneline -1 --pretty=format:'%s' ^/dev/null | string match -q -i WIPWIPWIPWIP
-        __g2_fatal 'Sorry, a WIP commit must remain local, please run <g unwip> to resume work items.'
+        if test hideError = 'true'
+            __g2_fatal 'Sorry, a WIP commit must remain local, please run <g unwip> to resume work items.'
+        end
         return 0
     end
     return 1
@@ -473,7 +475,7 @@ function __g2_wip
 end
 
 function __g2_unwip
-    if __g2_iswip ^/dev/null
+    if __g2_iswip true
         command git reset HEAD~1
     else
         __g2_fatal "There is nothing to unwip..."
@@ -604,18 +606,16 @@ function __g2_undo --argument-names action
         return 1
     end
 
+    if __g2_isforward
+        __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
+    end
+
     switch $action
         case commit
-            if __g2_isforward
-                __g2_askYN 'Branch already synced with server, alter the branch history'; and return 1
-            end
             __g2_info 'Undoing last commit and moving changes to the staging area.'
             command git reset --soft HEAD^
 
         case merge
-            if __g2_isforward
-                __g2_askYN 'It appears you already synced the changes to the server. Are you sure you want to alter the branch history'; and return 1
-            end
             __g2_info 'Reverting back prior to the last merge.'
             command git reset --hard ORIG_HEAD
 
