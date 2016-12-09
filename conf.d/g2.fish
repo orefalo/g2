@@ -328,11 +328,11 @@ function __g2_am
        return 1
     end
 
-    if __g2_isforward
+    if not __g2_isforward
         if test "$argv[1]" = '-f'
             __g2_askYN 'Warning: force amending will rewrite the history, please confirm'; and return 1
         else
-            __g2_fatal 'There are no local commits to amend.'
+            __g2_fatal 'There are no local commit to amend.'
             return 1
         end
     end
