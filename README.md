@@ -17,7 +17,7 @@ This project is an attempt to make the git command line a friendly place: it eas
 * **g2** provides two letter acronyms for most commands.
 * **g2** eases the merge process by introducing three new verbs:**sync**, **abort** and **continue**.
 * **g2** provides a reduced set of commands which give guidance on what to do next.
-* **g2** enhances command line experience auto-completion and a smart prompt.
+* **g2** enhances command line experience auto-completion.
 * **g2** warns when a branch history was changed on the server (forced pushed).
 * **g2** checks the freshness of the branch prior to merging and warns accordingly.
 * **g2** enforces a clean linear history by introducing new commands.
@@ -100,22 +100,11 @@ G2 Usage:
 
 On top of providing two letters acronyms for most git commands, **g2** has interesting features which enhance command line experience.
 
-## Prompt & Completion
+## Completion
 
-Let's start with the "sexy" one: the g2 prompt. 
+Thanks for Fish shell powerfull completion system, g2 comes with handy completion shortcuts.
 
-![image](http://orefalo.github.com/g2/images/g2-prompt.jpg)
-
-The prompt shows:
-
-* The current branch name and the hash of the last commit. **M** is used as a substitute for "master"
-* File counts: staged, changed and un-tracked filed.
-* Obviously username and host.
-* And finally the path, which smartly truncates at 40 characters.
-* The prompt colors will adjust depending of the state of the repository: clean, modified, conflict resolution... etc
-* Not visible on this screen shot is the optional error code should a shell command fail.
-
-Note: file counters can be expensive with large repositories. You may turn off the feature by running `g setup` and setting "Count files in the bash prompt? (true):" to **false**.
+type `g <TAB>` and enjoy a friendly list of commands to pick from. Completion also work on branch names, hashed, command names.
 
 ##Setup
 
@@ -173,11 +162,11 @@ Learn to read that tree, it's important: it holds the commit history for the cur
 
 ##Panic!
 
-It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the prompt shows a weird status. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it ! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
+It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the branch shows *detached* and some weird hex numbers show all around the place. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
 
-Well, you are panicking... and we built a command especially for you: `g panic`
+Keep calm, you are panicking... and we built a command especially for you: `g panic`!
 
-Use `panic` when you feel like getting help from your git master. It checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats and your git-master can rest.
+Use `panic` when you feel like getting help from your git master. The command will attempt to put you back on track: it checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats, plus your git-master can rest. ;-)
 
 ##Branching
 
@@ -372,11 +361,9 @@ Please notify us via the project issue tracker. For the time being, please use `
 
 Author: [Olivier Refalo](https://github.com/orefalo)
 
-* Contains a modified version of [git-prompt](http://volnitsky.com/project/git-prompt/) - Leonid Volnitsky
 * Contains a modified version of git-completion.bash - Shawn O. Pearce
 * [GUM](https://github.com/saintsjd/gum) by saintsjd. Wonder why this project felt short on delivery.
 * Andrew Peterson/ NDP Software for their cool interactive Cheat sheet
-* The maintainers behind msysgit who made git on windows all possible
 
 ##License
 
@@ -390,6 +377,7 @@ Distributed under the GNU General Public License, version 2.0.
 * g track origin/newbranch, if branch doesn't exist - create it!
       
 ## FIXED / DONE
+* Removed all prompt from the fisherman version - fisherman comes with a plugin system for prompt, it's much more flexible.
 * g ignore alias for ig
 * g undo needs more validations
 * g2 is an official homebrew formula
