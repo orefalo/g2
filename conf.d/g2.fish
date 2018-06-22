@@ -899,6 +899,7 @@ function __g2_setup
         command git config --global core.autocrlf input
     end
 
+	command git config --global core.excludesfile ~/.gitignore_global
     command git config --global core.ignorecase false
     command git config --global core.safecrlf warn
     command git config --global push.default current
