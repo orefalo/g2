@@ -160,12 +160,16 @@ end
 # Returns true(0) if the branch is forward its matching upstream branch
 function __g2_isforward
     set -l remote (__g2_getremote)
-    if test "$remote"
+
+    if test -n "$remote"
         if test (command git rev-list --left-only --count (git_branch_name)...$remote -- ) -gt 0
             return 0
+        else 
+            return 1
         end
     end
-    return 1
+
+    return 0
 end
 
 # Returns true(0) if the given branch was force updated
