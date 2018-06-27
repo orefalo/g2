@@ -3,13 +3,13 @@
 
 ![image](http://orefalo.github.com/g2/images/G2.jpg)
 
-#Introduction
+# Introduction
 
 I see it every day, beginners have a hard time picking up **git**. Aside from the DSCM concepts, the command line is not easy: it is aimed at people who know git.. advanced nerds, not beginners.
 
 This project is an attempt to make the git command line a friendly place: it eases the learning process by providing guidance and high level commands.
 
-##Benefits
+## Benefits
 
 * **g2** saves time by providing high level commands.
 * **g2** is generally safer than git as it prompts before destructive actions.
@@ -27,27 +27,27 @@ This project is an attempt to make the git command line a friendly place: it eas
 * **g2** eases branch creation.
 * **g2** is just easier at undoing things, see the **undo** command
 
-###What G2 is not
+### What G2 is not
 
 * A replacement for **git**. Rather, g2 is a layer on top of git
 * A magic way to learn GIT. It will only help by providing guidance.
 
-#Installation
+# Installation
 
-**PRE-REQUISITES**: 
+** PRE-REQUISITES**: 
 
 * **g2** is a layer on top of git, If you are doing a manual install, a recent version of git must be pre-installed.
 * Please backup your favorite ~/.gitconfig as g2 with recreate it from scratch.
 * G2 runs **bash** and **fishshell**.
 
-###MacOS/Linux
+## #MacOS/Linux
 
 Only the fishshell version is maintained.
 With [fishshell](https://fishshell.com/) and [fisherman](http://fisherman.sh/) previously installed, run
 
     fisher g2
 
-#How to use
+# How to use
 
 The project overrides the `g` and `git` commands. Taken without parameters it displays the following output.
 
@@ -106,7 +106,7 @@ Thanks for Fish shell powerfull completion system, g2 comes with handy completio
 
 type `g <TAB>` and enjoy a friendly list of commands to pick from. Completion also work on branch names, hashed, command names.
 
-##Setup
+## Setup
 
 So here you go, you downloaded git for the first time and I bet you are stuck on the ssh key generation. git is so lame and user unfriendly.
 
@@ -125,7 +125,7 @@ Should you need to regenerate the key pair, the process is equally user friendly
 
 ![image](http://orefalo.github.com/g2/images/key_gen.jpg)
 
-##Freeze, Unfreeze & Commit
+## Freeze, Unfreeze & Commit
 
 I have some files I want to stage. Do I want `git add .`, `git add -u`, or `git add -A`? Which does what again? Confused. What about staging deletions?
 
@@ -142,7 +142,7 @@ Ooops, I staged a change that I do not want to commit: I would then use `g unfre
 
 Try the [CheatSheet](http://orefalo.github.com/g2/) it helps visualize what commands do.
 
-##Undoing changes
+## Undoing changes
 
 Since we introduced **unfreeze** in the previous section, let's cover undoing: Standard git commands are very confusing when it comes to undoing things. It requires using the **reset** command which has a bunch of strange parameters that make writes to the git index. In fact, in order to undo changes properly, the reset command requires the user to have a clear understanding of the guts of the git index. This should not be the case for a common command, like undo.
 
@@ -152,7 +152,7 @@ So here comes **g2** with the following undo scenarios:
 * `g undo merge` - reverts all commits up to the state before the last merge.
 * `g undo myfile.txt` - reverts any changes made to myfile.txt.
 
-##Reviewing the History
+## Reviewing the History
 
 Working with beginners, I found that an easy way to keep them focused is to provide _visuals_. Now this is not the github network graph, but it's close enough to get them focused. Type `g lg` and enjoy the enhanced colorized commit log output.
 
@@ -160,7 +160,7 @@ Working with beginners, I found that an easy way to keep them focused is to prov
 
 Learn to read that tree, it's important: it holds the commit history for the current branch.
 
-##Panic!
+## Panic!
 
 It happened to all of us. You try a new command (like a rebase) and things don't work as expected: git complains on every commit attempt, the branch shows *detached* and some weird hex numbers show all around the place. Suddenly, you feel the urgency to hunt an expert advise: you start hunting the closest git-master: bad luck he's not around! In fact there is no-one to help you! "Damn it! I wish I never run that command!", you start pulling your hairs and screaming "CVS was so much bettttttter!"
 
@@ -168,7 +168,7 @@ Keep calm, you are panicking... and we built a command especially for you: `g pa
 
 Use `panic` when you feel like getting help from your git master. The command will attempt to put you back on track: it checks out the last known good state (HEAD) and removes all files not under source control, leaving a clean workspace to resume from. It's the easiest way to get you back on track and ready to work. No more cold sweats, plus your git-master can rest. ;-)
 
-##Branching
+## Branching
 
 Displaying the list of branches is achieved with the branch command: `g br`. Note how it provides details not only about the local and remote branches, but also about the state of these branches when compared to the status on the server.
 
@@ -212,7 +212,7 @@ By _stable state_ I mean: **no modified files, no staged files**. Should you hav
 
     fatal: some files were changed on this branch, either commit <ci>, <wip> or <panic>.
 
-##Merging,continue & abort
+## Merging,continue & abort
 
 **g2** enforces a simpler merge flow by introducing commands `abort` & `continue`.
 
@@ -237,7 +237,7 @@ With **g2** we simplified the process: no matter what flow you are in, there is 
 Finally I should probably mention `g abort` that cancels an ongoing merge/rebase and reverts back to the state prior to the merge attempt.
 
 
-##Tracking
+## Tracking
 
 The whole concept of _tracking_ is broken in git. It's not so much the feature, it's the way it is typically explained. All beginners wonder "What the hell is a **tracking branch** and how is it different from a regular branch?"
 
@@ -256,7 +256,7 @@ Well tracking is used across several commands in **g2**, the most common one is 
 Note that you may use `g track remote/branch` to set the mapping. For instance, say we are on branch test and we issue a `g track origin/mytest`. the local branch test will now synchronize with the server origin/mytest. 
 
 
-##Synching
+## Synching
 
 Before introducing one of the main **g2** features, let me talk about what **NOT** to do when merging with git.  
     
@@ -288,7 +288,7 @@ For the git expert, the command issues a _fetch, a rebase and a push_ with a mul
 
 Note: **g2** also supports `g sync upstream` which only fetch and rebase, handy with read-only clones ;-)
 
-##Saving the Work In Progress (WIP)
+## Saving the Work In Progress (WIP)
 
 Saving the _work in progress_ is a common task: Typically, git _stash_ comes to the rescue. The issue with stashing is that you typically loose track of which branch it was created from. Stashing is indeed a short term solution.
 
@@ -329,35 +329,35 @@ For convenience, several commands have been enhanced to accept the "upstream" ke
 * g merge upstream - merge local branch from the contents from the upstream
 * g sync upstream - pull contents from the server, rebase but **DON'T** push
 
-##List of Commands
+## List of Commands
 
 Please refer to the [cheatsheet](http://orefalo.github.com/g2/).
 
-#FAQ
+# FAQ
 
-###Why "g2"?
+### Why "g2"?
 
 * `g` is the command and it obviously comes from **git**
 * `2` because most of the actions are two letters long.
 
-###Is G2 a new git-flow?
+### Is G2 a new git-flow?
 
 No, **g2** doesn't enforce any branching policy.  
 
-###Is G2 compatible with git?
+### Is G2 compatible with git?
 
 * From a source control standpoint, yes **g2** is interoperable with git.
 * From a command line parameters standpoint, definitely NOT. **g2** grammar is simplified and hence doesn't support all the options available in git.
 
-###Why is G2 reinstalled on every launch?
+### Why is G2 reinstalled on every launch?
 
 To ensure the git configuration is in a stable, known state. Beginers can screw pretty bad when editing their gitconfig file.
 
-###What if my favorite command is missing?
+### What if my favorite command is missing?
 
 Please notify us via the project issue tracker. For the time being, please use `$GIT_EXE` to run the real git command.
 
-#Credits
+# Credits
 
 Author: [Olivier Refalo](https://github.com/orefalo)
 
@@ -365,11 +365,11 @@ Author: [Olivier Refalo](https://github.com/orefalo)
 * [GUM](https://github.com/saintsjd/gum) by saintsjd. Wonder why this project felt short on delivery.
 * Andrew Peterson/ NDP Software for their cool interactive Cheat sheet
 
-##License
+## License
 
 Distributed under the GNU General Public License, version 2.0.
 
-##TODO
+## TODO
 * g remote: when resetting origin, prompt user to override existing
 * g track origin/blabla - if origin/blabla not setup, prompt user to fetch from origin
 * g br newbranch (from a branch with no remote) -> does prompt to create the branch
