@@ -398,7 +398,7 @@ function __g2_continue
 
         case merge
             # Count the number of unmerged files
-            set count=(command git ls-files --unmerged | wc -l)
+            set count (command git ls-files --unmerged | wc -l)
             if test $count -ne 0
                __g2_fatal ">>>>> Hey! you still have unmerged files, please run <g mt> to resolve conflicts"
                return 1
