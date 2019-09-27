@@ -772,7 +772,7 @@ function __g2_sync --argument-names flag
     set -l lchg $count[1]
     set -l rchg $count[2]
 
-    debug --footer="(%name)" "pullOnly1:%pullOnly  rchg:%rchg  lchg:%lchg" $pullOnly $rchg $lchg
+    #debug --footer="(%name)" "pullOnly1:%pullOnly  rchg:%rchg  lchg:%lchg" $pullOnly $rchg $lchg
     if test $rchg -gt 0
         echo Rebasing...
         if not command git rebase $remote
@@ -786,7 +786,7 @@ function __g2_sync --argument-names flag
         end
     end
 
-    debug --footer="(%name)" "pullOnly2:%pullOnly rchg:%rchg lchg:%lchg" $pullOnly $rchg $lchg
+    #debug --footer="(%name)" "pullOnly2:%pullOnly rchg:%rchg lchg:%lchg" $pullOnly $rchg $lchg
     if test $pullOnly -eq 0 -a $lchg -gt 0
         echo Pushing...
         command git push
