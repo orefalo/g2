@@ -1,3 +1,2 @@
-fisherman/git_util
-fisherman/debug
-fisherman/cprintf
+fishpkg/fish-git-util
+markcial/cprintf
