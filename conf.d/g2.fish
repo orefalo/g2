@@ -369,7 +369,7 @@ function __g2_ig
 
         echo "$GIT_PREFIX$argv[1]" >> .gitignore
         __g2_info "Ignoring file $argv[1]"
-        command git rm --cached $GIT_PREFIX$argv >/dev/null ^&1
+        command git rm --cached $GIT_PREFIX$argv >/dev/null 2>/dev/null
         command git status
     end
 end
@@ -501,7 +501,7 @@ function __g2_track --argument-names branch
             return 1
         end
 
-        command git ls-remote --exit-code . "$branch"  >/dev/null ^&1
+        command git ls-remote --exit-code . "$branch"  >/dev/null 2>/dev/null
         if test $status -ne 0
             if not __g2_askYN "Remote branch not found, would you like to refresh from the server"
                 command git fetch
