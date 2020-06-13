@@ -658,12 +658,9 @@ function __g2_push
     set -l idx (count $argv)
 
     if test $idx -lt 2 -a $forceFlag -eq 0
-        set -l branch $argv[$idx]
-        if test "$branch" = "origin"
-            __g2_fatal 'Remember, you may only use <push> or <pull> against a feature branch, and <sync> against the working branch.'
-            __g2_fatal 'Usage: push <?opts> <remote> <branch>'
-            return 1
-        end
+        __g2_fatal 'Remember, you may only use <push> or <pull> against a feature branch, and <sync> against the working branch.'
+        __g2_fatal 'Usage: push <?opts> <remote> <branch>'
+        return 1
     end
 
     # read the branch
