@@ -233,6 +233,7 @@ function __g2_usage
     lg - displays branch history log
     ls <?params...> - list files under source control
     panic - gets you back on HEAD, cleans all untracked files
+    prune - strips history to reduce repository size
     pull/push <?opts> <remote> <branch> - deals with other branches
     rb <?params...> <branch> or <upstream> - rebase
     rm <params...> - remove files
@@ -730,6 +731,18 @@ function __g2_pull
     return $status
 end
 
+
+function __g2_prune
+    __g2_iswip; and return 1
+    __g2_isdirty; and return 1
+
+    git pull --depth 1
+    git gc --prune=all
+    git tag -d (git tag -l)
+    git reflog expire --expire=all --all
+
+end
+
 # Performs a fetch, rebase, push with a bunch of validations
 function __g2_sync --argument-names flag
 
@@ -1072,6 +1085,8 @@ function g
                                 __g2_panic
                             case pull
                                 __g2_pull $argv
+                            case prune
+                                __g2_prune
                             case push
                                 __g2_push $argv
                             case rb rebase

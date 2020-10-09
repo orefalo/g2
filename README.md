@@ -377,6 +377,7 @@ Distributed under the GNU General Public License, version 2.0.
 * g track origin/newbranch, if branch doesn't exist - create it!
       
 ## FIXED / DONE
+* added prune command to strip history and save disk space
 * Removed all prompt from the fisherman version - fisherman comes with a plugin system for prompt, it's much more flexible.
 * g ignore alias for ig
 * g undo needs more validations
