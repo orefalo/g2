@@ -110,6 +110,8 @@ function __g2_askYN --argument-names prompt
         switch $REPLY
             case y Y yes Yes YES
                 return 1
+            case n N no No
+                return 0
         end
     end
     return 0
@@ -724,7 +726,7 @@ function __g2_pull
     else
         if test "$dst" = "$remote"
             __g2_fatal 'Please use <sync> to synchronize the current branch and <pull> to merge a feature branch'
-         end
+        end
     end
 
     command git pull --no-ff $argv $rmt $branch
@@ -737,10 +739,11 @@ function __g2_prune
     __g2_isdirty; and return 1
 
     git pull --depth 1
-    git gc --prune=all
     git tag -d (git tag -l)
     git reflog expire --expire=all --all
+    git gc --prune=all
 
+    return $status
 end
 
 # Performs a fetch, rebase, push with a bunch of validations
@@ -903,6 +906,7 @@ function __g2_setup
     command git config --global color.diff auto
     command git config --global color.interactive auto
     command git config --global color.status auto
+    command git config --global pull.rebase true
 
     # FIX A FEW OTHER SETTINGS
     command git config --global core.pager cat
@@ -974,6 +978,7 @@ function g
         "mv"\
         "panic"\
         "pull"\
+        "prune"\
         "push"\
         "rb"\
         "rebase"\
@@ -1126,7 +1131,7 @@ function g
                             case wip
                                 __g2_wip
                             case '*'
-                                __g2_fatal "Action $i not implemented"
+                                __g2_fatal "Action '$i' is not implemented"
                                 return 1
                         end
                 end
