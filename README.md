@@ -43,9 +43,9 @@ This project is an attempt to make the git command line a friendly place: it eas
 ## #MacOS/Linux
 
 Only the fishshell version is maintained.
-With [fishshell](https://fishshell.com/) and [fisherman](http://fisherman.sh/) previously installed, run
+With [fisher v3](https://github.com/jorgebucaran/fisher) previously installed, run
 
-    fisher g2
+    $ fisher install orefalo/g2
 
 # How to use
 
