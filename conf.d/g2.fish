@@ -4,6 +4,15 @@
 # Author - Olivier Refalo
 #
 
+function git_is_repo -d "Check if directory is a repository"
+  test -d .git
+  or begin
+    set -l info (command git rev-parse --git-dir --is-bare-repository 2>/dev/null)
+    and test $info[2] = false
+  end
+end
+
+
 # Ensure git is installed in the path
 if test -z (which git)
     __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
