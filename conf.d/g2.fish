@@ -911,6 +911,9 @@ function __g2_setup
     set -l choice (__g2_askChoice 'Please select a mergetool' "$mergetools" "$default_mt" true)
     command git config --global merge.tool "$choice"
 
+    ## SQUASH TOOL - ie. git rebase -i HEAD~N
+    command git config --global sequence.editor interactive-rebase-tool
+
     ## TRUST EXIT CODE
     __g2_info "-----------------------------------------------------"
     set -l default (command git config mergetool.$choice.trustExitCode)
