@@ -137,7 +137,7 @@ end
 #### GIT Utility functions  ------------------------------------------------------------------
 
 function __g2_getremote
-    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' ^/dev/null)
+    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' 2>/dev/null)
     if test "$remote" = '@{u}'
         echo ''
     else
@@ -149,7 +149,7 @@ end
 # returns true(0) if merge or rebase
 function __g2_wrkspcState
 
-    set -l git_dir (command git rev-parse --git-dir ^/dev/null)
+    set -l git_dir (command git rev-parse --git-dir 2> /dev/null)
 
     if test -e "$git_dir/rebase-merge" -o -e "$git_dir/rebase-apply"
         echo 'rebase'
@@ -215,7 +215,7 @@ end
 # return true(0) if top commit is wip - work in progress
 # the proper validation is __g2_iswip; or return 1
 function __g2_iswip  --argument-names hideError
-    if command git log --oneline -1 --pretty=format:'%s' ^/dev/null | string match -q -i WIPWIPWIPWIP
+    if command git log --oneline -1 --pretty=format:'%s' 2>/dev/null | string match -q -i WIPWIPWIPWIP
         if test hideError = 'true'
             __g2_fatal 'Sorry, a WIP commit must remain local, please run <g unwip> to resume work items.'
         end
@@ -463,7 +463,7 @@ function __g2_br
         command git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads |  \
         while read local remote
             if test "$remote"
-                set -l count (command git rev-list --left-right --count $local...$remote -- ^/dev/null |tr \t \n); or continue
+                set -l count (command git rev-list --left-right --count $local...$remote -- 2>/dev/null |tr \t \n); or continue
                 __g2_info "$local (to sync:$count[1]) | (to merge:$count[2]) $remote"
             end
         end
@@ -801,7 +801,7 @@ function __g2_sync --argument-names flag
     end
 
     set -l branch (command git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-    set -l count (command git rev-list --left-right --count "$branch...$remote" -- ^/dev/null |tr \t \n)
+    set -l count (command git rev-list --left-right --count "$branch...$remote" -- 2>/dev/null |tr \t \n)
     set -l lchg $count[1]
     set -l rchg $count[2]
 
