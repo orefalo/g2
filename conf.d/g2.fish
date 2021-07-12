@@ -4,6 +4,15 @@
 # Author - Olivier Refalo
 #
 
+function git_is_repo -d "Check if directory is a repository"
+  test -d .git
+  or begin
+    set -l info (command git rev-parse --git-dir --is-bare-repository 2>/dev/null)
+    and test $info[2] = false
+  end
+end
+
+
 # Ensure git is installed in the path
 if test -z (which git)
     __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
@@ -11,6 +20,14 @@ if test -z (which git)
 end
 
 #### output functions ------------------------------------------------------------------
+
+function __g2_git_is_repo -d "Check if directory is a repository"
+  test -d .git
+  or begin
+    set -l info (command git rev-parse --git-dir --is-bare-repository 2>/dev/null)
+    and test $info[2] = false
+  end
+end
 
 function __g2_fatal
     cprintf "<bg:red>FATAL:</bg> %s" $argv[1]
@@ -110,6 +127,8 @@ function __g2_askYN --argument-names prompt
         switch $REPLY
             case y Y yes Yes YES
                 return 1
+            case n N no No
+                return 0
         end
     end
     return 0
@@ -118,7 +137,7 @@ end
 #### GIT Utility functions  ------------------------------------------------------------------
 
 function __g2_getremote
-    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' ^/dev/null)
+    set -l remote (command git rev-parse --symbolic-full-name --abbrev-ref '@{u}' 2>/dev/null)
     if test "$remote" = '@{u}'
         echo ''
     else
@@ -130,7 +149,7 @@ end
 # returns true(0) if merge or rebase
 function __g2_wrkspcState
 
-    set -l git_dir (command git rev-parse --git-dir ^/dev/null)
+    set -l git_dir (command git rev-parse --git-dir 2> /dev/null)
 
     if test -e "$git_dir/rebase-merge" -o -e "$git_dir/rebase-apply"
         echo 'rebase'
@@ -196,7 +215,7 @@ end
 # return true(0) if top commit is wip - work in progress
 # the proper validation is __g2_iswip; or return 1
 function __g2_iswip  --argument-names hideError
-    if command git log --oneline -1 --pretty=format:'%s' ^/dev/null | string match -q -i WIPWIPWIPWIP
+    if command git log --oneline -1 --pretty=format:'%s' 2>/dev/null | string match -q -i WIPWIPWIPWIP
         if test hideError = 'true'
             __g2_fatal 'Sorry, a WIP commit must remain local, please run <g unwip> to resume work items.'
         end
@@ -233,6 +252,7 @@ function __g2_usage
     lg - displays branch history log
     ls <?params...> - list files under source control
     panic - gets you back on HEAD, cleans all untracked files
+    prune - strips history to reduce repository size
     pull/push <?opts> <remote> <branch> - deals with other branches
     rb <?params...> <branch> or <upstream> - rebase
     rm <params...> - remove files
@@ -258,9 +278,9 @@ function __g2_lg
     if test (count $argv) -eq 0
 
         if test (uname) = "Darwin"
-            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | more -r
+            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | command more -r
         else
-            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | less -r
+            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | command less -r
         end
 
     else
@@ -369,7 +389,7 @@ function __g2_ig
 
         echo "$GIT_PREFIX$argv[1]" >> .gitignore
         __g2_info "Ignoring file $argv[1]"
-        command git rm --cached $GIT_PREFIX$argv >/dev/null ^&1
+        command git rm --cached $GIT_PREFIX$argv >/dev/null 2>/dev/null
         command git status
     end
 end
@@ -443,7 +463,7 @@ function __g2_br
         command git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads |  \
         while read local remote
             if test "$remote"
-                set -l count (command git rev-list --left-right --count $local...$remote -- ^/dev/null |tr \t \n); or continue
+                set -l count (command git rev-list --left-right --count $local...$remote -- 2>/dev/null |tr \t \n); or continue
                 __g2_info "$local (to sync:$count[1]) | (to merge:$count[2]) $remote"
             end
         end
@@ -501,7 +521,7 @@ function __g2_track --argument-names branch
             return 1
         end
 
-        command git ls-remote --exit-code . "$branch"  >/dev/null ^&1
+        command git ls-remote --exit-code . "$branch"  >/dev/null 2>/dev/null
         if test $status -ne 0
             if not __g2_askYN "Remote branch not found, would you like to refresh from the server"
                 command git fetch
@@ -723,10 +743,23 @@ function __g2_pull
     else
         if test "$dst" = "$remote"
             __g2_fatal 'Please use <sync> to synchronize the current branch and <pull> to merge a feature branch'
-         end
+        end
     end
 
     command git pull --no-ff $argv $rmt $branch
+    return $status
+end
+
+
+function __g2_prune
+    __g2_iswip; and return 1
+    __g2_isdirty; and return 1
+
+    git pull --depth 1
+    git tag -d (git tag -l)
+    git reflog expire --expire=all --all
+    git gc --prune=all
+
     return $status
 end
 
@@ -768,7 +801,7 @@ function __g2_sync --argument-names flag
     end
 
     set -l branch (command git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-    set -l count (command git rev-list --left-right --count "$branch...$remote" -- ^/dev/null |tr \t \n)
+    set -l count (command git rev-list --left-right --count "$branch...$remote" -- 2>/dev/null |tr \t \n)
     set -l lchg $count[1]
     set -l rchg $count[2]
 
@@ -878,6 +911,9 @@ function __g2_setup
     set -l choice (__g2_askChoice 'Please select a mergetool' "$mergetools" "$default_mt" true)
     command git config --global merge.tool "$choice"
 
+    ## SQUASH TOOL - ie. git rebase -i HEAD~N
+    command git config --global sequence.editor interactive-rebase-tool
+
     ## TRUST EXIT CODE
     __g2_info "-----------------------------------------------------"
     set -l default (command git config mergetool.$choice.trustExitCode)
@@ -890,6 +926,7 @@ function __g2_setup
     command git config --global color.diff auto
     command git config --global color.interactive auto
     command git config --global color.status auto
+    command git config --global pull.rebase true
 
     # FIX A FEW OTHER SETTINGS
     command git config --global core.pager cat
@@ -961,6 +998,7 @@ function g
         "mv"\
         "panic"\
         "pull"\
+        "prune"\
         "push"\
         "rb"\
         "rebase"\
@@ -1015,7 +1053,7 @@ function g
                     case setup
                         __g2_setup
                     case '*'
-                        git_is_repo
+                        __g2_git_is_repo
                         if test $status -eq 1
                             printf "Not a git repository"
                             return 1
@@ -1072,6 +1110,8 @@ function g
                                 __g2_panic
                             case pull
                                 __g2_pull $argv
+                            case prune
+                                __g2_prune
                             case push
                                 __g2_push $argv
                             case rb rebase
@@ -1111,7 +1151,7 @@ function g
                             case wip
                                 __g2_wip
                             case '*'
-                                __g2_fatal "Action $i not implemented"
+                                __g2_fatal "Action '$i' is not implemented"
                                 return 1
                         end
                 end

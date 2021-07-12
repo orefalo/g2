@@ -43,9 +43,9 @@ This project is an attempt to make the git command line a friendly place: it eas
 ## #MacOS/Linux
 
 Only the fishshell version is maintained.
-With [fishshell](https://fishshell.com/) and [fisherman](http://fisherman.sh/) previously installed, run
+With [fisher v3](https://github.com/jorgebucaran/fisher) previously installed, run
 
-    fisher g2
+    $ fisher install orefalo/g2
 
 # How to use
 
@@ -377,6 +377,7 @@ Distributed under the GNU General Public License, version 2.0.
 * g track origin/newbranch, if branch doesn't exist - create it!
       
 ## FIXED / DONE
+* added prune command to strip history and save disk space
 * Removed all prompt from the fisherman version - fisherman comes with a plugin system for prompt, it's much more flexible.
 * g ignore alias for ig
 * g undo needs more validations
