@@ -39,7 +39,7 @@ end
 
 #### IO functions ------------------------------------------------------------------
 
-function __g2_askInput --argument-names prompt default 
+function __g2_askInput --argument-names prompt default
 
     function __g2_askprompt --no-scope-shadowing
         cprintf "<fg:white>%s</fg> <fg:green>(%s)</fg>: " $prompt $default
@@ -183,7 +183,7 @@ function __g2_isforward
     if test -n "$remote"
         if test (command git rev-list --left-only --count (git_branch_name)...$remote -- ) -gt 0
             return 0
-        else 
+        else
             return 1
         end
     end
@@ -324,12 +324,12 @@ end
 
 function __g2_unfreeze
     if test -z "$argv"
-        if test (command git reset -q HEAD ^ /dev/null) -eq 1
+        if test (command git reset -q HEAD 2>/dev/null) -eq 1
             __g2_fatal 'The first repo commit must be unfrozen file by file. Sorry about that...'
             return 1
         end
     else
-        command git reset -q HEAD -- $argv ^ /dev/null; or command git rm -q --cached $argv
+        command git reset -q HEAD -- $argv 2>/dev/null; or command git rm -q --cached $argv
     end
     command git status
 end
@@ -399,7 +399,7 @@ function __g2_server
 end
 
 function __g2_abort
-    command git merge --abort ^ /dev/null; or command git rebase --abort ^ /dev/null
+    command git merge --abort 2>/dev/null; or command git rebase --abort 2>/dev/null
 end
 
 function __g2_continue
@@ -413,7 +413,7 @@ function __g2_continue
                 __g2_info "The last commit brings no significant changes -- automatically skipping"
                 set action '--skip'
             end
-            command git rebase $action ^ /dev/null
+            command git rebase $action 2>/dev/null
             return 0
 
         case merge

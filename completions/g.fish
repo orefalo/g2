@@ -2,7 +2,7 @@
 # Use 'command git' to avoid interactions for aliases from git to (e.g.) hub
 
 function __g2_prompt_branches
-  command git branch --no-color -a ^/dev/null | grep -v 'remotes/' | sed -e 's/^..//' -e 's/^remotes\///'
+  command git branch --no-color -a 2>/dev/null | grep -v 'remotes/' | sed -e 's/^..//' -e 's/^remotes\///'
 end
 
 function __g2_prompt_remotebranches
@@ -34,12 +34,12 @@ end
 
 # files changed in workspace
 function __g2_prompt_modified_files
-  command git ls-files -m --exclude-standard ^/dev/null
+  command git ls-files -m --exclude-standard 2>/dev/null
 end
 
 # files modified
 function __g2_prompt_add_files
-  command git ls-files -mo --exclude-standard ^/dev/null
+  command git ls-files -mo --exclude-standard 2>/dev/null
 end
 
 # files in staging area
@@ -81,7 +81,7 @@ function __g2_prompt_using_command
     end
 
     # aliased command
-    set -l aliased (command git config --get "alias.$cmd[2]" ^ /dev/null | sed 's/ .*$//')
+    set -l aliased (command git config --get "alias.$cmd[2]" 2>/dev/null | sed 's/ .*$//')
     if [ $argv[1] = "$aliased" ]
       return 0
     end
