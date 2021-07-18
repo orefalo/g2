@@ -324,12 +324,12 @@ end
 
 function __g2_unfreeze
     if test -z "$argv"
-        if test (command git reset -q HEAD ^ /dev/null) -eq 1
+        if test (command git reset -q HEAD > /dev/null) -eq 1
             __g2_fatal 'The first repo commit must be unfrozen file by file. Sorry about that...'
             return 1
         end
     else
-        command git reset -q HEAD -- $argv ^ /dev/null; or command git rm -q --cached $argv
+        command git reset -q HEAD -- $argv > /dev/null; or command git rm -q --cached $argv
     end
     command git status
 end
@@ -413,7 +413,7 @@ function __g2_continue
                 __g2_info "The last commit brings no significant changes -- automatically skipping"
                 set action '--skip'
             end
-            command git rebase $action ^ /dev/null
+            command git rebase $action > /dev/null
             return 0
 
         case merge
