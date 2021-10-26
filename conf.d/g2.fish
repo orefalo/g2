@@ -12,6 +12,10 @@ function git_is_repo -d "Check if directory is a repository"
   end
 end
 
+function git_branch_name -d "get current branch name"
+    git rev-parse --abbrev-ref HEAD
+end
+
 
 # Ensure git is installed in the path
 if test -z (which git)
