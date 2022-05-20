@@ -240,6 +240,7 @@ function __g2_usage
     continue - resumes a conflict resolution
     cp <commit> - cherry-pick
     ci <?params...> - commit
+    cz - commits with cz-customizable
     clone <url> - clone a remote repository
     df/dt <?params...> <file> - compares files
     fetch - gets changes sitting on the server
@@ -276,6 +277,10 @@ function __g2_usage
     undo <file>|commit|merge - reverts last changes
     version - prints g2 version
     wip/unwip - save/restore work in progress to branch"
+end
+
+function __g2_cz
+    cz-customizable
 end
 
 function __g2_lg
@@ -977,6 +982,7 @@ function g
         "continue"\
         "cp"\
         "cherry-pick"\
+        "cz"\
         "df"\
         "diff"\
         "dt"\
@@ -1082,6 +1088,8 @@ function g
                                 __g2_continue
                             case cp cherry-pick
                                 __g2_cp $argv
+                            case cz
+                                __g2_cz $argv
                             case df diff
                                 command git diff $argv
                             case dt difftool
