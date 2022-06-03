@@ -908,14 +908,14 @@ function __g2_setup
 
     ## DIFFTOOL
     __g2_info "-----------------------------------------------------"
-    set -l difftools "difftools araxis bc3 diffuse emerge ecmerge gvimdiff kdiff3 kompare meld opendiff p4merge tkdiff vimdiff xxdiff deltawalker"
+    set -l difftools "difftools araxis bc3 diffuse emerge ecmerge gvimdiff ksdiff kdiff3 kompare meld opendiff p4merge tkdiff vimdiff xxdiff deltawalker"
     set -l default_dt (command git config diff.tool)
     set -l choice (__g2_askChoice 'Please select a difftool' "$difftools" "$default_dt" true)
     command git config --global diff.tool "$choice"
 
     ## MERGETOOL
     __g2_info "-----------------------------------------------------"
-    set -l mergetools "difftools araxis bc3 diffuse emerge ecmerge gvimdiff kdiff3 kompare meld opendiff p4merge tkdiff vimdiff xxdiff deltawalker"
+    set -l mergetools "difftools araxis bc3 diffuse emerge ecmerge gvimdiff ksdiff kdiff3 kompare meld opendiff p4merge tkdiff vimdiff xxdiff deltawalker"
     set -l default_mt (command git config merge.tool)
     set -l choice (__g2_askChoice 'Please select a mergetool' "$mergetools" "$default_mt" true)
     command git config --global merge.tool "$choice"
