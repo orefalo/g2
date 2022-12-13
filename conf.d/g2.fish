@@ -408,7 +408,7 @@ function __g2_server
 end
 
 function __g2_abort
-    command git merge --abort > /dev/null; or command git rebase --abort > /dev/null
+    command git merge --abort >/dev/null 2>/dev/null; or command git rebase --abort >/dev/null 2>/dev/null
 end
 
 function __g2_continue
