@@ -962,7 +962,7 @@ function __g2_setup
 
 end
 
-#TODO use fisher getops
+#TODO use fisher getops https://github.com/jorgebucaran/getopts.fish
 function g
     if test (count $argv) -eq 0
         __g2_usage;
