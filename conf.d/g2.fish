@@ -937,8 +937,13 @@ function __g2_setup
     command git config --global color.status auto
     command git config --global pull.rebase true
 
-    # FIX A FEW OTHER SETTINGS
-    command git config --global core.pager cat
+    # FIX A FEW OTHER SETTINGS for git-delta
+    command git config --global core.pager delta
+    command git config --global merge.conflictstyle diff3
+    command git config --global diff.colorMoved default
+    command git config --global delta.navigate true
+    command git config --global delta.light false
+    command git config --global interactive.diffFilter 'delta --color-only'
 
     # For windows, use these default settings
     if test (uname -a | grep -c MINGW) -eq 1
