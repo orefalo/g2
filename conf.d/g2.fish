@@ -939,7 +939,7 @@ function __g2_setup
 
     # FIX A FEW OTHER SETTINGS for git-delta
     command git config --global core.pager delta
-    command git config --global merge.conflictstyle diff3
+    command git config --global merge.conflictstyle zdiff3
     command git config --global diff.colorMoved default
     command git config --global delta.navigate true
     command git config --global delta.light false
