@@ -936,6 +936,7 @@ function __g2_setup
     command git config --global color.interactive auto
     command git config --global color.status auto
     command git config --global pull.rebase true
+    command git config --global merge.ff false
 
     # FIX A FEW OTHER SETTINGS for git-delta
     command git config --global core.pager delta
